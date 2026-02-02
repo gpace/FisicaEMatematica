@@ -3,444 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cos(π/3 - x) + sin(π/6 + x) - Formule di Addizione</title>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>Formule di Addizione - Livello Avanzato</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Crimson Pro', Georgia, serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            min-height: 100vh;
-            color: #e8e8e8;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            padding: 2cm;
+            max-width: 21cm;
             margin: 0 auto;
+            background: white;
+            color: black;
         }
 
         h1 {
+            font-size: 16pt;
             text-align: center;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 25px;
-            color: #ffd700;
+            margin-bottom: 5mm;
+            font-weight: bold;
         }
 
-        .main-layout {
+        .subtitle {
+            text-align: center;
+            font-size: 11pt;
+            color: #555;
+            margin-bottom: 8mm;
+        }
+
+        .instructions {
+            background: #f5f5f5;
+            padding: 4mm;
+            border-radius: 2mm;
+            margin-bottom: 8mm;
+            font-size: 11pt;
+        }
+
+        .reference-box {
+            border: 1px solid #333;
+            padding: 5mm;
+            margin-bottom: 8mm;
+            background: #fafafa;
+            font-size: 11pt;
+        }
+
+        .reference-title {
+            font-weight: bold;
+            margin-bottom: 3mm;
+        }
+
+        .formula-grid {
             display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 25px;
-            align-items: start;
+            grid-template-columns: 1fr 1fr;
+            gap: 2mm;
+            font-family: 'Courier New', monospace;
+            font-size: 10pt;
         }
 
-        @media (max-width: 1000px) {
-            .main-layout {
-                grid-template-columns: 1fr;
-            }
+        .section {
+            margin-bottom: 10mm;
         }
 
-        .steps-container {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .section-title {
+            font-weight: bold;
+            font-size: 13pt;
+            border-bottom: 1px solid #333;
+            padding-bottom: 2mm;
+            margin-bottom: 5mm;
         }
 
-        .step {
-            opacity: 0.25;
-            transform: translateX(-10px);
-            transition: all 0.4s ease;
-            margin-bottom: 20px;
-            padding: 18px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.02);
+        .exercise {
+            margin-bottom: 12mm;
+            padding: 4mm;
+            border: 1px solid #ddd;
+            border-radius: 2mm;
         }
 
-        .step.active {
-            opacity: 1;
-            transform: translateX(0);
-            background: rgba(255, 215, 0, 0.1);
-            border-left: 4px solid #ffd700;
+        .exercise-number {
+            font-weight: bold;
+            font-size: 13pt;
         }
 
-        .step.completed {
-            opacity: 0.6;
-            transform: translateX(0);
-        }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .step-number {
-            width: 28px;
-            height: 28px;
-            background: #ffd700;
-            color: #1a1a2e;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 28px;
-            font-weight: 600;
-            margin-right: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-        }
-
-        .step-title {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #ffd700;
-        }
-
-        .math {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1rem;
-            line-height: 1.9;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 14px 18px;
-            border-radius: 8px;
-            margin: 8px 0;
-            overflow-x: auto;
-            white-space: pre-wrap;
-        }
-
-        .cos { color: #4ecdc4; }
-        .sin { color: #ff6b6b; }
-        .result { color: #ffd700; font-weight: 600; }
-        .angle { color: #a29bfe; }
-        .value { color: #74b9ff; }
-
-        .explanation {
-            font-size: 0.95rem;
-            color: #aaa;
-            margin-top: 10px;
-            line-height: 1.5;
-        }
-
-        /* Right panel */
-        .right-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .circle-container {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .circle-title {
-            font-size: 1rem;
-            color: #ffd700;
-            margin-bottom: 15px;
+        .exercise-problem {
+            font-family: 'Courier New', monospace;
+            font-size: 14pt;
+            margin: 4mm 0;
+            padding: 4mm;
+            background: #f0f0f0;
             text-align: center;
         }
 
-        svg {
-            display: block;
-            margin: 0 auto;
+        .work-area {
+            min-height: 50mm;
+            border: 1px dashed #ccc;
+            margin: 3mm 0;
+            padding: 3mm;
         }
 
-        .values-box {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .result-box {
+            background: #e8f5e9;
+            padding: 3mm;
+            border-left: 3px solid #4caf50;
+            margin-top: 3mm;
         }
 
-        .values-title {
-            font-size: 1rem;
-            color: #ffd700;
-            margin-bottom: 15px;
+        .result-label {
+            font-weight: bold;
+            font-size: 10pt;
         }
 
-        .value-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
+        .result-line {
+            border-bottom: 2px solid #333;
+            height: 8mm;
+            margin-top: 2mm;
         }
 
-        .value-row:last-child { border-bottom: none; }
-
-        .controls {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(26, 26, 46, 0.95);
-            padding: 15px 30px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-            z-index: 100;
+        .strategy-hint {
+            font-size: 10pt;
+            color: #666;
+            font-style: italic;
+            background: #fff8e1;
+            padding: 3mm;
+            border-left: 3px solid #ff9800;
+            margin-bottom: 3mm;
         }
 
-        button {
-            font-family: 'Crimson Pro', serif;
-            font-size: 1rem;
-            padding: 12px 28px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
+        .footer {
+            margin-top: 15mm;
+            padding-top: 5mm;
+            border-top: 1px solid #ccc;
+            font-size: 10pt;
+            color: #666;
         }
 
-        .btn-prev {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-        }
-
-        .btn-next {
-            background: #ffd700;
-            color: #1a1a2e;
-            font-weight: 600;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-        }
-
-        button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .formula-box {
-            background: rgba(255, 215, 0, 0.1);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .formula-box-title {
-            font-size: 0.9rem;
-            color: #ffd700;
-            margin-bottom: 10px;
-        }
-
-        .formula-box .math {
-            background: transparent;
-            padding: 5px 0;
-            font-size: 0.95rem;
+        @media print {
+            body { padding: 1.5cm; }
+            .exercise { break-inside: avoid; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Semplificare: cos(π/3 − x) + sin(π/6 + x)</h1>
+    <h1>Formule di Addizione - Livello Avanzato</h1>
+    <p class="subtitle">Semplificazione di espressioni complete</p>
+
+    <div class="instructions">
+        <strong>Obiettivo:</strong> Semplificare espressioni che richiedono l'applicazione di più formule di addizione e la combinazione dei risultati.
+    </div>
+
+    <div class="reference-box">
+        <div class="reference-title">📐 Formule e valori notevoli</div>
+        <div class="formula-grid">
+            <div>cos(α ± β) = cos α cos β ∓ sin α sin β</div>
+            <div>sin(α ± β) = sin α cos β ± cos α sin β</div>
+            <div>π/6: sin = 1/2, cos = √3/2</div>
+            <div>π/3: sin = √3/2, cos = 1/2</div>
+            <div>π/4: sin = cos = √2/2</div>
+            <div>π/2: sin = 1, cos = 0</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Esercizi</div>
         
-        <div class="main-layout">
-            <div class="steps-container">
-                <div class="formula-box">
-                    <div class="formula-box-title">📐 Formule di addizione</div>
-                    <div class="math"><span class="cos">cos(α − β)</span> = cos α cos β + sin α sin β
-<span class="sin">sin(α + β)</span> = sin α cos β + cos α sin β</div>
-                </div>
-
-                <div class="step" data-step="0">
-                    <div class="step-header">
-                        <span class="step-number">1</span>
-                        <span class="step-title">Espressione di partenza</span>
-                    </div>
-                    <div class="math"><span class="cos">cos(<span class="angle">π/3</span> − x)</span> + <span class="sin">sin(<span class="angle">π/6</span> + x)</span></div>
-                    <div class="explanation">Dobbiamo semplificare questa somma usando le formule di addizione.</div>
-                </div>
-
-                <div class="step" data-step="1">
-                    <div class="step-header">
-                        <span class="step-number">2</span>
-                        <span class="step-title">Applichiamo cos(α − β)</span>
-                    </div>
-                    <div class="math"><span class="cos">cos(π/3 − x)</span> = cos(π/3)cos(x) + sin(π/3)sin(x)</div>
-                    <div class="explanation">Formula: cos(α − β) = cos α cos β + sin α sin β, con α = π/3 e β = x</div>
-                </div>
-
-                <div class="step" data-step="2">
-                    <div class="step-header">
-                        <span class="step-number">3</span>
-                        <span class="step-title">Sostituiamo i valori di π/3</span>
-                    </div>
-                    <div class="math"><span class="cos">cos(π/3 − x)</span> = <span class="value">1/2</span> · cos(x) + <span class="value">√3/2</span> · sin(x)</div>
-                    <div class="explanation">Dal cerchio: cos(π/3) = 1/2 e sin(π/3) = √3/2 (vedi il triangolo a 60°)</div>
-                </div>
-
-                <div class="step" data-step="3">
-                    <div class="step-header">
-                        <span class="step-number">4</span>
-                        <span class="step-title">Applichiamo sin(α + β)</span>
-                    </div>
-                    <div class="math"><span class="sin">sin(π/6 + x)</span> = sin(π/6)cos(x) + cos(π/6)sin(x)</div>
-                    <div class="explanation">Formula: sin(α + β) = sin α cos β + cos α sin β, con α = π/6 e β = x</div>
-                </div>
-
-                <div class="step" data-step="4">
-                    <div class="step-header">
-                        <span class="step-number">5</span>
-                        <span class="step-title">Sostituiamo i valori di π/6</span>
-                    </div>
-                    <div class="math"><span class="sin">sin(π/6 + x)</span> = <span class="value">1/2</span> · cos(x) + <span class="value">√3/2</span> · sin(x)</div>
-                    <div class="explanation">Dal cerchio: sin(π/6) = 1/2 e cos(π/6) = √3/2 (vedi il triangolo a 30°)</div>
-                </div>
-
-                <div class="step" data-step="5">
-                    <div class="step-header">
-                        <span class="step-number">6</span>
-                        <span class="step-title">Sommiamo i due risultati</span>
-                    </div>
-                    <div class="math">= (<span class="value">1/2</span> cos x + <span class="value">√3/2</span> sin x) + (<span class="value">1/2</span> cos x + <span class="value">√3/2</span> sin x)</div>
-                    <div class="explanation">Mettiamo insieme i due pezzi che abbiamo calcolato.</div>
-                </div>
-
-                <div class="step" data-step="6">
-                    <div class="step-header">
-                        <span class="step-number">7</span>
-                        <span class="step-title">Risultato finale</span>
-                    </div>
-                    <div class="math">= <span class="result">cos(x) + √3 · sin(x)</span></div>
-                    <div class="explanation">Sommando: 1/2 + 1/2 = 1 (per cos x) e √3/2 + √3/2 = √3 (per sin x)</div>
-                </div>
-
-                <div class="controls">
-                    <button class="btn-prev" onclick="prevStep()" id="prevBtn">← Indietro</button>
-                    <button class="btn-next" onclick="nextStep()" id="nextBtn">Avanti →</button>
-                </div>
+        <div class="exercise">
+            <span class="exercise-number">1.</span> Semplifica:
+            <div class="exercise-problem">cos(π/3 − x) + sin(π/6 + x)</div>
+            <div class="strategy-hint">Strategia: sviluppa separatamente i due termini, poi somma raccogliendo cos(x) e sin(x)</div>
+            <div class="work-area"></div>
+            <div class="result-box">
+                <span class="result-label">Risultato:</span>
+                <div class="result-line"></div>
             </div>
+        </div>
 
-            <div class="right-panel">
-                <div class="circle-container">
-                    <div class="circle-title">Cerchio goniometrico</div>
-                    <svg width="320" height="320" viewBox="-160 -160 320 320">
-                        <!-- Grid -->
-                        <line x1="-140" y1="0" x2="140" y2="0" stroke="#444" stroke-width="1"/>
-                        <line x1="0" y1="-140" x2="0" y2="140" stroke="#444" stroke-width="1"/>
-                        
-                        <!-- Circle -->
-                        <circle cx="0" cy="0" r="120" fill="none" stroke="#666" stroke-width="2"/>
-                        
-                        <!-- Axis labels -->
-                        <text x="145" y="5" fill="#888" font-size="14">x</text>
-                        <text x="5" y="-145" fill="#888" font-size="14">y</text>
-                        
-                        <!-- π/6 = 30° -->
-                        <line x1="0" y1="0" x2="103.9" y2="-60" stroke="#ff6b6b" stroke-width="2" id="line-pi6"/>
-                        <circle cx="103.9" cy="-60" r="6" fill="#ff6b6b" id="point-pi6"/>
-                        <text x="108" y="-65" fill="#ff6b6b" font-size="13" font-family="JetBrains Mono">π/6</text>
-                        
-                        <!-- Projections for π/6 -->
-                        <line x1="103.9" y1="-60" x2="103.9" y2="0" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="4" class="proj-pi6"/>
-                        <line x1="103.9" y1="-60" x2="0" y2="-60" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="4" class="proj-pi6"/>
-                        
-                        <!-- π/3 = 60° -->
-                        <line x1="0" y1="0" x2="60" y2="-103.9" stroke="#4ecdc4" stroke-width="2" id="line-pi3"/>
-                        <circle cx="60" cy="-103.9" r="6" fill="#4ecdc4" id="point-pi3"/>
-                        <text x="65" y="-108" fill="#4ecdc4" font-size="13" font-family="JetBrains Mono">π/3</text>
-                        
-                        <!-- Projections for π/3 -->
-                        <line x1="60" y1="-103.9" x2="60" y2="0" stroke="#4ecdc4" stroke-width="1" stroke-dasharray="4" class="proj-pi3"/>
-                        <line x1="60" y1="-103.9" x2="0" y2="-103.9" stroke="#4ecdc4" stroke-width="1" stroke-dasharray="4" class="proj-pi3"/>
-                        
-                        <!-- Reference values on axes -->
-                        <text x="57" y="15" fill="#4ecdc4" font-size="11" font-family="JetBrains Mono">1/2</text>
-                        <text x="-35" y="-100" fill="#4ecdc4" font-size="11" font-family="JetBrains Mono">√3/2</text>
-                        
-                        <text x="100" y="15" fill="#ff6b6b" font-size="11" font-family="JetBrains Mono">√3/2</text>
-                        <text x="-28" y="-57" fill="#ff6b6b" font-size="11" font-family="JetBrains Mono">1/2</text>
-                        
-                        <!-- Angle arcs -->
-                        <path d="M 30 0 A 30 30 0 0 0 26 -15" fill="none" stroke="#ff6b6b" stroke-width="1.5"/>
-                        <path d="M 25 0 A 25 25 0 0 0 12.5 -21.65" fill="none" stroke="#4ecdc4" stroke-width="1.5"/>
-                    </svg>
-                </div>
+        <div class="exercise">
+            <span class="exercise-number">2.</span> Semplifica:
+            <div class="exercise-problem">sin(π/3 + x) + cos(π/6 − x)</div>
+            <div class="work-area"></div>
+            <div class="result-box">
+                <span class="result-label">Risultato:</span>
+                <div class="result-line"></div>
+            </div>
+        </div>
 
-                <div class="values-box">
-                    <div class="values-title">📋 Valori notevoli</div>
-                    <div class="value-row">
-                        <span><span class="angle">π/6</span> = 30°</span>
-                        <span><span class="sin">sin</span> = 1/2</span>
-                        <span><span class="cos">cos</span> = √3/2</span>
-                    </div>
-                    <div class="value-row">
-                        <span><span class="angle">π/3</span> = 60°</span>
-                        <span><span class="sin">sin</span> = √3/2</span>
-                        <span><span class="cos">cos</span> = 1/2</span>
-                    </div>
-                    <div class="value-row">
-                        <span><span class="angle">π/4</span> = 45°</span>
-                        <span><span class="sin">sin</span> = √2/2</span>
-                        <span><span class="cos">cos</span> = √2/2</span>
-                    </div>
-                </div>
+        <div class="exercise">
+            <span class="exercise-number">3.</span> Semplifica:
+            <div class="exercise-problem">cos(π/4 + x) + cos(π/4 − x)</div>
+            <div class="strategy-hint">Suggerimento: cosa succede ai termini con sin(x)?</div>
+            <div class="work-area"></div>
+            <div class="result-box">
+                <span class="result-label">Risultato:</span>
+                <div class="result-line"></div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <span class="exercise-number">4.</span> Semplifica:
+            <div class="exercise-problem">sin(π/6 + x) − sin(π/6 − x)</div>
+            <div class="work-area"></div>
+            <div class="result-box">
+                <span class="result-label">Risultato:</span>
+                <div class="result-line"></div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <span class="exercise-number">5.</span> Semplifica (sfida):
+            <div class="exercise-problem">cos(π/3 + x) · cos(π/3 − x) + sin(π/3 + x) · sin(π/3 − x)</div>
+            <div class="strategy-hint">Suggerimento: questa espressione ti ricorda qualcosa? Pensa alle formule "al contrario"...</div>
+            <div class="work-area"></div>
+            <div class="result-box">
+                <span class="result-label">Risultato:</span>
+                <div class="result-line"></div>
             </div>
         </div>
     </div>
 
-    <script>
-        let currentStep = 0;
-        const totalSteps = 7;
-
-        function updateSteps() {
-            document.querySelectorAll('.step').forEach((step, index) => {
-                step.classList.remove('active', 'completed');
-                if (index < currentStep) {
-                    step.classList.add('completed');
-                } else if (index === currentStep) {
-                    step.classList.add('active');
-                }
-            });
-
-            document.getElementById('prevBtn').disabled = currentStep === 0;
-            document.getElementById('nextBtn').disabled = currentStep === totalSteps - 1;
-            
-            if (currentStep === totalSteps - 1) {
-                document.getElementById('nextBtn').textContent = '✓ Fine';
-            } else {
-                document.getElementById('nextBtn').textContent = 'Avanti →';
-            }
-        }
-
-        function nextStep() {
-            if (currentStep < totalSteps - 1) {
-                currentStep++;
-                updateSteps();
-            }
-        }
-
-        function prevStep() {
-            if (currentStep > 0) {
-                currentStep--;
-                updateSteps();
-            }
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
-                nextStep();
-            } else if (e.key === 'ArrowLeft') {
-                prevStep();
-            }
-        });
-
-        // Initialize
-        updateSteps();
-    </script>
+    <div class="footer">
+        Nome: _________________________________ Classe: _________ Data: _________
+    </div>
 </body>
 </html>
+
