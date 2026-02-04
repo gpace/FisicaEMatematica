@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conservazione della Quantità di Moto - 4L</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0a0f1a;
+            --bg-secondary: #121a2e;
+            --bg-card: #1a2540;
+            --accent-blue: #4a9eff;
+            --accent-orange: #ff7b4a;
+            --accent-green: #4aff9f;
+            --accent-purple: #a855f7;
+            --text-primary: #e8edf5;
+            --text-secondary: #8892a8;
+            --text-muted: #5a6478;
+        }
+        
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(74, 158, 255, 0.2);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+        
+        .formula-box {
+            background: var(--bg-card);
+            border: 2px solid var(--accent-blue);
+            border-radius: 15px;
+            padding: 1.5rem 2rem;
+            margin: 2rem auto;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .formula-box .formula {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            color: var(--accent-green);
+            margin: 0.5rem 0;
+        }
+        
+        .formula-box .explanation {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Navigation tabs */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-tab {
+            padding: 0.8rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--text-muted);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+        
+        .nav-tab:hover {
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+        
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-color: transparent;
+            color: white;
+        }
+        
+        /* Sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Animation canvas area */
+        .animation-container {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(74, 158, 255, 0.2);
+        }
+        
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(180deg, #0d1320 0%, #1a2540 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Track */
+        .track {
+            position: absolute;
+            bottom: 80px;
+            left: 5%;
+            right: 5%;
+            height: 8px;
+            background: linear-gradient(90deg, #2a3a5a, #3a4a6a, #2a3a5a);
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        
+        .track::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, #4a5a7a 0, #4a5a7a 20px, transparent 20px, transparent 40px);
+        }
+        
+        /* Carrelli */
+        .cart {
+            position: absolute;
+            bottom: 88px;
+            width: 80px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: left 0.05s linear;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        
+        .cart-1 {
+            background: linear-gradient(135deg, var(--accent-blue), #2a7adf);
+            left: calc(50% - 90px);
+        }
+        
+        .cart-2 {
+            background: linear-gradient(135deg, var(--accent-orange), #df5a2a);
+            left: calc(50% + 10px);
+        }
+        
+        .cart .wheels {
+            position: absolute;
+            bottom: -8px;
+            display: flex;
+            gap: 50px;
+        }
+        
+        .wheel {
+            width: 14px;
+            height: 14px;
+            background: #2a2a3a;
+            border-radius: 50%;
+            border: 2px solid #4a4a5a;
+        }
+        
+        /* Molla */
+        .spring {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .spring svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .spring-path {
+            stroke: var(--accent-green);
+            stroke-width: 3;
+            fill: none;
+        }
+        
+        /* Data display */
+        .data-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .data-card {
+            background: var(--bg-card);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-blue);
+        }
+        
+        .data-card.cart-2-data {
+            border-left-color: var(--accent-orange);
+        }
+        
+        .data-card.total-data {
+            border-left-color: var(--accent-green);
+        }
+        
+        .data-card h4 {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .data-card .value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+        }
+        
+        .data-card .unit {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Controls */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: flex-end;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .control-group label {
+            display: block;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--bg-primary);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(74, 158, 255, 0.4);
+        }
+        
+        .slider-value {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-blue);
+            font-size: 1.1rem;
+            margin-top: 0.3rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-green), #2adf7a);
+            color: #0a0f1a;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 255, 159, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--text-muted);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        /* Exercises */
+        .exercise-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .exercise-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .exercise-card.level-base {
+            border-left: 4px solid var(--accent-green);
+        }
+        
+        .exercise-card.level-intermedio {
+            border-left: 4px solid var(--accent-blue);
+        }
+        
+        .exercise-card.level-sfida {
+            border-left: 4px solid var(--accent-purple);
+        }
+        
+        .level-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+        
+        .level-base .level-badge {
+            background: rgba(74, 255, 159, 0.2);
+            color: var(--accent-green);
+        }
+        
+        .level-intermedio .level-badge {
+            background: rgba(74, 158, 255, 0.2);
+            color: var(--accent-blue);
+        }
+        
+        .level-sfida .level-badge {
+            background: rgba(168, 85, 247, 0.2);
+            color: var(--accent-purple);
+        }
+        
+        .exercise-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .exercise-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .exercise-card .hint {
+            background: var(--bg-secondary);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        .exercise-card .answer-area {
+            margin-top: 1rem;
+        }
+        
+        .exercise-card input[type="number"] {
+            width: 100px;
+            padding: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--text-muted);
+            border-radius: 8px;
+            color: var(--text-primary);
+            margin-right: 0.5rem;
+        }
+        
+        .exercise-card .check-btn {
+            padding: 0.5rem 1rem;
+            background: var(--accent-blue);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .exercise-card .feedback {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .feedback.correct {
+            background: rgba(74, 255, 159, 0.2);
+            color: var(--accent-green);
+        }
+        
+        .feedback.incorrect {
+            background: rgba(255, 123, 74, 0.2);
+            color: var(--accent-orange);
+        }
+        
+        /* Quiz section */
+        .quiz-question {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .quiz-question h3 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .quiz-option:hover {
+            background: var(--bg-primary);
+            border-color: var(--accent-blue);
+        }
+        
+        .quiz-option.selected {
+            border-color: var(--accent-blue);
+            background: rgba(74, 158, 255, 0.1);
+        }
+        
+        .quiz-option.correct {
+            border-color: var(--accent-green);
+            background: rgba(74, 255, 159, 0.1);
+        }
+        
+        .quiz-option.wrong {
+            border-color: var(--accent-orange);
+            background: rgba(255, 123, 74, 0.1);
+        }
+        
+        .quiz-option input {
+            margin-right: 1rem;
+        }
+        
+        /* Theory section */
+        .theory-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .theory-card h2 {
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .theory-card h3 {
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.5rem;
+        }
+        
+        .theory-card p, .theory-card li {
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+        }
+        
+        .theory-card ul {
+            margin-left: 1.5rem;
+        }
+        
+        .highlight-formula {
+            background: var(--bg-secondary);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--accent-green);
+        }
+        
+        /* Scenario selector */
+        .scenario-selector {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        
+        .scenario-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 2px solid var(--text-muted);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .scenario-btn.active {
+            border-color: var(--accent-green);
+            background: rgba(74, 255, 159, 0.1);
+        }
+        
+        .scenario-btn h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+        
+        .scenario-btn p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        
+        /* Center marker */
+        .center-marker {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Velocity arrows */
+        .velocity-arrow {
+            position: absolute;
+            bottom: 160px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .velocity-arrow.visible {
+            opacity: 1;
+        }
+        
+        .velocity-arrow.cart-1-arrow {
+            color: var(--accent-blue);
+        }
+        
+        .velocity-arrow.cart-2-arrow {
+            color: var(--accent-orange);
+        }
+        
+        .arrow-line {
+            height: 4px;
+            background: currentColor;
+            border-radius: 2px;
+        }
+        
+        .arrow-head {
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+        
+        .arrow-head.left {
+            border-right: 12px solid currentColor;
+        }
+        
+        .arrow-head.right {
+            border-left: 12px solid currentColor;
+        }
+        
+        /* Section headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+        }
+        
+        .section-header .icon {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Conservazione della Quantità di Moto</h1>
+            <p class="subtitle">Classe 4L – Liceo Galilei Dolo</p>
+            
+            <div class="formula-box">
+                <div class="formula">p<sub>tot,prima</sub> = p<sub>tot,dopo</sub></div>
+                <div class="formula">m₁v₁ + m₂v₂ = m₁v'₁ + m₂v'₂</div>
+                <div class="explanation">La quantità di moto totale di un sistema isolato si conserva</div>
+            </div>
+        </header>
+        
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('simulazione')">🎬 Simulazione</button>
+            <button class="nav-tab" onclick="showSection('teoria')">📚 Ripasso</button>
+            <button class="nav-tab" onclick="showSection('quiz')">❓ Quiz Concettuale</button>
+            <button class="nav-tab" onclick="showSection('esercizi-base')">🌱 Esercizi Base</button>
+            <button class="nav-tab" onclick="showSection('esercizi-sfida')">🚀 Sfida</button>
+        </nav>
+        
+        <!-- SIMULAZIONE -->
+        <section id="simulazione" class="section active">
+            <div class="section-header">
+                <div class="icon">🔬</div>
+                <h2>Simulazione Interattiva</h2>
+            </div>
+            
+            <div class="scenario-selector">
+                <button class="scenario-btn active" onclick="setScenario('base')">
+                    <h4>Scenario Base</h4>
+                    <p>Masse uguali (1 kg + 1 kg)</p>
+                </button>
+                <button class="scenario-btn" onclick="setScenario('doppia')">
+                    <h4>Massa Doppia</h4>
+                    <p>m₂ = 2 × m₁</p>
+                </button>
+                <button class="scenario-btn" onclick="setScenario('tripla')">
+                    <h4>Massa Tripla</h4>
+                    <p>m₂ = 3 × m₁</p>
+                </button>
+                <button class="scenario-btn" onclick="setScenario('custom')">
+                    <h4>Personalizzato</h4>
+                    <p>Scegli tu le masse</p>
+                </button>
+            </div>
+            
+            <div class="animation-container">
+                <div class="canvas-wrapper" id="canvas">
+                    <div class="track"></div>
+                    <div class="center-marker">⬆ Centro</div>
+                    
+                    <div class="cart cart-1" id="cart1">
+                        <span id="cart1-label">m₁</span>
+                        <div class="wheels">
+                            <div class="wheel"></div>
+                            <div class="wheel"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="spring" id="spring">
+                        <svg viewBox="0 0 60 30">
+                            <path class="spring-path" id="spring-path" d="M 5 15 Q 10 5, 15 15 Q 20 25, 25 15 Q 30 5, 35 15 Q 40 25, 45 15 Q 50 5, 55 15"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="cart cart-2" id="cart2">
+                        <span id="cart2-label">m₂</span>
+                        <div class="wheels">
+                            <div class="wheel"></div>
+                            <div class="wheel"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="velocity-arrow cart-1-arrow" id="arrow1">
+                        <div class="arrow-head left"></div>
+                        <div class="arrow-line" id="arrow1-line"></div>
+                        <span id="arrow1-label"></span>
+                    </div>
+                    
+                    <div class="velocity-arrow cart-2-arrow" id="arrow2">
+                        <div class="arrow-line" id="arrow2-line"></div>
+                        <div class="arrow-head right"></div>
+                        <span id="arrow2-label"></span>
+                    </div>
+                </div>
+                
+                <div class="data-display">
+                    <div class="data-card">
+                        <h4>Carrello Blu (m₁)</h4>
+                        <div class="value"><span id="m1-display">1.0</span> <span class="unit">kg</span></div>
+                        <div class="value"><span id="v1-display">0.0</span> <span class="unit">m/s</span></div>
+                        <div class="value">p₁ = <span id="p1-display">0.0</span> <span class="unit">kg·m/s</span></div>
+                    </div>
+                    <div class="data-card cart-2-data">
+                        <h4>Carrello Arancione (m₂)</h4>
+                        <div class="value"><span id="m2-display">1.0</span> <span class="unit">kg</span></div>
+                        <div class="value"><span id="v2-display">0.0</span> <span class="unit">m/s</span></div>
+                        <div class="value">p₂ = <span id="p2-display">0.0</span> <span class="unit">kg·m/s</span></div>
+                    </div>
+                    <div class="data-card total-data">
+                        <h4>Quantità di Moto Totale</h4>
+                        <div class="value">p<sub>tot</sub> = <span id="ptot-display">0.0</span> <span class="unit">kg·m/s</span></div>
+                        <div style="margin-top: 0.5rem; color: var(--accent-green); font-size: 0.9rem;">
+                            ✓ Si conserva sempre!
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls" id="custom-controls" style="display: none;">
+                    <div class="control-group">
+                        <label>Massa carrello blu (m₁)</label>
+                        <input type="range" id="mass1-slider" min="0.5" max="5" step="0.5" value="1">
+                        <div class="slider-value"><span id="mass1-value">1.0</span> kg</div>
+                    </div>
+                    <div class="control-group">
+                        <label>Massa carrello arancione (m₂)</label>
+                        <input type="range" id="mass2-slider" min="0.5" max="5" step="0.5" value="1">
+                        <div class="slider-value"><span id="mass2-value">1.0</span> kg</div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-primary" id="launch-btn" onclick="launchSpring()">
+                        🚀 Rilascia la Molla!
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetAnimation()">
+                        ↺ Reset
+                    </button>
+                </div>
+            </div>
+            
+            <div class="theory-card">
+                <h3>🔍 Cosa osservare</h3>
+                <ul>
+                    <li><strong>Masse uguali</strong>: i carrelli partono con la stessa velocità (in verso opposto)</li>
+                    <li><strong>Massa doppia</strong>: il carrello più pesante va a metà velocità</li>
+                    <li><strong>Massa tripla</strong>: il carrello più pesante va a un terzo della velocità</li>
+                    <li>La quantità di moto totale è sempre <strong>zero</strong> (partivano fermi!)</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- TEORIA -->
+        <section id="teoria" class="section">
+            <div class="section-header">
+                <div class="icon">📚</div>
+                <h2>Ripasso Teorico</h2>
+            </div>
+            
+            <div class="theory-card">
+                <h2>La Quantità di Moto</h2>
+                <p>La <strong>quantità di moto</strong> (o momento lineare) è una grandezza vettoriale che descrive il "movimento" di un oggetto:</p>
+                
+                <div class="highlight-formula"><b>p</b> = m · <b>v</b></div>
+                
+                <p>dove:</p>
+                <ul>
+                    <li><strong>m</strong> è la massa dell'oggetto (in kg)</li>
+                    <li><b>v</b> è la velocità dell'oggetto (in m/s)</li>
+                    <li><b>p</b> è la quantità di moto (in kg·m/s)</li>
+                </ul>
+                
+                <h3>Perché è importante?</h3>
+                <p>Un camion che va a 10 km/h è più "difficile da fermare" di una bicicletta che va a 30 km/h. La quantità di moto cattura questa idea: tiene conto sia della massa che della velocità.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h2>Il Principio di Conservazione</h2>
+                <p>In un <strong>sistema isolato</strong> (nessuna forza esterna), la quantità di moto totale si conserva:</p>
+                
+                <div class="highlight-formula"><b>p</b><sub>tot,prima</sub> = <b>p</b><sub>tot,dopo</sub></div>
+                
+                <h3>Nel nostro esperimento</h3>
+                <p>I due carrelli partono fermi, quindi:</p>
+                <div class="highlight-formula">p<sub>tot,prima</sub> = 0</div>
+                
+                <p>Dopo che la molla scatta:</p>
+                <div class="highlight-formula">m₁v₁ + m₂v₂ = 0</div>
+                
+                <p>Da cui ricaviamo la relazione fondamentale:</p>
+                <div class="highlight-formula">m₁v₁ = -m₂v₂</div>
+                
+                <p>Le quantità di moto sono <strong>uguali e opposte</strong>!</p>
+                
+                <h3>Conseguenza importante</h3>
+                <div class="highlight-formula">v₁/v₂ = -m₂/m₁</div>
+                <p>Le velocità sono <strong>inversamente proporzionali</strong> alle masse (e di verso opposto).</p>
+            </div>
+            
+            <div class="theory-card">
+                <h2>L'esperimento in laboratorio</h2>
+                <p>Quello che abbiamo visto con i carrelli sulla rotaia:</p>
+                <ul>
+                    <li>Due carrelli inizialmente fermi, connessi da una molla compressa</li>
+                    <li>Si rilascia la molla → i carrelli si allontanano</li>
+                    <li>Il carrello più leggero va più veloce</li>
+                    <li>Il carrello più pesante va più lento</li>
+                    <li>Il prodotto m×v è uguale per entrambi (ma di segno opposto)</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- QUIZ -->
+        <section id="quiz" class="section">
+            <div class="section-header">
+                <div class="icon">❓</div>
+                <h2>Quiz Concettuale</h2>
+            </div>
+            
+            <div class="quiz-question" data-correct="b">
+                <h3>1. Due carrelli identici partono fermi. Dopo il rilascio della molla, le loro velocità sono:</h3>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q1" value="a">
+                        Uguali in modulo e verso
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q1" value="b">
+                        Uguali in modulo, opposte in verso
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q1" value="c">
+                        Una è doppia dell'altra
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q1" value="d">
+                        Dipende dalla rigidità della molla
+                    </label>
+                </div>
+                <div class="feedback" id="feedback-q1"></div>
+            </div>
+            
+            <div class="quiz-question" data-correct="c">
+                <h3>2. Se m₂ = 2m₁, dopo il rilascio della molla:</h3>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q2" value="a">
+                        v₁ = v₂
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q2" value="b">
+                        v₁ = v₂/2
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q2" value="c">
+                        v₁ = 2v₂ (in verso opposto)
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q2" value="d">
+                        v₁ = 4v₂
+                    </label>
+                </div>
+                <div class="feedback" id="feedback-q2"></div>
+            </div>
+            
+            <div class="quiz-question" data-correct="a">
+                <h3>3. La quantità di moto totale del sistema dopo il rilascio è:</h3>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q3" value="a">
+                        Zero
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q3" value="b">
+                        Uguale all'energia potenziale della molla
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q3" value="c">
+                        Uguale a m₁v₁
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q3" value="d">
+                        Dipende dalla massa totale
+                    </label>
+                </div>
+                <div class="feedback" id="feedback-q3"></div>
+            </div>
+            
+            <div class="quiz-question" data-correct="b">
+                <h3>4. Perché si conserva la quantità di moto e non la velocità?</h3>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q4" value="a">
+                        Perché la velocità è troppo piccola
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q4" value="b">
+                        Perché le forze interne trasferiscono quantità di moto tra i corpi, non velocità
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q4" value="c">
+                        Perché la massa non si conserva
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q4" value="d">
+                        È solo una convenzione
+                    </label>
+                </div>
+                <div class="feedback" id="feedback-q4"></div>
+            </div>
+            
+            <div class="quiz-question" data-correct="c">
+                <h3>5. Un carrello di 3 kg e uno di 1 kg partono fermi. Se il carrello leggero parte a 6 m/s verso destra, il carrello pesante:</h3>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="q5" value="a">
+                        Va a 6 m/s verso sinistra
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q5" value="b">
+                        Va a 18 m/s verso sinistra
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q5" value="c">
+                        Va a 2 m/s verso sinistra
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="q5" value="d">
+                        Va a 2 m/s verso destra
+                    </label>
+                </div>
+                <div class="feedback" id="feedback-q5"></div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="checkQuiz()" style="margin-top: 1.5rem;">
+                Verifica Risposte
+            </button>
+        </section>
+        
+        <!-- ESERCIZI BASE -->
+        <section id="esercizi-base" class="section">
+            <div class="section-header">
+                <div class="icon">🌱</div>
+                <h2>Esercizi Base</h2>
+            </div>
+            
+            <div class="exercise-grid">
+                <div class="exercise-card level-base">
+                    <span class="level-badge">Base</span>
+                    <h3>Esercizio 1: Carrelli identici</h3>
+                    <p>Due carrelli identici di massa <strong>m = 2 kg</strong> ciascuno, inizialmente fermi, sono collegati da una molla compressa. Dopo il rilascio, il carrello A si muove verso sinistra a <strong>3 m/s</strong>.</p>
+                    <p><strong>Domanda:</strong> Qual è la velocità del carrello B?</p>
+                    <div class="hint">💡 Suggerimento: masse uguali → velocità uguali (ma opposte!)</div>
+                    <div class="answer-area">
+                        <input type="number" id="ex1-answer" step="0.1" placeholder="v₂">
+                        <span>m/s (verso destra)</span>
+                        <button class="check-btn" onclick="checkExercise(1, 3)">Verifica</button>
+                        <div class="feedback" id="feedback-ex1"></div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card level-base">
+                    <span class="level-badge">Base</span>
+                    <h3>Esercizio 2: Massa doppia</h3>
+                    <p>Un carrello di massa <strong>m₁ = 1 kg</strong> e uno di massa <strong>m₂ = 2 kg</strong> partono fermi. Dopo il rilascio della molla, il carrello leggero va a <strong>4 m/s</strong> verso sinistra.</p>
+                    <p><strong>Domanda:</strong> A quale velocità va il carrello pesante?</p>
+                    <div class="hint">💡 Suggerimento: m₁v₁ = m₂v₂, quindi v₂ = m₁v₁/m₂</div>
+                    <div class="answer-area">
+                        <input type="number" id="ex2-answer" step="0.1" placeholder="v₂">
+                        <span>m/s (verso destra)</span>
+                        <button class="check-btn" onclick="checkExercise(2, 2)">Verifica</button>
+                        <div class="feedback" id="feedback-ex2"></div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card level-base">
+                    <span class="level-badge">Base</span>
+                    <h3>Esercizio 3: Calcolo della quantità di moto</h3>
+                    <p>Un carrello di <strong>1.5 kg</strong> si muove a <strong>4 m/s</strong> verso destra.</p>
+                    <p><strong>Domanda:</strong> Qual è la sua quantità di moto?</p>
+                    <div class="hint">💡 Suggerimento: p = m × v</div>
+                    <div class="answer-area">
+                        <input type="number" id="ex3-answer" step="0.1" placeholder="p">
+                        <span>kg·m/s</span>
+                        <button class="check-btn" onclick="checkExercise(3, 6)">Verifica</button>
+                        <div class="feedback" id="feedback-ex3"></div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card level-intermedio">
+                    <span class="level-badge">Intermedio</span>
+                    <h3>Esercizio 4: Trovare la massa</h3>
+                    <p>Due carrelli partono fermi. Dopo il rilascio, il carrello A (massa <strong>2 kg</strong>) va a <strong>3 m/s</strong> verso sinistra, mentre il carrello B va a <strong>2 m/s</strong> verso destra.</p>
+                    <p><strong>Domanda:</strong> Qual è la massa del carrello B?</p>
+                    <div class="hint">💡 Suggerimento: m₁v₁ = m₂v₂, quindi m₂ = m₁v₁/v₂</div>
+                    <div class="answer-area">
+                        <input type="number" id="ex4-answer" step="0.1" placeholder="m₂">
+                        <span>kg</span>
+                        <button class="check-btn" onclick="checkExercise(4, 3)">Verifica</button>
+                        <div class="feedback" id="feedback-ex4"></div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card level-intermedio">
+                    <span class="level-badge">Intermedio</span>
+                    <h3>Esercizio 5: Rapporto delle velocità</h3>
+                    <p>Un carrello di massa <strong>m₁ = 0.5 kg</strong> e uno di massa <strong>m₂ = 2.5 kg</strong> partono fermi.</p>
+                    <p><strong>Domanda:</strong> Quante volte più veloce va il carrello leggero rispetto a quello pesante?</p>
+                    <div class="hint">💡 Suggerimento: v₁/v₂ = m₂/m₁</div>
+                    <div class="answer-area">
+                        <input type="number" id="ex5-answer" step="0.1" placeholder="rapporto">
+                        <span>volte</span>
+                        <button class="check-btn" onclick="checkExercise(5, 5)">Verifica</button>
+                        <div class="feedback" id="feedback-ex5"></div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card level-intermedio">
+                    <span class="level-badge">Intermedio</span>
+                    <h3>Esercizio 6: Verifica della conservazione</h3>
+                    <p>Carrello A: <strong>m₁ = 1 kg</strong>, <strong>v₁ = -6 m/s</strong> (verso sinistra)<br>
+                    Carrello B: <strong>m₂ = 3 kg</strong>, <strong>v₂ = +2 m/s</strong> (verso destra)</p>
+                    <p><strong>Domanda:</strong> Qual è la quantità di moto totale?</p>
+                    <div class="hint">💡 Suggerimento: p_tot = m₁v₁ + m₂v₂ (attenzione ai segni!)</div>
+                    <div class="answer-area">
+                        <input type="number" id="ex6-answer" step="0.1" placeholder="p_tot">
+                        <span>kg·m/s</span>
+                        <button class="check-btn" onclick="checkExercise(6, 0)">Verifica</button>
+                        <div class="feedback" id="feedback-ex6"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ESERCIZI SFIDA -->
+        <section id="esercizi-sfida" class="section">
+            <div class="section-header">
+                <div class="icon">🚀</div>
+                <h2>Esercizi Sfida</h2>
+            </div>
+            
+            <div class="exercise-grid">
+                <div class="exercise-card level-sfida">
+                    <span class="level-badge">Sfida</span>
+                    <h3>Esercizio 7: Carrelli già in movimento</h3>
+                    <p>Due carrelli sono su una rotaia. Il carrello A (<strong>m₁ = 2 kg</strong>) si muove a <strong>+5 m/s</strong> verso destra, il carrello B (<strong>m₂ = 3 kg</strong>) a <strong>-3 m/s</strong> verso sinistra. Si urtano e rimangono attaccati.</p>
+                    <p><strong>Domanda:</strong> Qual è la velocità finale del sistema?</p>
+                    <div class="hint">💡 Suggerimento: p_prima = p_dopo → m₁v₁ + m₂v₂ = (m₁ + m₂)v_finale</div>
+                    <div class="answer-area">
+                        <input type="number" id="ex7-answer" step="0.1" placeholder="v_f">
+                        <span>m/s</span>
+                        <button class="check-btn" onclick="checkExercise(7, 0.2)">Verifica</button>
+                        <div class="feedback" id="feedback-ex7"></div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card level-sfida">
+                    <span class="level-badge">Sfida</span>
+                    <h3>Esercizio 8: Tre carrelli</h3>
+                    <p>Tre carrelli identici (<strong>m = 1 kg</strong> ciascuno) sono fermi in fila sulla rotaia. Una molla tra il primo e il secondo si rilascia, spingendo il primo a <strong>-4 m/s</strong> verso sinistra.</p>
+                    <p><strong>Domanda:</strong> A quale velocità si muovono insieme il secondo e il terzo carrello (considerali come un unico sistema di massa 2 kg)?</p>
+                    <div class="hint">💡 Suggerimento: Il primo carrello ha quantità di moto -4 kg·m/s. Quanto devono avere gli altri due insieme?</div>
+                    <div class="answer-area">
+                        <input type="number" id="ex8-answer" step="0.1" placeholder="v">
+                        <span>m/s</span>
+                        <button class="check-btn" onclick="checkExercise(8, 2)">Verifica</button>
+                        <div class="feedback" id="feedback-ex8"></div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card level-sfida">
+                    <span class="level-badge">Sfida</span>
+                    <h3>Esercizio 9: Problema inverso</h3>
+                    <p>Due carrelli partono fermi. Dopo il rilascio della molla, il carrello A va a <strong>6 m/s</strong> e il carrello B a <strong>2 m/s</strong> (in verso opposto). La massa totale è <strong>4 kg</strong>.</p>
+                    <p><strong>Domanda:</strong> Qual è la massa del carrello A?</p>
+                    <div class="hint">💡 Suggerimento: Usa sia m₁v₁ = m₂v₂ che m₁ + m₂ = 4 kg</div>
+                    <div class="answer-area">
+                        <input type="number" id="ex9-answer" step="0.1" placeholder="m₁">
+                        <span>kg</span>
+                        <button class="check-btn" onclick="checkExercise(9, 1)">Verifica</button>
+                        <div class="feedback" id="feedback-ex9"></div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card level-sfida">
+                    <span class="level-badge">Sfida ⭐</span>
+                    <h3>Esercizio 10: La domanda del prof</h3>
+                    <p>Un carrello di massa <strong>m</strong> fermo spara un proiettile di massa <strong>m/10</strong> a velocità <strong>v</strong>. Il carrello rincula.</p>
+                    <p><strong>Domanda:</strong> Qual è la velocità di rinculo del carrello? (esprimi in funzione di v)</p>
+                    <div class="hint">💡 Suggerimento: Prima erano fermi, quindi p_tot = 0. Dopo: (m - m/10)v_carrello + (m/10)v = 0</div>
+                    <div class="answer-area">
+                        <p>La velocità del carrello è: <input type="text" id="ex10-answer" placeholder="-v/..." style="width: 80px;"></p>
+                        <button class="check-btn" onclick="checkExercise10()">Verifica</button>
+                        <div class="feedback" id="feedback-ex10"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>Prof. Giancarlo Pace – Liceo Galilei Dolo – A.S. 2025/2026</p>
+        </footer>
+    </div>
+    
+    <script>
+        // State
+        let currentScenario = 'base';
+        let isAnimating = false;
+        let animationId = null;
+        let m1 = 1, m2 = 1;
+        let v1 = 0, v2 = 0;
+        let pos1 = 0, pos2 = 0;
+        let springEnergy = 100; // Arbitrary energy unit
+        
+        // DOM elements
+        const cart1 = document.getElementById('cart1');
+        const cart2 = document.getElementById('cart2');
+        const spring = document.getElementById('spring');
+        const arrow1 = document.getElementById('arrow1');
+        const arrow2 = document.getElementById('arrow2');
+        
+        // Show section
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Set scenario
+        function setScenario(scenario) {
+            currentScenario = scenario;
+            document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+            event.target.closest('.scenario-btn').classList.add('active');
+            
+            const customControls = document.getElementById('custom-controls');
+            
+            switch(scenario) {
+                case 'base':
+                    m1 = 1; m2 = 1;
+                    customControls.style.display = 'none';
+                    break;
+                case 'doppia':
+                    m1 = 1; m2 = 2;
+                    customControls.style.display = 'none';
+                    break;
+                case 'tripla':
+                    m1 = 1; m2 = 3;
+                    customControls.style.display = 'none';
+                    break;
+                case 'custom':
+                    customControls.style.display = 'flex';
+                    m1 = parseFloat(document.getElementById('mass1-slider').value);
+                    m2 = parseFloat(document.getElementById('mass2-slider').value);
+                    break;
+            }
+            
+            resetAnimation();
+            updateDisplay();
+        }
+        
+        // Slider handlers
+        document.getElementById('mass1-slider').addEventListener('input', (e) => {
+            m1 = parseFloat(e.target.value);
+            document.getElementById('mass1-value').textContent = m1.toFixed(1);
+            resetAnimation();
+            updateDisplay();
+        });
+        
+        document.getElementById('mass2-slider').addEventListener('input', (e) => {
+            m2 = parseFloat(e.target.value);
+            document.getElementById('mass2-value').textContent = m2.toFixed(1);
+            resetAnimation();
+            updateDisplay();
+        });
+        
+        // Update display
+        function updateDisplay() {
+            document.getElementById('m1-display').textContent = m1.toFixed(1);
+            document.getElementById('m2-display').textContent = m2.toFixed(1);
+            document.getElementById('v1-display').textContent = v1.toFixed(2);
+            document.getElementById('v2-display').textContent = v2.toFixed(2);
+            document.getElementById('p1-display').textContent = (m1 * v1).toFixed(2);
+            document.getElementById('p2-display').textContent = (m2 * v2).toFixed(2);
+            document.getElementById('ptot-display').textContent = (m1 * v1 + m2 * v2).toFixed(2);
+            
+            // Update cart labels
+            document.getElementById('cart1-label').textContent = m1.toFixed(1) + ' kg';
+            document.getElementById('cart2-label').textContent = m2.toFixed(1) + ' kg';
+            
+            // Update cart sizes based on mass
+            const baseWidth = 60;
+            const baseHeight = 40;
+            cart1.style.width = (baseWidth + m1 * 10) + 'px';
+            cart1.style.height = (baseHeight + m1 * 5) + 'px';
+            cart2.style.width = (baseWidth + m2 * 10) + 'px';
+            cart2.style.height = (baseHeight + m2 * 5) + 'px';
+        }
+        
+        // Launch spring
+        function launchSpring() {
+            if (isAnimating) return;
+            isAnimating = true;
+            
+            document.getElementById('launch-btn').disabled = true;
+            
+            // Calculate final velocities based on conservation of momentum ONLY
+            // Starting from rest: m1*v1 + m2*v2 = 0
+            // Therefore: v1/v2 = -m2/m1
+            // We set a reference speed for the lighter cart and derive the other
+            
+            const baseSpeed = 4; // Reference speed in m/s
+            
+            // The lighter cart goes faster, heavier goes slower
+            // v1 * m1 = -v2 * m2
+            // Set v2 = baseSpeed * (m1 / max(m1,m2)) so heavier cart has reasonable speed
+            // Then v1 = -v2 * m2 / m1
+            
+            v2 = baseSpeed * (m1 / Math.max(m1, m2)); // Heavier cart gets base or less
+            v1 = -v2 * m2 / m1; // Lighter cart goes proportionally faster
+            
+            // Hide spring
+            spring.style.opacity = '0';
+            spring.style.transform = 'translateX(-50%) scale(0)';
+            
+            // Show velocity arrows
+            arrow1.classList.add('visible');
+            arrow2.classList.add('visible');
+            updateArrows();
+            
+            // Animate
+            pos1 = 0;
+            pos2 = 0;
+            animate();
+        }
+        
+        function updateArrows() {
+            const arrowScale = 15; // pixels per m/s
+            
+            // Arrow 1 (goes left)
+            const arrow1Width = Math.abs(v1) * arrowScale;
+            document.getElementById('arrow1-line').style.width = arrow1Width + 'px';
+            document.getElementById('arrow1-label').textContent = v1.toFixed(2) + ' m/s';
+            arrow1.style.left = `calc(50% - 90px - ${arrow1Width + 20}px)`;
+            
+            // Arrow 2 (goes right)
+            const arrow2Width = Math.abs(v2) * arrowScale;
+            document.getElementById('arrow2-line').style.width = arrow2Width + 'px';
+            document.getElementById('arrow2-label').textContent = v2.toFixed(2) + ' m/s';
+            arrow2.style.left = `calc(50% + 90px)`;
+        }
+        
+        function animate() {
+            pos1 += v1 * 0.5;
+            pos2 += v2 * 0.5;
+            
+            cart1.style.left = `calc(50% - 90px + ${pos1}px)`;
+            cart2.style.left = `calc(50% + 10px + ${pos2}px)`;
+            
+            // Update arrow positions
+            const arrowScale = 15;
+            const arrow1Width = Math.abs(v1) * arrowScale;
+            arrow1.style.left = `calc(50% - 90px + ${pos1}px - ${arrow1Width + 20}px)`;
+            arrow2.style.left = `calc(50% + 90px + ${pos2}px)`;
+            
+            updateDisplay();
+            
+            // Stop when reaching edges
+            if (Math.abs(pos1) < 200 && Math.abs(pos2) < 200) {
+                animationId = requestAnimationFrame(animate);
+            } else {
+                isAnimating = false;
+                document.getElementById('launch-btn').disabled = false;
+            }
+        }
+        
+        // Reset animation
+        function resetAnimation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            isAnimating = false;
+            document.getElementById('launch-btn').disabled = false;
+            
+            v1 = 0;
+            v2 = 0;
+            pos1 = 0;
+            pos2 = 0;
+            
+            cart1.style.left = 'calc(50% - 90px)';
+            cart2.style.left = 'calc(50% + 10px)';
+            
+            spring.style.opacity = '1';
+            spring.style.transform = 'translateX(-50%) scale(1)';
+            
+            arrow1.classList.remove('visible');
+            arrow2.classList.remove('visible');
+            
+            updateDisplay();
+        }
+        
+        // Quiz checking
+        function checkQuiz() {
+            const answers = {
+                q1: 'b',
+                q2: 'c',
+                q3: 'a',
+                q4: 'b',
+                q5: 'c'
+            };
+            
+            const explanations = {
+                q1: 'Masse uguali → velocità uguali in modulo ma opposte, per conservare p_tot = 0',
+                q2: 'Se m₂ = 2m₁, allora v₁ = 2v₂ (velocità inversamente proporzionali alle masse)',
+                q3: 'Partivano fermi (p_tot = 0), quindi dopo deve ancora essere p_tot = 0',
+                q4: 'Le forze interne (la molla) trasferiscono quantità di moto tra i corpi, non velocità',
+                q5: 'm₁v₁ = m₂v₂ → 1 × 6 = 3 × v₂ → v₂ = 2 m/s verso sinistra'
+            };
+            
+            for (let q in answers) {
+                const selected = document.querySelector(`input[name="${q}"]:checked`);
+                const feedback = document.getElementById(`feedback-${q}`);
+                const options = document.querySelectorAll(`input[name="${q}"]`);
+                
+                options.forEach(opt => {
+                    opt.closest('.quiz-option').classList.remove('correct', 'wrong', 'selected');
+                });
+                
+                if (selected) {
+                    const option = selected.closest('.quiz-option');
+                    if (selected.value === answers[q]) {
+                        option.classList.add('correct');
+                        feedback.className = 'feedback correct';
+                        feedback.textContent = '✓ Corretto! ' + explanations[q];
+                    } else {
+                        option.classList.add('wrong');
+                        // Highlight correct answer
+                        document.querySelector(`input[name="${q}"][value="${answers[q]}"]`).closest('.quiz-option').classList.add('correct');
+                        feedback.className = 'feedback incorrect';
+                        feedback.textContent = '✗ ' + explanations[q];
+                    }
+                } else {
+                    feedback.className = 'feedback incorrect';
+                    feedback.textContent = 'Seleziona una risposta!';
+                }
+            }
+        }
+        
+        // Exercise checking
+        function checkExercise(num, correctAnswer) {
+            const input = document.getElementById(`ex${num}-answer`);
+            const feedback = document.getElementById(`feedback-ex${num}`);
+            const userAnswer = parseFloat(input.value);
+            
+            if (isNaN(userAnswer)) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Inserisci un numero!';
+                return;
+            }
+            
+            if (Math.abs(userAnswer - correctAnswer) < 0.15) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✓ Corretto! Ottimo lavoro!';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `✗ Non esatto. Riprova! (La risposta corretta è ${correctAnswer})`;
+            }
+        }
+        
+        function checkExercise10() {
+            const input = document.getElementById('ex10-answer');
+            const feedback = document.getElementById('feedback-ex10');
+            const answer = input.value.toLowerCase().replace(/\s/g, '');
+            
+            // Accept various forms: -v/9, -v/9, v/9 (with implied negative)
+            if (answer.includes('v/9') || answer.includes('v÷9') || answer === '-1/9v' || answer === '-(1/9)v') {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✓ Esatto! Il carrello rincula a -v/9 (verso opposto al proiettile)';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = '✗ Non esatto. Usa: (9m/10)·v_carrello + (m/10)·v = 0 → v_carrello = -v/9';
+            }
+        }
+        
+        // Initialize
+        updateDisplay();
+    </script>
+</body>
+</html>
