@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urto Anelastico — Laboratorio guidato 4L</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181b24;
+    --surface2: #1f2330;
+    --accent: #4fc3f7;
+    --accent2: #ff7043;
+    --accent3: #66bb6a;
+    --gold: #ffd54f;
+    --text: #e0e0e0;
+    --text-dim: #8a8fa8;
+    --text-bright: #ffffff;
+    --border: #2a2e3d;
+    --formula-bg: #141720;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 18px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    background: linear-gradient(170deg, #0f1117, #161a28, #1a1e30);
+    position: relative;
+  }
+
+  .hero h1 {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 700;
+    color: var(--text-bright);
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero .sub {
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    margin-top: 0.4rem;
+  }
+
+  /* ── Progress bar ── */
+  .progress-bar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: rgba(15,17,23,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.6rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .progress-bar .step-dot {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--surface2);
+    cursor: pointer;
+    transition: background 0.3s;
+    position: relative;
+  }
+
+  .progress-bar .step-dot.active {
+    background: var(--accent);
+  }
+
+  .progress-bar .step-dot.done {
+    background: var(--accent3);
+  }
+
+  .progress-bar .step-label {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+    display: none;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .progress-bar .step-dot:hover .step-label {
+    display: block;
+  }
+
+  /* ── Main ── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 5rem;
+  }
+
+  /* ── Blocks (the main unit) ── */
+  .block {
+    margin-bottom: 3rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .block-header:hover {
+    background: #252938;
+  }
+
+  .block-header .block-id {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .block-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--bg);
+    background: var(--accent);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .block-header h2 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .block-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--gold);
+    background: rgba(255,213,79,0.1);
+    padding: 0.25rem 0.8rem;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .block-body {
+    padding: 1.5rem;
+  }
+
+  /* ── Teacher notes (only visible to prof) ── */
+  .teacher-note {
+    background: rgba(255,213,79,0.06);
+    border: 1px dashed rgba(255,213,79,0.25);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.2rem;
+    font-size: 0.88rem;
+    color: var(--gold);
+    display: none;
+  }
+
+  .teacher-note::before {
+    content: '👁 SOLO PER TE — ';
+    font-weight: 700;
+  }
+
+  body.show-teacher .teacher-note {
+    display: block;
+  }
+
+  .teacher-toggle {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 300;
+    background: rgba(255,213,79,0.15);
+    border: 1px solid rgba(255,213,79,0.3);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(8px);
+  }
+
+  .teacher-toggle:hover {
+    background: rgba(255,213,79,0.25);
+  }
+
+  /* ── Formula display (big, for LIM) ── */
+  .formula-big {
+    background: var(--formula-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.2rem 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.35rem;
+    color: var(--text-bright);
+    letter-spacing: 0.5px;
+    line-height: 2;
+  }
+
+  .formula-big .tag {
+    display: block;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+  }
+
+  /* ── Guided exercise: the fill-in boxes ── */
+  .exercise {
+    background: var(--formula-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .exercise .ex-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 0.3rem;
+  }
+
+  .exercise .ex-text {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .fill-step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.6rem 1rem;
+    align-items: start;
+    margin-bottom: 0.8rem;
+    padding: 0.7rem 0.9rem;
+    background: rgba(79,195,247,0.03);
+    border-radius: 6px;
+    border: 1px solid rgba(79,195,247,0.08);
+  }
+
+  .fill-step .fs-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: rgba(79,195,247,0.1);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  .fill-step .fs-content {
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .fill-step .fs-content .blank {
+    display: inline-block;
+    min-width: 80px;
+    border-bottom: 2px dashed var(--accent);
+    color: var(--accent3);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 0.3rem;
+    margin: 0 0.2rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+  }
+
+  .fill-step .fs-content .blank.revealed {
+    border-bottom-color: var(--accent3);
+    color: var(--accent3);
+  }
+
+  .fill-step .fs-content .blank::after {
+    content: '(clicca)';
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.6;
+  }
+
+  .fill-step .fs-content .blank.revealed::after {
+    content: none;
+  }
+
+  /* ── Checkpoint ── */
+  .checkpoint {
+    background: rgba(102,187,106,0.08);
+    border: 1px solid rgba(102,187,106,0.2);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin: 1.2rem 0;
+    text-align: center;
+  }
+
+  .checkpoint .cp-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .checkpoint .cp-text {
+    font-weight: 600;
+    color: var(--accent3);
+    font-size: 1rem;
+  }
+
+  .checkpoint .cp-sub {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-top: 0.3rem;
+  }
+
+  /* ── Alert/rule boxes ── */
+  .rule-box {
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+  }
+
+  .rule-box.green {
+    background: rgba(102,187,106,0.08);
+    border-left: 3px solid var(--accent3);
+  }
+
+  .rule-box.orange {
+    background: rgba(255,112,67,0.08);
+    border-left: 3px solid var(--accent2);
+  }
+
+  .rule-box .rb-title {
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+
+  .rule-box.green .rb-title { color: var(--accent3); }
+  .rule-box.orange .rb-title { color: var(--accent2); }
+
+  /* ── Timer widget ── */
+  .timer-widget {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.2rem 0;
+    padding: 0.8rem;
+    background: var(--surface2);
+    border-radius: 8px;
+  }
+
+  .timer-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-bright);
+    min-width: 90px;
+    text-align: center;
+  }
+
+  .timer-display.warning { color: var(--accent2); }
+  .timer-display.done { color: var(--accent3); }
+
+  .timer-widget button {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.45rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .timer-widget button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ── "Ora tocca a voi" action prompt ── */
+  .action-prompt {
+    background: linear-gradient(135deg, rgba(79,195,247,0.1), rgba(79,195,247,0.03));
+    border: 2px solid rgba(79,195,247,0.25);
+    border-radius: 10px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+
+  .action-prompt .ap-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .action-prompt .ap-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+
+  .action-prompt .ap-desc {
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  /* ── Reveal all button ── */
+  .reveal-all-btn {
+    display: block;
+    margin: 1rem auto;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.4rem 1.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .reveal-all-btn:hover {
+    color: var(--accent3);
+    border-color: var(--accent3);
+  }
+
+  /* ── Simple animation canvas ── */
+  .sim-container {
+    background: var(--formula-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.8rem;
+    margin: 1.2rem 0;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    border-radius: 6px;
+    background: #0d0f15;
+  }
+
+  .sim-btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 0.6rem;
+  }
+
+  .sim-btn-row button {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface2);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .sim-btn-row button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 650px) {
+    main { padding: 1rem; }
+    .formula-big { font-size: 1.1rem; }
+    .timer-display { font-size: 1.5rem; }
+    .block-body { padding: 1rem; }
+  }
+
+  /* ── Print / hide teacher notes for students ── */
+  @media print {
+    .teacher-note, .teacher-toggle, .progress-bar { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════ HERO ═══════ -->
+<div class="hero">
+  <h1>Urto anelastico: <span>laboratorio guidato</span></h1>
+  <p class="sub">4L — Segui ogni blocco, passo dopo passo. Scrivi tutto sul quaderno.</p>
+</div>
+
+<!-- ═══════ PROGRESS BAR ═══════ -->
+<div class="progress-bar" id="progressBar">
+  <div class="step-dot" onclick="scrollToBlock(0)"><span class="step-label">Regole</span></div>
+  <div class="step-dot" onclick="scrollToBlock(1)"><span class="step-label">Formula</span></div>
+  <div class="step-dot" onclick="scrollToBlock(2)"><span class="step-label">Esempio</span></div>
+  <div class="step-dot" onclick="scrollToBlock(3)"><span class="step-label">Esercizio A</span></div>
+  <div class="step-dot" onclick="scrollToBlock(4)"><span class="step-label">Animazione</span></div>
+  <div class="step-dot" onclick="scrollToBlock(5)"><span class="step-label">Energia</span></div>
+  <div class="step-dot" onclick="scrollToBlock(6)"><span class="step-label">Esercizio B</span></div>
+  <div class="step-dot" onclick="scrollToBlock(7)"><span class="step-label">Pendolo</span></div>
+  <div class="step-dot" onclick="scrollToBlock(8)"><span class="step-label">Esercizio C</span></div>
+  <div class="step-dot" onclick="scrollToBlock(9)"><span class="step-label">Chiusura</span></div>
+</div>
+
+<!-- ═══════ TEACHER TOGGLE ═══════ -->
+<button class="teacher-toggle" onclick="toggleTeacher()">👁 Note prof</button>
+
+<!-- ═══════ MAIN ═══════ -->
+<main>
+
+<!-- ────────── BLOCCO 0: Regole del gioco ────────── -->
+<div class="block" id="block-0">
+  <div class="block-header" onclick="toggleBlock(0)">
+    <div class="block-id">
+      <div class="block-num">0</div>
+      <h2>Regole del gioco</h2>
+    </div>
+    <span class="block-time">3 min</span>
+  </div>
+  <div class="block-body">
+    <div class="teacher-note">
+      Leggi le regole ad alta voce, tono tranquillo. Non spiegare, non giustificare. Poi vai subito avanti.
+    </div>
+
+    <p>Oggi lavoriamo diversamente. Seguite la LIM blocco per blocco.</p>
+
+    <div class="rule-box green">
+      <div class="rb-title">✓ Cosa fate voi</div>
+      <p>Copiate sul quaderno tutto quello che ha il bordo blu. Risolvete gli esercizi seguendo i passi numerati. Avete un tempo per ogni blocco.</p>
+    </div>
+
+    <div class="rule-box orange">
+      <div class="rb-title">⚠ Una regola sola</div>
+      <p>Quando il timer parte, lavorate. Quando scade, ci fermiamo e correggiamo insieme. Chi ha scritto i passi — anche sbagliati — ha lavorato. Chi ha il quaderno vuoto, no.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── BLOCCO 1: La formula ────────── -->
+<div class="block" id="block-1">
+  <div class="block-header" onclick="toggleBlock(1)">
+    <div class="block-id">
+      <div class="block-num">1</div>
+      <h2>L'unica formula che vi serve</h2>
+    </div>
+    <span class="block-time">5 min</span>
+  </div>
+  <div class="block-body">
+    <div class="teacher-note">
+      Spiega in 2 minuti max. Due corpi si scontrano, restano attaccati, si muovono insieme. Punto. Poi chiedi di copiare la formula. Gira a controllare che l'abbiano copiata.
+    </div>
+
+    <p>Due oggetti si scontrano e <strong>restano attaccati</strong>. Questo è un urto perfettamente anelastico. Per trovare la velocità dopo l'urto, usiamo una sola formula:</p>
+
+    <div class="formula-big">
+      <span class="tag">Copiate questa nel quaderno</span>
+      m₁ · v₁ + m₂ · v₂ = (m₁ + m₂) · v<sub>f</sub>
+    </div>
+
+    <p>Da cui:</p>
+
+    <div class="formula-big">
+      <span class="tag">E anche questa</span>
+      v<sub>f</sub> = (m₁ · v₁ + m₂ · v₂) / (m₁ + m₂)
+    </div>
+
+    <p>Se il secondo corpo è <strong>fermo</strong> (v₂ = 0), si semplifica:</p>
+
+    <div class="formula-big">
+      <span class="tag">Caso più comune degli esercizi</span>
+      v<sub>f</sub> = (m₁ · v₁) / (m₁ + m₂)
+    </div>
+
+    <div class="action-prompt">
+      <div class="ap-icon">✍️</div>
+      <div class="ap-title">Copiate le tre formule nel quaderno</div>
+      <div class="ap-desc">Avete 2 minuti. Passo tra i banchi a controllare.</div>
+    </div>
+
+    <div class="timer-widget" id="timer-1">
+      <button onclick="startTimer('timer-1', 120)">▶ 2:00</button>
+      <div class="timer-display" id="timer-1-display">2:00</div>
+      <button onclick="resetTimer('timer-1', 120)">↺</button>
+    </div>
+
+    <div class="checkpoint">
+      <div class="cp-icon">✅</div>
+      <div class="cp-text">Checkpoint: le tre formule sono sul quaderno?</div>
+      <div class="cp-sub">Se sì, avanti. Se no, aspettiamo.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── BLOCCO 2: Esempio svolto (Es. 1a) ────────── -->
+<div class="block" id="block-2">
+  <div class="block-header" onclick="toggleBlock(2)">
+    <div class="block-id">
+      <div class="block-num">2</div>
+      <h2>Esempio svolto insieme</h2>
+    </div>
+    <span class="block-time">8 min</span>
+  </div>
+  <div class="block-body">
+    <div class="teacher-note">
+      Fai tutto tu alla lavagna/LIM, loro copiano. Vai LENTO. Ogni passo, aspetta che abbiano finito di scrivere prima di andare avanti. Indica fisicamente lo schermo quando cambi passo.
+    </div>
+
+    <div class="exercise">
+      <div class="ex-title">Esercizio 1a — Proiettile nel sacco da box</div>
+      <div class="ex-text">Un proiettile di massa 8,0 g viene sparato a 370 m/s contro un sacco da box di massa 40 kg fermo. Il proiettile si conficca. Quanto vale v<sub>f</sub>?</div>
+
+      <div class="fill-step">
+        <span class="fs-label">DATI</span>
+        <div class="fs-content">
+          m₁ = 8,0 g = <span class="blank" data-answer="0,008 kg">?</span> &nbsp;&nbsp;
+          v₁ = <span class="blank" data-answer="370 m/s">?</span><br>
+          m₂ = <span class="blank" data-answer="40 kg">?</span> &nbsp;&nbsp;
+          v₂ = <span class="blank" data-answer="0 m/s">?</span>
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">FORMULA</span>
+        <div class="fs-content">
+          v<sub>f</sub> = (m₁ · v₁) / (m₁ + m₂) &nbsp; ← perché v₂ = 0
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">SOSTITUISCO</span>
+        <div class="fs-content">
+          v<sub>f</sub> = (<span class="blank" data-answer="0,008">?</span> × <span class="blank" data-answer="370">?</span>) / (<span class="blank" data-answer="0,008">?</span> + <span class="blank" data-answer="40">?</span>)
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">CALCOLO</span>
+        <div class="fs-content">
+          v<sub>f</sub> = <span class="blank" data-answer="2,96">?</span> / <span class="blank" data-answer="40,008">?</span> = <span class="blank" data-answer="0,074 m/s">?</span>
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">CONTROLLO</span>
+        <div class="fs-content">
+          Il sacco è 5000 volte più pesante → v<sub>f</sub> è minuscola ✓
+        </div>
+      </div>
+
+      <button class="reveal-all-btn" onclick="revealAll(this)">Mostra tutte le risposte</button>
+    </div>
+
+    <div class="action-prompt">
+      <div class="ap-icon">✍️</div>
+      <div class="ap-title">Copiate questo esempio nel quaderno</div>
+      <div class="ap-desc">Tutti i passi: DATI → FORMULA → SOSTITUISCO → CALCOLO → CONTROLLO</div>
+    </div>
+
+    <div class="timer-widget" id="timer-2">
+      <button onclick="startTimer('timer-2', 180)">▶ 3:00</button>
+      <div class="timer-display" id="timer-2-display">3:00</div>
+      <button onclick="resetTimer('timer-2', 180)">↺</button>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── BLOCCO 3: Primo esercizio guidato (Es. 3a) ────────── -->
+<div class="block" id="block-3">
+  <div class="block-header" onclick="toggleBlock(3)">
+    <div class="block-id">
+      <div class="block-num">3</div>
+      <h2>Ora tocca a voi — Esercizio A</h2>
+    </div>
+    <span class="block-time">10 min</span>
+  </div>
+  <div class="block-body">
+    <div class="teacher-note">
+      Questo è identico all'esempio: bersaglio fermo, stessa formula. Gira tra i banchi. Non dare la risposta, indica il passo in cui si sono bloccati e di' "rileggi l'esempio sopra". Dopo 7 minuti, correggi alla LIM cliccando le risposte.
+    </div>
+
+    <div class="exercise">
+      <div class="ex-title">Esercizio 3a — Freccia nel bersaglio su carrello</div>
+      <div class="ex-text">Una freccia di massa 30 g viaggia a 65 m/s e colpisce un bersaglio su carrello di massa 2,0 kg, fermo. La freccia si conficca. Calcola v<sub>f</sub>.</div>
+
+      <div class="fill-step">
+        <span class="fs-label">DATI</span>
+        <div class="fs-content">
+          m₁ = 30 g = <span class="blank" data-answer="0,030 kg">?</span> &nbsp;&nbsp;
+          v₁ = <span class="blank" data-answer="65 m/s">?</span><br>
+          m₂ = <span class="blank" data-answer="2,0 kg">?</span> &nbsp;&nbsp;
+          v₂ = <span class="blank" data-answer="0 m/s">?</span>
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">FORMULA</span>
+        <div class="fs-content">
+          <span class="blank" data-answer="v_f = (m₁ · v₁) / (m₁ + m₂)">Quale formula usi?</span>
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">SOSTITUISCO</span>
+        <div class="fs-content">
+          v<sub>f</sub> = (<span class="blank" data-answer="0,030">?</span> × <span class="blank" data-answer="65">?</span>) / (<span class="blank" data-answer="0,030">?</span> + <span class="blank" data-answer="2,0">?</span>)
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">CALCOLO</span>
+        <div class="fs-content">
+          v<sub>f</sub> = <span class="blank" data-answer="1,95">?</span> / <span class="blank" data-answer="2,030">?</span> = <span class="blank" data-answer="0,96 m/s">?</span>
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">CONTROLLO</span>
+        <div class="fs-content">
+          <span class="blank" data-answer="Il carrello è ≈ 67 volte più pesante → v_f è molto piccola ✓">Il risultato ha senso? Perché?</span>
+        </div>
+      </div>
+
+      <button class="reveal-all-btn" onclick="revealAll(this)">Mostra tutte le risposte</button>
+    </div>
+
+    <div class="action-prompt">
+      <div class="ap-icon">✏️</div>
+      <div class="ap-title">Risolvete sul quaderno</div>
+      <div class="ap-desc">Seguite i 5 passi. Scrivete anche se non siete sicuri. Avete 7 minuti.</div>
+    </div>
+
+    <div class="timer-widget" id="timer-3">
+      <button onclick="startTimer('timer-3', 420)">▶ 7:00</button>
+      <div class="timer-display" id="timer-3-display">7:00</div>
+      <button onclick="resetTimer('timer-3', 420)">↺</button>
+    </div>
+
+    <div class="checkpoint">
+      <div class="cp-icon">📋</div>
+      <div class="cp-text">Correzione insieme</div>
+      <div class="cp-sub">Clicca sulle caselle per rivelare le risposte una per una.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── BLOCCO 4: Animazione (pausa visiva) ────────── -->
+<div class="block" id="block-4">
+  <div class="block-header" onclick="toggleBlock(4)">
+    <div class="block-id">
+      <div class="block-num">4</div>
+      <h2>Guardiamo cosa succede</h2>
+    </div>
+    <span class="block-time">3 min</span>
+  </div>
+  <div class="block-body">
+    <div class="teacher-note">
+      Pausa visiva: fai partire l'animazione e commenta a voce quello che vedono. "Vedete? Il corpo piccolo va veloce, colpisce quello grande, e dopo si muovono insieme ma piano piano." Non chiedere niente, è un momento di riposo attivo.
+    </div>
+
+    <p>Il corpo piccolo e veloce colpisce quello grande e fermo. Dopo l'urto: vanno insieme, lentamente.</p>
+
+    <div class="sim-container">
+      <canvas id="canvas1" width="840" height="180"></canvas>
+      <div class="sim-btn-row">
+        <button onclick="startSim1()">▶ Avvia</button>
+        <button onclick="resetSim1()">↺ Reset</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── BLOCCO 5: Energia cinetica ────────── -->
+<div class="block" id="block-5">
+  <div class="block-header" onclick="toggleBlock(5)">
+    <div class="block-id">
+      <div class="block-num">5</div>
+      <h2>L'energia: dove finisce?</h2>
+    </div>
+    <span class="block-time">5 min</span>
+  </div>
+  <div class="block-body">
+    <div class="teacher-note">
+      Concetto nuovo ma semplice: la velocità cala, quindi l'energia cinetica pure. Dove va? Calore, deformazione, suono. Dai la formula dell'energia, chiedi di copiarla. Poi mostra il calcolo.
+    </div>
+
+    <p>Nell'urto anelastico, la quantità di moto si conserva, ma l'<strong>energia cinetica no</strong>. Parte si trasforma in calore, deformazione e suono.</p>
+
+    <div class="formula-big">
+      <span class="tag">Copiate — energia cinetica</span>
+      E<sub>k</sub> = ½ · m · v²
+    </div>
+
+    <div class="formula-big">
+      <span class="tag">Copiate — percentuale persa</span>
+      % persa = (E<sub>k,prima</sub> − E<sub>k,dopo</sub>) / E<sub>k,prima</sub> × 100
+    </div>
+
+    <div class="rule-box orange">
+      <div class="rb-title">⚠ Attenzione</div>
+      <p>L'energia cinetica <strong>non</strong> si conserva durante l'urto anelastico. Si conserva solo la quantità di moto!</p>
+    </div>
+
+    <div class="action-prompt">
+      <div class="ap-icon">✍️</div>
+      <div class="ap-title">Copiate le due formule</div>
+      <div class="ap-desc">Poi avanti al prossimo esercizio.</div>
+    </div>
+
+    <div class="timer-widget" id="timer-5">
+      <button onclick="startTimer('timer-5', 120)">▶ 2:00</button>
+      <div class="timer-display" id="timer-5-display">2:00</div>
+      <button onclick="resetTimer('timer-5', 120)">↺</button>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── BLOCCO 6: Esercizio B — Energia (Es. 1b) ────────── -->
+<div class="block" id="block-6">
+  <div class="block-header" onclick="toggleBlock(6)">
+    <div class="block-id">
+      <div class="block-num">6</div>
+      <h2>Esercizio B — Calcolo dell'energia</h2>
+    </div>
+    <span class="block-time">10 min</span>
+  </div>
+  <div class="block-body">
+    <div class="teacher-note">
+      Esercizio 1b della scheda. I dati vengono dall'esempio svolto (blocco 2). Devono solo applicare E = ½mv² due volte e poi fare la percentuale. Gira e controlla: il punto critico è ricordarsi che dopo l'urto la massa è (m₁+m₂).
+    </div>
+
+    <div class="exercise">
+      <div class="ex-title">Esercizio 1b — Quanta energia si perde?</div>
+      <div class="ex-text">Dall'esempio di prima: proiettile (0,008 kg, 370 m/s) nel sacco (40 kg, fermo). Sappiamo che v<sub>f</sub> = 0,074 m/s. Calcoliamo le energie.</div>
+
+      <div class="fill-step">
+        <span class="fs-label">Ek PRIMA</span>
+        <div class="fs-content">
+          E<sub>k,prima</sub> = ½ × m₁ × v₁² = ½ × 0,008 × 370² = <span class="blank" data-answer="548 J">?</span>
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">Ek DOPO</span>
+        <div class="fs-content">
+          E<sub>k,dopo</sub> = ½ × (m₁+m₂) × v<sub>f</sub>² = ½ × <span class="blank" data-answer="40,008">?</span> × <span class="blank" data-answer="0,074²">?</span> = <span class="blank" data-answer="0,11 J">?</span>
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">% PERSA</span>
+        <div class="fs-content">
+          % = (<span class="blank" data-answer="548">?</span> − <span class="blank" data-answer="0,11">?</span>) / <span class="blank" data-answer="548">?</span> × 100 = <span class="blank" data-answer="99,98%">?</span>
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">DOVE VA?</span>
+        <div class="fs-content">
+          <span class="blank" data-answer="Calore, deformazione del proiettile e del sacco, suono">?</span>
+        </div>
+      </div>
+
+      <button class="reveal-all-btn" onclick="revealAll(this)">Mostra tutte le risposte</button>
+    </div>
+
+    <div class="action-prompt">
+      <div class="ap-icon">✏️</div>
+      <div class="ap-title">Risolvete — stessi 5 passi</div>
+      <div class="ap-desc">8 minuti. Usate la calcolatrice.</div>
+    </div>
+
+    <div class="timer-widget" id="timer-6">
+      <button onclick="startTimer('timer-6', 480)">▶ 8:00</button>
+      <div class="timer-display" id="timer-6-display">8:00</div>
+      <button onclick="resetTimer('timer-6', 480)">↺</button>
+    </div>
+
+    <div class="checkpoint">
+      <div class="cp-icon">🤯</div>
+      <div class="cp-text">Il 99,98% dell'energia sparisce!</div>
+      <div class="cp-sub">Tutta in calore e deformazione. Solo lo 0,02% muove il sacco.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── BLOCCO 7: Pendolo balistico (spiegazione) ────────── -->
+<div class="block" id="block-7">
+  <div class="block-header" onclick="toggleBlock(7)">
+    <div class="block-id">
+      <div class="block-num">7</div>
+      <h2>Il pendolo balistico</h2>
+    </div>
+    <span class="block-time">7 min</span>
+  </div>
+  <div class="block-body">
+    <div class="teacher-note">
+      Questo è il salto concettuale: due fasi. Spiega con calma: "Prima l'urto (quantità di moto), poi il pendolo sale (energia)." Mostra l'animazione. Poi dai le due formule da copiare. Non fare ragionamenti astratti — solo: "dopo l'urto, il blocco sale. Più va veloce, più sale in alto."
+    </div>
+
+    <p>Se dopo l'urto il blocco è appeso come un pendolo, la velocità v<sub>f</sub> lo fa salire. Più è veloce, più sale in alto.</p>
+
+    <div class="rule-box green">
+      <div class="rb-title">Due fasi, due formule diverse</div>
+      <p><strong>Fase 1 — L'urto:</strong> si conserva la quantità di moto → trovo v<sub>f</sub><br>
+      <strong>Fase 2 — Il pendolo sale:</strong> l'energia cinetica diventa potenziale → trovo h</p>
+    </div>
+
+    <div class="sim-container">
+      <canvas id="canvas2" width="840" height="300"></canvas>
+      <div class="sim-btn-row">
+        <button onclick="startSim2()">▶ Avvia</button>
+        <button onclick="resetSim2()">↺ Reset</button>
+      </div>
+    </div>
+
+    <div class="formula-big">
+      <span class="tag">Copiate — da velocità ad altezza</span>
+      h = v<sub>f</sub>² / (2g)
+    </div>
+
+    <div class="formula-big">
+      <span class="tag">Copiate — da altezza ad angolo</span>
+      h = L · (1 − cos θ)
+    </div>
+
+    <div class="action-prompt">
+      <div class="ap-icon">✍️</div>
+      <div class="ap-title">Copiate le due formule</div>
+      <div class="ap-desc">Sotto le altre, nel quaderno.</div>
+    </div>
+
+    <div class="timer-widget" id="timer-7">
+      <button onclick="startTimer('timer-7', 120)">▶ 2:00</button>
+      <div class="timer-display" id="timer-7-display">2:00</div>
+      <button onclick="resetTimer('timer-7', 120)">↺</button>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── BLOCCO 8: Esercizio C — Pendolo (Es. 2) ────────── -->
+<div class="block" id="block-8">
+  <div class="block-header" onclick="toggleBlock(8)">
+    <div class="block-id">
+      <div class="block-num">8</div>
+      <h2>Esercizio C — Il pendolo balistico</h2>
+    </div>
+    <span class="block-time">12 min</span>
+  </div>
+  <div class="block-body">
+    <div class="teacher-note">
+      Esercizio 2 della scheda. È il più impegnativo: ha due fasi. Suggerimento: fai la fase 1 (trovare v_f) tutti insieme, poi lasciali fare la fase 2 (trovare h e θ) da soli. Così il salto è gestibile.
+    </div>
+
+    <div class="exercise">
+      <div class="ex-title">Esercizio 2 — Proiettile e pendolo balistico</div>
+      <div class="ex-text">Un proiettile di 10 g viene sparato a 850 m/s contro un blocco di legno di 4,0 kg appeso a una fune lunga 1,5 m. Il proiettile si conficca.</div>
+
+      <p style="color:var(--accent); font-weight:600; margin: 0.8rem 0 0.5rem;">FASE 1 — Trovo v<sub>f</sub> (quantità di moto)</p>
+
+      <div class="fill-step">
+        <span class="fs-label">DATI</span>
+        <div class="fs-content">
+          m₁ = <span class="blank" data-answer="0,010 kg">?</span> &nbsp;
+          v₁ = <span class="blank" data-answer="850 m/s">?</span> &nbsp;
+          m₂ = <span class="blank" data-answer="4,0 kg">?</span> &nbsp;
+          v₂ = <span class="blank" data-answer="0">?</span>
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">FORMULA</span>
+        <div class="fs-content">
+          v<sub>f</sub> = (m₁ · v₁) / (m₁ + m₂)
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">CALCOLO</span>
+        <div class="fs-content">
+          v<sub>f</sub> = (<span class="blank" data-answer="0,010">?</span> × <span class="blank" data-answer="850">?</span>) / (<span class="blank" data-answer="0,010">?</span> + <span class="blank" data-answer="4,0">?</span>) = <span class="blank" data-answer="8,5 / 4,010 = 2,12 m/s">?</span>
+        </div>
+      </div>
+
+      <p style="color:var(--accent3); font-weight:600; margin: 1rem 0 0.5rem;">FASE 2 — Trovo h e θ (energia)</p>
+
+      <div class="fill-step">
+        <span class="fs-label">ALTEZZA</span>
+        <div class="fs-content">
+          h = v<sub>f</sub>² / (2g) = <span class="blank" data-answer="2,12²">?</span> / (2 × 9,81) = <span class="blank" data-answer="4,494 / 19,62">?</span> = <span class="blank" data-answer="0,229 m ≈ 23 cm">?</span>
+        </div>
+      </div>
+
+      <div class="fill-step">
+        <span class="fs-label">ANGOLO</span>
+        <div class="fs-content">
+          h = L(1 − cos θ) → cos θ = 1 − h/L = 1 − <span class="blank" data-answer="0,229/1,5">?</span> = <span class="blank" data-answer="0,847">?</span><br>
+          θ = arccos(0,847) = <span class="blank" data-answer="32°">?</span>
+        </div>
+      </div>
+
+      <button class="reveal-all-btn" onclick="revealAll(this)">Mostra tutte le risposte</button>
+    </div>
+
+    <div class="action-prompt">
+      <div class="ap-icon">✏️</div>
+      <div class="ap-title">Risolvete sul quaderno</div>
+      <div class="ap-desc">Fase 1: la facciamo insieme (3 min). Fase 2: la fate voi (7 min).</div>
+    </div>
+
+    <div class="timer-widget" id="timer-8">
+      <button onclick="startTimer('timer-8', 420)">▶ 7:00</button>
+      <div class="timer-display" id="timer-8-display">7:00</div>
+      <button onclick="resetTimer('timer-8', 420)">↺</button>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── BLOCCO 9: Chiusura ────────── -->
+<div class="block" id="block-9">
+  <div class="block-header" onclick="toggleBlock(9)">
+    <div class="block-id">
+      <div class="block-num">9</div>
+      <h2>Chiusura</h2>
+    </div>
+    <span class="block-time">2 min</span>
+  </div>
+  <div class="block-body">
+    <div class="teacher-note">
+      Chiudi veloce. Ricorda che gli esercizi 4 e 5 sono per casa (il 4 è il pendolo al contrario, il 5 i pattinatori con velocità opposte). Tono leggero: "Oggi avete lavorato, bravi. Per casa: stessa identica procedura."
+    </div>
+
+    <div class="rule-box green">
+      <div class="rb-title">Cosa avete imparato oggi</div>
+      <p>
+        A risolvere un esercizio sull'urto anelastico in 5 passi:<br>
+        <strong>DATI → FORMULA → SOSTITUISCO → CALCOLO → CONTROLLO</strong>
+      </p>
+    </div>
+
+    <div class="rule-box orange">
+      <div class="rb-title">📚 Per casa — Esercizi 4 e 5</div>
+      <p>
+        <strong>Esercizio 4</strong> — Il pendolo balistico al contrario: partite dall'altezza e risalite alla velocità del proiettile. Stessi passi, ordine inverso.<br><br>
+        <strong>Esercizio 5</strong> — Due pattinatori che vengono da direzioni opposte. Attenti ai segni: scegliete un verso positivo, l'altro è negativo.
+      </p>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  Laboratorio guidato — Urto anelastico · Classe 4L · Prof. Ferraro · Liceo Galilei Dolo
+</footer>
+
+<!-- ═══════════════════════ JAVASCRIPT ═══════════════════════ -->
+<script>
+// ─── Teacher toggle ───
+function toggleTeacher() {
+  document.body.classList.toggle('show-teacher');
+  const btn = document.querySelector('.teacher-toggle');
+  btn.textContent = document.body.classList.contains('show-teacher') ? '👁 Nascondi note' : '👁 Note prof';
+}
+
+// ─── Block collapse (not used by default, blocks are open) ───
+function toggleBlock(n) {
+  // Optional: could collapse/expand blocks. For now, just scroll.
+  document.getElementById('block-' + n).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function scrollToBlock(n) {
+  document.getElementById('block-' + n).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── Blank reveal ───
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('blank') && !e.target.classList.contains('revealed')) {
+    e.target.textContent = e.target.dataset.answer;
+    e.target.classList.add('revealed');
+  }
+});
+
+function revealAll(btn) {
+  const exercise = btn.closest('.exercise');
+  exercise.querySelectorAll('.blank:not(.revealed)').forEach(b => {
+    b.textContent = b.dataset.answer;
+    b.classList.add('revealed');
+  });
+}
+
+// ─── Timers ───
+const timers = {};
+
+function startTimer(id, totalSeconds) {
+  if (timers[id] && timers[id].running) return;
+  
+  const display = document.getElementById(id + '-display');
+  let remaining = timers[id] ? timers[id].remaining : totalSeconds;
+  
+  timers[id] = {
+    running: true,
+    remaining: remaining,
+    interval: setInterval(() => {
+      remaining--;
+      timers[id].remaining = remaining;
+      
+      const m = Math.floor(remaining / 60);
+      const s = remaining % 60;
+      display.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+      
+      if (remaining <= 30 && remaining > 0) {
+        display.className = 'timer-display warning';
+      }
+      
+      if (remaining <= 0) {
+        clearInterval(timers[id].interval);
+        timers[id].running = false;
+        display.textContent = 'TEMPO!';
+        display.className = 'timer-display done';
+      }
+    }, 1000)
+  };
+}
+
+function resetTimer(id, totalSeconds) {
+  if (timers[id]) {
+    clearInterval(timers[id].interval);
+  }
+  timers[id] = { running: false, remaining: totalSeconds };
+  const display = document.getElementById(id + '-display');
+  const m = Math.floor(totalSeconds / 60);
+  const s = totalSeconds % 60;
+  display.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  display.className = 'timer-display';
+}
+
+// ─── Progress bar ───
+const blocks = document.querySelectorAll('.block');
+const dots = document.querySelectorAll('.step-dot');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = Array.from(blocks).indexOf(entry.target);
+      dots.forEach((d, i) => {
+        d.classList.remove('active');
+        if (i < idx) d.classList.add('done');
+        else d.classList.remove('done');
+      });
+      if (idx >= 0) dots[idx].classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+
+blocks.forEach(b => observer.observe(b));
+
+// ═══════════════════════════════════
+//  SIMULATION 1 — Linear collision
+// ═══════════════════════════════════
+const dpr = window.devicePixelRatio || 1;
+
+function setupCanvas(canvas) {
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { ctx, w: rect.width, h: rect.height };
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
+  ctx.arcTo(x+w,y,x+w,y+r,r); ctx.lineTo(x+w,y+h-r);
+  ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h);
+  ctx.arcTo(x,y+h,x,y+h-r,r); ctx.lineTo(x,y+r);
+  ctx.arcTo(x,y,x+r,y,r); ctx.closePath();
+}
+
+function drawArrow(ctx, x1, y1, x2, y2, color) {
+  const hl = 8, a = Math.atan2(y2-y1, x2-x1);
+  ctx.strokeStyle = color; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-hl*Math.cos(a-Math.PI/6), y2-hl*Math.sin(a-Math.PI/6));
+  ctx.lineTo(x2-hl*Math.cos(a+Math.PI/6), y2-hl*Math.sin(a+Math.PI/6));
+  ctx.closePath(); ctx.fill();
+}
+
+let sim1 = { running: false, animId: null };
+
+function drawSim1Static() {
+  const c = document.getElementById('canvas1');
+  const { ctx, w, h } = setupCanvas(c);
+  ctx.clearRect(0,0,w,h);
+  const ty = h*0.65;
+  ctx.strokeStyle='#2a2e3d'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(40,ty); ctx.lineTo(w-40,ty); ctx.stroke();
+
+  ctx.fillStyle='#4fc3f7';
+  roundRect(ctx, 100, ty-35, 35, 35, 4); ctx.fill();
+  ctx.fillStyle='#0d0f15'; ctx.font='600 12px "JetBrains Mono"'; ctx.textAlign='center';
+  ctx.fillText('m₁', 117, ty-14);
+  drawArrow(ctx, 143, ty-17, 185, ty-17, '#4fc3f7');
+
+  ctx.fillStyle='#ff7043';
+  roundRect(ctx, w*0.6-35, ty-50, 70, 50, 4); ctx.fill();
+  ctx.fillStyle='#0d0f15'; ctx.font='600 13px "JetBrains Mono"';
+  ctx.fillText('m₂', w*0.6, ty-22);
+
+  ctx.fillStyle='#8a8fa8'; ctx.font='400 12px "Source Sans 3"';
+  ctx.fillText('Premi ▶', w/2, h-10);
+}
+
+function resetSim1() {
+  sim1.running = false;
+  if (sim1.animId) cancelAnimationFrame(sim1.animId);
+  drawSim1Static();
+}
+
+function startSim1() {
+  if (sim1.running) return;
+  sim1.running = true;
+  const c = document.getElementById('canvas1');
+  const { w, h } = setupCanvas(c);
+  const ty = h*0.65;
+  let x1 = 100, x2 = w*0.6-35, merged = false, flashT = 0;
+  const spd = 2.8, spdF = spd * 0.17;
+
+  function anim() {
+    const { ctx, w, h } = setupCanvas(c);
+    ctx.clearRect(0,0,w,h);
+    ctx.strokeStyle='#2a2e3d'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(40,ty); ctx.lineTo(w-40,ty); ctx.stroke();
+
+    if (!merged) {
+      x1 += spd;
+      if (x1+35 >= x2) { merged = true; flashT = 12; }
+      ctx.fillStyle='#4fc3f7'; roundRect(ctx, x1, ty-35, 35, 35, 4); ctx.fill();
+      if (!merged) drawArrow(ctx, x1+43, ty-17, x1+75, ty-17, '#4fc3f7');
+      ctx.fillStyle='#ff7043'; roundRect(ctx, x2, ty-50, 70, 50, 4); ctx.fill();
+    } else {
+      x1 += spdF; x2 += spdF;
+      if (flashT > 0) { ctx.fillStyle=`rgba(255,255,255,${flashT/20})`; ctx.fillRect(0,0,w,h); flashT--; }
+      const mx = (x1+35+x2)/2;
+      ctx.fillStyle='#d4724a'; roundRect(ctx, mx-45, ty-50, 90, 50, 4); ctx.fill();
+      ctx.fillStyle='#4fc3f7'; roundRect(ctx, mx-45, ty-50, 25, 50, 4); ctx.fill();
+      ctx.fillStyle='#0d0f15'; ctx.font='600 11px "JetBrains Mono"'; ctx.textAlign='center';
+      ctx.fillText('m₁+m₂', mx, ty-22);
+      drawArrow(ctx, mx+50, ty-25, mx+68, ty-25, '#66bb6a');
+      ctx.fillStyle='#66bb6a'; ctx.font='500 12px "Source Sans 3"';
+      ctx.fillText('lento!', mx, ty-58);
+      if (mx > w-60) { sim1.running = false; return; }
+    }
+    sim1.animId = requestAnimationFrame(anim);
+  }
+  sim1.animId = requestAnimationFrame(anim);
+}
+
+// ═══════════════════════════════════
+//  SIMULATION 2 — Ballistic pendulum
+// ═══════════════════════════════════
+let sim2 = { running: false, animId: null };
+
+function drawSim2Static() {
+  const c = document.getElementById('canvas2');
+  const { ctx, w, h } = setupCanvas(c);
+  ctx.clearRect(0,0,w,h);
+  const px = w*0.55, py = 25, rl = 170;
+  ctx.fillStyle='#2a2e3d'; ctx.fillRect(px-25,0,50,8);
+  ctx.strokeStyle='#5a5f78'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px,py+rl); ctx.stroke();
+  const by = py+rl+18;
+  ctx.fillStyle='#ff7043'; roundRect(ctx, px-22, by-18, 44, 36, 4); ctx.fill();
+  ctx.fillStyle='#0d0f15'; ctx.font='600 10px "JetBrains Mono"'; ctx.textAlign='center';
+  ctx.fillText('M', px, by+3);
+  ctx.fillStyle='#4fc3f7';
+  ctx.beginPath(); ctx.ellipse(70, by, 12, 6, 0, 0, Math.PI*2); ctx.fill();
+  drawArrow(ctx, 88, by, 130, by, '#4fc3f7');
+  ctx.fillStyle='#8a8fa8'; ctx.font='400 12px "Source Sans 3"';
+  ctx.fillText('Premi ▶', w/2, h-10);
+}
+
+function resetSim2() {
+  sim2.running = false;
+  if (sim2.animId) cancelAnimationFrame(sim2.animId);
+  drawSim2Static();
+}
+
+function startSim2() {
+  if (sim2.running) return;
+  sim2.running = true;
+  const c = document.getElementById('canvas2');
+  const { w, h } = setupCanvas(c);
+  const px = w*0.55, py = 25, rl = 170;
+  const thetaMax = 0.56; // ~32°
+  let bulletX = 70, phase = 'fly', flashT = 0, swingT = 0;
+  const bTarget = px - 22;
+
+  function anim() {
+    const { ctx, w, h } = setupCanvas(c);
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle='#2a2e3d'; ctx.fillRect(px-25,0,50,8);
+    const by = py+rl+18;
+
+    if (phase === 'fly') {
+      bulletX += 7;
+      if (bulletX >= bTarget-10) { phase = 'flash'; flashT = 15; }
+      ctx.strokeStyle='#5a5f78'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px,py+rl); ctx.stroke();
+      ctx.fillStyle='#ff7043'; roundRect(ctx, px-22, by-18, 44, 36, 4); ctx.fill();
+      ctx.fillStyle='#4fc3f7';
+      ctx.beginPath(); ctx.ellipse(bulletX, by, 12, 6, 0, 0, Math.PI*2); ctx.fill();
+    } else if (phase === 'flash') {
+      flashT--;
+      if (flashT<=0) { phase = 'swing'; swingT = 0; }
+      ctx.fillStyle=`rgba(255,255,200,${flashT/25})`; ctx.fillRect(0,0,w,h);
+      ctx.strokeStyle='#5a5f78'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px,py+rl); ctx.stroke();
+      ctx.fillStyle='#d4724a'; roundRect(ctx, px-22, by-18, 44, 36, 4); ctx.fill();
+    } else {
+      swingT++;
+      let angle;
+      const rise = 80;
+      if (swingT < rise) {
+        const t = swingT/rise;
+        angle = thetaMax * (t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2);
+      } else {
+        const el = swingT-rise;
+        angle = thetaMax * Math.cos(2*Math.PI*el/110) * Math.pow(0.987, el);
+      }
+      const bx = px+Math.sin(angle)*rl, byy = py+Math.cos(angle)*rl;
+      ctx.strokeStyle='rgba(90,95,120,0.2)'; ctx.setLineDash([3,3]); ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px,py+rl); ctx.stroke(); ctx.setLineDash([]);
+      ctx.strokeStyle='#5a5f78'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(bx,byy); ctx.stroke();
+      ctx.save(); ctx.translate(bx,byy+18); ctx.rotate(angle*0.12);
+      ctx.fillStyle='#d4724a'; roundRect(ctx,-22,-18,44,36,4); ctx.fill();
+      ctx.fillStyle='#0d0f15'; ctx.font='600 9px "JetBrains Mono"'; ctx.textAlign='center';
+      ctx.fillText('m+M',0,3); ctx.restore();
+
+      if (swingT < rise+25 && Math.abs(angle)>0.03) {
+        const ch = rl - Math.cos(angle)*rl;
+        if (ch > 2) {
+          ctx.fillStyle='#66bb6a'; ctx.font='500 11px "JetBrains Mono"'; ctx.textAlign='left';
+          ctx.fillText('h', bx+30, byy+18);
+        }
+      }
+      if (swingT > 400) { sim2.running=false; return; }
+    }
+    sim2.animId = requestAnimationFrame(anim);
+  }
+  sim2.animId = requestAnimationFrame(anim);
+}
+
+// ─── Init ───
+window.addEventListener('load', () => { drawSim1Static(); drawSim2Static(); });
+window.addEventListener('resize', () => { if(!sim1.running) drawSim1Static(); if(!sim2.running) drawSim2Static(); });
+</script>
+
+</body>
+</html>
