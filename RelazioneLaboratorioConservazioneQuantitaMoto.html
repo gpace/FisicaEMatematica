@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relazione di Laboratorio — Conservazione della Quantità di Moto</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e67e22;
+            --border: #bdc3c7;
+            --bg-light: #f8f9fa;
+            --bg-section: #ffffff;
+            --text: #2c3e50;
+            --placeholder: #e74c3c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            background: var(--bg-light);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-section);
+            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem 2.5rem;
+        }
+        .header h1 { font-size: 1.6rem; margin-bottom: 0.3rem; }
+        .header .subtitle { font-size: 1rem; opacity: 0.85; }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem 2rem;
+            margin-top: 1.2rem;
+            font-size: 0.95rem;
+        }
+        .meta-grid .label { opacity: 0.7; }
+        .meta-grid .fill { color: #f1c40f; font-style: italic; }
+
+        .content { padding: 2rem 2.5rem; }
+
+        section {
+            margin-bottom: 2.2rem;
+            border-left: 4px solid var(--accent);
+            padding-left: 1.2rem;
+        }
+
+        section h2 {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        section h2 .num {
+            background: var(--accent);
+            color: white;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .todo {
+            color: var(--placeholder);
+            font-style: italic;
+            background: #fdf2f2;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            border: 1px dashed var(--placeholder);
+            margin: 0.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.8rem 0;
+            font-size: 0.92rem;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.55rem 0.8rem;
+            text-align: center;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f4f6f7; }
+        .col-header { background: #f0f3f4; font-weight: 600; color: var(--primary); }
+
+        .media-placeholder {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: #7f8c8d;
+            margin: 0.8rem 0;
+            background: #fafbfc;
+        }
+        .media-placeholder .icon { font-size: 2rem; margin-bottom: 0.4rem; }
+        .media-placeholder p { font-size: 0.9rem; }
+        .media-placeholder code {
+            display: inline-block;
+            background: #ecf0f1;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.82rem;
+            margin-top: 0.3rem;
+        }
+
+        .formula-box {
+            background: #fef5e7;
+            border: 1px solid #f5cba7;
+            border-radius: 6px;
+            padding: 0.8rem 1.2rem;
+            margin: 0.5rem 0;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.05rem;
+            text-align: center;
+        }
+
+        .checklist { list-style: none; padding: 0; }
+        .checklist li {
+            padding: 0.3rem 0 0.3rem 1.5rem;
+            position: relative;
+        }
+        .checklist li::before {
+            content: "\2610";
+            position: absolute;
+            left: 0;
+        }
+
+        .note-box {
+            background: #fef9e7;
+            border-left: 4px solid #f1c40f;
+            padding: 0.7rem 1rem;
+            border-radius: 0 6px 6px 0;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        @media print {
+            body { padding: 0; background: white; }
+            .container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- ========== HEADER ========== -->
+    <div class="header">
+        <h1>Conservazione della Quantità di Moto</h1>
+        <div class="subtitle">Urto tra due carrelli caricati che si muovono in direzioni opposte</div>
+        <div class="meta-grid">
+            <div><span class="label">Classe: </span><span class="fill">__________</span></div>
+            <div><span class="label">Data esperienza: </span><span class="fill">__________</span></div>
+            <div><span class="label">Gruppo: </span><span class="fill">__________</span></div>
+            <div><span class="label">Data consegna: </span><span class="fill">__________</span></div>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- 1. OBIETTIVO -->
+        <section>
+            <h2><span class="num">1</span> Obiettivo</h2>
+            <p class="todo">Descrivere lo scopo dell'esperienza: verificare sperimentalmente la conservazione della quantità di moto totale in un urto tra due carrelli che si muovono in direzioni opposte lungo una rotaia.</p>
+        </section>
+
+        <!-- 2. RICHIAMI TEORICI -->
+        <section>
+            <h2><span class="num">2</span> Richiami teorici</h2>
+            <p class="todo">Definizione di quantità di moto. Principio di conservazione della quantità di moto per un sistema isolato. Distinzione tra urto elastico e anelastico. Convenzione sui segni (verso positivo e negativo).</p>
+
+            <div class="formula-box">
+                <strong>p</strong> = m &middot; <strong>v</strong>
+            </div>
+            <div class="formula-box">
+                m&#8321; <strong>v</strong>&#8321;<sub>i</sub> + m&#8322; <strong>v</strong>&#8322;<sub>i</sub> = m&#8321; <strong>v</strong>&#8321;<sub>f</sub> + m&#8322; <strong>v</strong>&#8322;<sub>f</sub>
+            </div>
+
+            <div class="note-box">
+                <strong>Convenzione sui segni:</strong> definire quale verso della rotaia è positivo e quale negativo. I due carrelli si muovono in direzioni opposte, quindi le loro velocità iniziali avranno segni opposti.
+            </div>
+
+            <p class="todo">Descrivere come si propaga l'errore nel calcolo di p = m &middot; v.</p>
+        </section>
+
+        <!-- 3. MATERIALI E STRUMENTI -->
+        <section>
+            <h2><span class="num">3</span> Materiali e strumenti</h2>
+            <p class="todo">Elencare tutti i materiali e gli strumenti utilizzati.</p>
+            <table>
+                <tr>
+                    <th>Strumento / Materiale</th>
+                    <th>Portata</th>
+                    <th>Sensibilità</th>
+                </tr>
+                <tr><td class="todo">...</td><td class="todo">...</td><td class="todo">...</td></tr>
+                <tr><td class="todo">...</td><td class="todo">...</td><td class="todo">...</td></tr>
+                <tr><td class="todo">...</td><td class="todo">...</td><td class="todo">...</td></tr>
+                <tr><td class="todo">...</td><td class="todo">...</td><td class="todo">...</td></tr>
+            </table>
+        </section>
+
+        <!-- 4. SCHEMA DELL'APPARATO -->
+        <section>
+            <h2><span class="num">4</span> Schema dell'apparato sperimentale</h2>
+            <div class="media-placeholder">
+                <div class="icon">&#128247;</div>
+                <p>Inserire qui una foto o uno schema dell'apparato con i due carrelli sulla rotaia.</p>
+                <code>&lt;img src="apparato_qdm.jpg" alt="Schema apparato" style="max-width:100%"&gt;</code>
+            </div>
+            <p class="todo">Descrivere la disposizione: rotaia, posizione dei due carrelli, masse aggiunte, tipo di urto (con respingenti elastici, velcro per urto anelastico, ecc.), verso positivo scelto.</p>
+        </section>
+
+        <!-- 5. PROCEDIMENTO -->
+        <section>
+            <h2><span class="num">5</span> Procedimento</h2>
+            <p class="todo">Descrivere passo per passo: come sono state misurate le masse dei carrelli (con le masse aggiunte), come sono stati lanciati i due carrelli in direzioni opposte, come sono state misurate le velocità prima e dopo l'urto (fotocellule, analisi video, ecc.), quante ripetizioni sono state fatte, che tipo di urto si è realizzato.</p>
+        </section>
+
+        <!-- 6. VIDEO -->
+        <section>
+            <h2><span class="num">6</span> Video dell'esperienza</h2>
+            <div class="media-placeholder">
+                <div class="icon">&#127916;</div>
+                <p>Inserire qui il video dell'urto.</p>
+                <code>&lt;video src="video_qdm.mp4" controls style="max-width:100%"&gt;&lt;/video&gt;</code>
+                <p style="margin-top:0.5rem;">Oppure un link esterno (YouTube / Google Drive):</p>
+                <p class="todo" style="display:inline-block; margin:0.3rem 0;">URL del video: __________</p>
+            </div>
+        </section>
+
+        <!-- 7. DATI SPERIMENTALI -->
+        <section>
+            <h2><span class="num">7</span> Dati sperimentali</h2>
+
+            <h3 style="margin: 0.8rem 0 0.4rem; color: var(--primary);">Masse</h3>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Carrello 1</th>
+                    <th>Carrello 2</th>
+                </tr>
+                <tr>
+                    <td class="col-header">Massa carrello (kg)</td>
+                    <td class="todo"></td>
+                    <td class="todo"></td>
+                </tr>
+                <tr>
+                    <td class="col-header">Masse aggiunte (kg)</td>
+                    <td class="todo"></td>
+                    <td class="todo"></td>
+                </tr>
+                <tr>
+                    <td class="col-header">Massa totale &pm; errore (kg)</td>
+                    <td class="todo"></td>
+                    <td class="todo"></td>
+                </tr>
+            </table>
+
+            <h3 style="margin: 1.2rem 0 0.4rem; color: var(--primary);">Velocità prima dell'urto</h3>
+            <p class="todo">Descrivere come sono state misurate le velocità (distanza percorsa / tempo, analisi video, sensori...).</p>
+            <table>
+                <tr>
+                    <th>Misura n°</th>
+                    <th>v&#8321;<sub>i</sub> (m/s)</th>
+                    <th>v&#8322;<sub>i</sub> (m/s)</th>
+                </tr>
+                <tr><td>1</td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>2</td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>3</td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>4</td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>5</td><td class="todo"></td><td class="todo"></td></tr>
+            </table>
+
+            <div class="note-box">
+                Ricordare la convenzione sui segni: se il verso positivo è verso destra (&rarr;), il carrello che si muove verso sinistra avrà velocità negativa.
+            </div>
+
+            <h3 style="margin: 1.2rem 0 0.4rem; color: var(--primary);">Velocità dopo l'urto</h3>
+            <table>
+                <tr>
+                    <th>Misura n°</th>
+                    <th>v&#8321;<sub>f</sub> (m/s)</th>
+                    <th>v&#8322;<sub>f</sub> (m/s)</th>
+                </tr>
+                <tr><td>1</td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>2</td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>3</td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>4</td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>5</td><td class="todo"></td><td class="todo"></td></tr>
+            </table>
+        </section>
+
+        <!-- 8. ELABORAZIONE DATI -->
+        <section>
+            <h2><span class="num">8</span> Elaborazione dei dati</h2>
+
+            <p class="todo">Per ogni prova, calcolare la quantità di moto totale prima e dopo l'urto. Mostrare tutti i passaggi.</p>
+
+            <div class="formula-box">
+                p<sub>tot,i</sub> = m&#8321; &middot; v&#8321;<sub>i</sub> + m&#8322; &middot; v&#8322;<sub>i</sub>
+            </div>
+            <div class="formula-box">
+                p<sub>tot,f</sub> = m&#8321; &middot; v&#8321;<sub>f</sub> + m&#8322; &middot; v&#8322;<sub>f</sub>
+            </div>
+
+            <h3 style="margin: 1rem 0 0.4rem; color: var(--primary);">Tabella riassuntiva</h3>
+            <table>
+                <tr>
+                    <th>Prova</th>
+                    <th>p<sub>tot,i</sub> (kg&middot;m/s)</th>
+                    <th>p<sub>tot,f</sub> (kg&middot;m/s)</th>
+                    <th>&Delta;p (kg&middot;m/s)</th>
+                </tr>
+                <tr><td>1</td><td class="todo"></td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>2</td><td class="todo"></td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>3</td><td class="todo"></td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>4</td><td class="todo"></td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>5</td><td class="todo"></td><td class="todo"></td><td class="todo"></td></tr>
+            </table>
+
+            <p class="todo">Calcolare la propagazione dell'errore su p<sub>tot,i</sub> e p<sub>tot,f</sub>. Verificare se &Delta;p = p<sub>tot,f</sub> &minus; p<sub>tot,i</sub> è compatibile con zero entro l'errore.</p>
+
+            <div class="media-placeholder">
+                <div class="icon">&#128202;</div>
+                <p>Inserire qui eventuali grafici (es. confronto p<sub>tot</sub> prima e dopo per ogni prova).</p>
+                <code>&lt;img src="grafico_qdm.png" alt="Grafico quantità di moto" style="max-width:100%"&gt;</code>
+            </div>
+        </section>
+
+        <!-- 9. ENERGIA CINETICA (opzionale) -->
+        <section>
+            <h2><span class="num">9</span> Verifica dell'energia cinetica <span style="font-size:0.8rem; color:#95a5a6;">(opzionale)</span></h2>
+            <p class="todo">Se richiesto: calcolare l'energia cinetica totale prima e dopo l'urto. L'urto è stato elastico o anelastico? Quanta energia si è "persa"?</p>
+            <div class="formula-box">
+                E<sub>k</sub> = &frac12; m v&sup2;
+            </div>
+            <table>
+                <tr>
+                    <th>Prova</th>
+                    <th>E<sub>k,i</sub> (J)</th>
+                    <th>E<sub>k,f</sub> (J)</th>
+                    <th>&Delta;E<sub>k</sub> (J)</th>
+                </tr>
+                <tr><td>1</td><td class="todo"></td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>2</td><td class="todo"></td><td class="todo"></td><td class="todo"></td></tr>
+                <tr><td>3</td><td class="todo"></td><td class="todo"></td><td class="todo"></td></tr>
+            </table>
+        </section>
+
+        <!-- 10. CONCLUSIONI -->
+        <section>
+            <h2><span class="num">10</span> Conclusioni</h2>
+            <p class="todo">Rispondere alle seguenti domande:</p>
+            <ul class="checklist">
+                <li>La quantità di moto totale si è conservata entro il margine di errore?</li>
+                <li>Se non si è conservata perfettamente, quali forze esterne possono aver agito?</li>
+                <li>L'urto è stato elastico o anelastico? Come lo si dimostra?</li>
+                <li>Quali sono le principali fonti di errore?</li>
+                <li>Come si potrebbe migliorare l'esperienza?</li>
+            </ul>
+        </section>
+
+    </div>
+</div>
+</body>
+</html>
