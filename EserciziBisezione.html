@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formule di Bisezione — Esercizi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']],
+        macros: {
+          sen: '\\operatorname{sen}'
+        }
+      }
+    };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script>
+    <style>
+        :root {
+            --ink: #1a1a2e;
+            --paper: #faf8f5;
+            --accent: #2d5a8e;
+            --accent-light: #e8f0fa;
+            --border: #d4cfc8;
+            --muted: #6b6b7b;
+            --highlight: #c44536;
+            --section-bg: #f3f1ec;
+            --step-bg: #eef4ed;
+            --step-border: #6a9e6e;
+            --warn-bg: #fef3e8;
+            --warn-border: #d4920a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .page {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 40px 48px;
+        }
+
+        /* HEADER */
+        .header {
+            border-bottom: 3px solid var(--ink);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .header .subtitle {
+            font-size: 1.05rem;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        /* SECTIONS */
+        .section {
+            margin-bottom: 36px;
+        }
+
+        .section-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 14px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--accent-light);
+        }
+
+        .section-subtitle {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 12px;
+        }
+
+        /* FORMULA BOXES */
+        .formula-box {
+            background: var(--accent-light);
+            border-left: 4px solid var(--accent);
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .formula-box.highlight {
+            background: #fdf0e8;
+            border-left-color: var(--highlight);
+        }
+
+        .formula-box.result {
+            background: var(--step-bg);
+            border-left-color: var(--step-border);
+        }
+
+        .formula-box .label {
+            font-weight: 600;
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .formula-box.highlight .label {
+            color: var(--highlight);
+        }
+
+        .formula-box.result .label {
+            color: var(--step-border);
+        }
+
+        /* STEP-BY-STEP */
+        .steps {
+            margin: 16px 0;
+        }
+
+        .step {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 52px;
+        }
+
+        .step-number {
+            position: absolute;
+            left: 14px;
+            top: 14px;
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .step .step-title {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        /* EXERCISES */
+        .exercise-block {
+            margin-bottom: 32px;
+        }
+
+        .exercise {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+        }
+
+        .exercise-label {
+            font-weight: 700;
+            color: var(--accent);
+            margin-right: 6px;
+        }
+
+        .exercise-hint {
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-style: italic;
+            margin-top: 6px;
+        }
+
+        /* SPOILER / SOLUTION TOGGLE */
+        .solution-toggle {
+            margin-top: 10px;
+        }
+
+        .solution-toggle summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 0.92rem;
+            padding: 6px 0;
+            user-select: none;
+        }
+
+        .solution-toggle summary:hover {
+            color: var(--highlight);
+        }
+
+        .solution-content {
+            background: var(--step-bg);
+            border-left: 3px solid var(--step-border);
+            padding: 12px 16px;
+            margin-top: 8px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* CALLOUT */
+        .callout {
+            background: var(--warn-bg);
+            border-left: 4px solid var(--warn-border);
+            padding: 14px 18px;
+            margin: 16px 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .callout .callout-title {
+            font-weight: 700;
+            color: #a06800;
+            margin-bottom: 4px;
+        }
+
+        /* TABLE */
+        table.values {
+            border-collapse: collapse;
+            margin: 16px 0;
+            width: 100%;
+        }
+
+        table.values th, table.values td {
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            text-align: center;
+        }
+
+        table.values th {
+            background: var(--accent-light);
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        table.values td {
+            background: white;
+        }
+
+        /* SEPARATOR */
+        hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 30px 0;
+        }
+
+        /* PRINT */
+        @media print {
+            .page { padding: 20px; }
+            .solution-toggle { display: none; }
+        }
+
+        @media (max-width: 600px) {
+            .page { padding: 20px 16px; }
+            .header h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>Formule di Bisezione</h1>
+        <div class="subtitle">Dalle formule di duplicazione alle formule di bisezione — Esercizi guidati e pratica</div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PARTE 1: RIPASSO -->
+    <!-- ============================================================ -->
+    <div class="section">
+        <h2 class="section-title">1. Dalle duplicazione alla bisezione</h2>
+
+        <h3 class="section-subtitle">1.1 Le formule di duplicazione (ripasso)</h3>
+        <p>Ricordiamo le formule di duplicazione del coseno:</p>
+
+        <div class="formula-box">
+            <div class="label">Formule di duplicazione</div>
+            \[
+            \cos(2\alpha) = \cos^2\alpha - \sen^2\alpha
+            \]
+            Usando l'identità fondamentale \(\sen^2\alpha + \cos^2\alpha = 1\), si ottengono due forme equivalenti:
+            \[
+            \cos(2\alpha) = 2\cos^2\alpha - 1 \qquad\qquad \cos(2\alpha) = 1 - 2\sen^2\alpha
+            \]
+        </div>
+
+        <h3 class="section-subtitle">1.2 La sostituzione chiave</h3>
+        <p>L'idea è semplice: se poniamo \(\alpha = \dfrac{\theta}{2}\), allora \(2\alpha = \theta\). Sostituiamo nelle due forme:</p>
+
+        <div class="formula-box highlight">
+            <div class="label">Sostituzione \(\alpha = \theta/2\)</div>
+            \[
+            \cos\theta = 2\cos^2\!\frac{\theta}{2} - 1 \qquad\qquad \cos\theta = 1 - 2\sen^2\!\frac{\theta}{2}
+            \]
+        </div>
+
+        <h3 class="section-subtitle">1.3 Inversione: le formule di bisezione</h3>
+        <p>Ora isoliamo \(\cos^2\!\dfrac{\theta}{2}\) dalla prima e \(\sen^2\!\dfrac{\theta}{2}\) dalla seconda:</p>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-title">Dalla prima forma:</div>
+                \(\cos\theta = 2\cos^2\!\dfrac{\theta}{2} - 1\) &nbsp;⟹&nbsp; \(2\cos^2\!\dfrac{\theta}{2} = 1 + \cos\theta\) &nbsp;⟹&nbsp; \(\cos^2\!\dfrac{\theta}{2} = \dfrac{1+\cos\theta}{2}\)
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-title">Dalla seconda forma:</div>
+                \(\cos\theta = 1 - 2\sen^2\!\dfrac{\theta}{2}\) &nbsp;⟹&nbsp; \(2\sen^2\!\dfrac{\theta}{2} = 1 - \cos\theta\) &nbsp;⟹&nbsp; \(\sen^2\!\dfrac{\theta}{2} = \dfrac{1-\cos\theta}{2}\)
+            </div>
+        </div>
+
+        <div class="formula-box result">
+            <div class="label">Formule di bisezione</div>
+            \[
+            \cos^2\!\frac{\theta}{2} = \frac{1+\cos\theta}{2} \qquad\qquad \sen^2\!\frac{\theta}{2} = \frac{1-\cos\theta}{2}
+            \]
+            E, dividendo membro a membro:
+            \[
+            \tan^2\!\frac{\theta}{2} = \frac{1-\cos\theta}{1+\cos\theta}
+            \]
+        </div>
+
+        <div class="callout">
+            <div class="callout-title">⚠️ Attenzione al segno!</div>
+            <p>Le formule danno il <strong>quadrato</strong> di seno e coseno. Quando estraiamo la radice quadrata, il segno (±) dipende dal quadrante in cui si trova l'angolo \(\theta/2\):</p>
+            \[
+            \cos\frac{\theta}{2} = \pm\sqrt{\frac{1+\cos\theta}{2}} \qquad\qquad \sen\frac{\theta}{2} = \pm\sqrt{\frac{1-\cos\theta}{2}}
+            \]
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- PARTE 2: ESEMPIO GUIDATO -->
+    <!-- ============================================================ -->
+    <div class="section">
+        <h2 class="section-title">2. Esempio guidato: calcolo di \(\cos\dfrac{9}{8}\pi\)</h2>
+
+        <p>Vogliamo calcolare il valore esatto di \(\cos\dfrac{9}{8}\pi\). Procediamo passo per passo.</p>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-title">Riconoscere l'angolo come metà di un angolo noto</div>
+                <p>Osserviamo che:</p>
+                \[\frac{9}{8}\pi = \frac{1}{2}\cdot\frac{9}{4}\pi\]
+                <p>Quindi \(\dfrac{9}{8}\pi\) è la metà di \(\dfrac{9}{4}\pi\). Posto \(\theta = \dfrac{9}{4}\pi\), dobbiamo calcolare \(\cos\dfrac{\theta}{2}\).</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-title">Calcolare \(\cos\theta = \cos\dfrac{9}{4}\pi\)</div>
+                <p>L'angolo \(\dfrac{9}{4}\pi = 2\pi + \dfrac{1}{4}\pi\), quindi è coterminale con \(\dfrac{\pi}{4}\):</p>
+                \[\cos\frac{9}{4}\pi = \cos\frac{\pi}{4} = \frac{\sqrt{2}}{2}\]
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-title">Applicare la formula di bisezione</div>
+                <p>Sostituiamo nella formula:</p>
+                \[\cos^2\!\frac{\theta}{2} = \frac{1+\cos\theta}{2} = \frac{1 + \dfrac{\sqrt{2}}{2}}{2} = \frac{\dfrac{2+\sqrt{2}}{2}}{2} = \frac{2+\sqrt{2}}{4}\]
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-title">Determinare il segno</div>
+                <p>L'angolo \(\dfrac{9}{8}\pi\) è compreso tra \(\pi\) e \(\dfrac{3}{2}\pi\), quindi si trova nel <strong>terzo quadrante</strong>, dove il coseno è <strong>negativo</strong>.</p>
+                <p>Quindi scegliamo il segno meno davanti alla radice.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-title">Estrarre la radice e concludere</div>
+                <div class="formula-box result" style="margin-top:8px;">
+                    \[\cos\frac{9}{8}\pi = -\sqrt{\frac{2+\sqrt{2}}{4}} = -\frac{\sqrt{2+\sqrt{2}}}{2}\]
+                </div>
+            </div>
+        </div>
+
+        <div class="callout">
+            <div class="callout-title">📝 Schema riassuntivo del procedimento</div>
+            <p>Per calcolare \(\cos\dfrac{\alpha}{2}\) o \(\sen\dfrac{\alpha}{2}\):</p>
+            <p><strong>(a)</strong> Scrivi l'angolo come metà di un angolo \(\theta\), cioè trova \(\theta = 2\cdot\text{(angolo dato)}\).</p>
+            <p><strong>(b)</strong> Calcola \(\cos\theta\) (riconducendoti, se serve, a un angolo noto).</p>
+            <p><strong>(c)</strong> Sostituisci nella formula di bisezione.</p>
+            <p><strong>(d)</strong> Determina il segno guardando in quale quadrante si trova l'angolo dato.</p>
+            <p><strong>(e)</strong> Estrai la radice quadrata.</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- PARTE 3: ESERCIZI -->
+    <!-- ============================================================ -->
+    <div class="section">
+        <h2 class="section-title">3. Esercizi</h2>
+
+        <h3 class="section-subtitle">Gruppo A — Applicazione diretta delle formule</h3>
+        <p>Calcola i seguenti valori esatti usando le formule di bisezione.</p>
+
+        <div class="exercise-block">
+            <div class="exercise">
+                <span class="exercise-label">A1.</span>
+                Calcola \(\cos\dfrac{\pi}{8}\).
+                <div class="exercise-hint">Suggerimento: di quale angolo noto è la metà?</div>
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\dfrac{\pi}{8} = \dfrac{1}{2}\cdot\dfrac{\pi}{4}\), quindi \(\theta = \dfrac{\pi}{4}\) e \(\cos\theta = \dfrac{\sqrt{2}}{2}\).</p>
+                        <p>\(\cos^2\dfrac{\pi}{8} = \dfrac{1 + \frac{\sqrt{2}}{2}}{2} = \dfrac{2+\sqrt{2}}{4}\)</p>
+                        <p>\(\dfrac{\pi}{8}\) è nel primo quadrante, coseno positivo:</p>
+                        \[\cos\frac{\pi}{8} = \frac{\sqrt{2+\sqrt{2}}}{2}\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">A2.</span>
+                Calcola \(\sen\dfrac{\pi}{8}\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>Stesso \(\theta = \dfrac{\pi}{4}\), usiamo la formula per il seno:</p>
+                        <p>\(\sen^2\dfrac{\pi}{8} = \dfrac{1 - \frac{\sqrt{2}}{2}}{2} = \dfrac{2-\sqrt{2}}{4}\)</p>
+                        <p>\(\dfrac{\pi}{8}\) è nel primo quadrante, seno positivo:</p>
+                        \[\sen\frac{\pi}{8} = \frac{\sqrt{2-\sqrt{2}}}{2}\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">A3.</span>
+                Calcola \(\cos\dfrac{\pi}{12}\).
+                <div class="exercise-hint">Suggerimento: \(\dfrac{\pi}{12}\) è la metà di…?</div>
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\dfrac{\pi}{12} = \dfrac{1}{2}\cdot\dfrac{\pi}{6}\), quindi \(\theta = \dfrac{\pi}{6}\) e \(\cos\theta = \dfrac{\sqrt{3}}{2}\).</p>
+                        <p>\(\cos^2\dfrac{\pi}{12} = \dfrac{1 + \frac{\sqrt{3}}{2}}{2} = \dfrac{2+\sqrt{3}}{4}\)</p>
+                        <p>Primo quadrante, coseno positivo:</p>
+                        \[\cos\frac{\pi}{12} = \frac{\sqrt{2+\sqrt{3}}}{2}\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">A4.</span>
+                Calcola \(\sen\dfrac{\pi}{12}\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\theta = \dfrac{\pi}{6}\), \(\cos\theta = \dfrac{\sqrt{3}}{2}\):</p>
+                        <p>\(\sen^2\dfrac{\pi}{12} = \dfrac{1 - \frac{\sqrt{3}}{2}}{2} = \dfrac{2-\sqrt{3}}{4}\)</p>
+                        \[\sen\frac{\pi}{12} = \frac{\sqrt{2-\sqrt{3}}}{2}\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">A5.</span>
+                Calcola \(\tan\dfrac{\pi}{8}\).
+                <div class="exercise-hint">Puoi usare la formula per la tangente, oppure fare il rapporto seno/coseno.</div>
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>Con la formula diretta, \(\theta = \dfrac{\pi}{4}\), \(\cos\theta = \dfrac{\sqrt{2}}{2}\):</p>
+                        <p>\(\tan^2\dfrac{\pi}{8} = \dfrac{1 - \frac{\sqrt{2}}{2}}{1 + \frac{\sqrt{2}}{2}} = \dfrac{2 - \sqrt{2}}{2 + \sqrt{2}}\)</p>
+                        <p>Razionalizziamo:</p>
+                        <p>\(\dfrac{2 - \sqrt{2}}{2 + \sqrt{2}} \cdot \dfrac{2 - \sqrt{2}}{2 - \sqrt{2}} = \dfrac{(2-\sqrt{2})^2}{4-2} = \dfrac{(2-\sqrt{2})^2}{2}\)</p>
+                        <p>Primo quadrante, tangente positiva:</p>
+                        \[\tan\frac{\pi}{8} = \frac{2-\sqrt{2}}{\sqrt{2}} = \sqrt{2}-1\]
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <h3 class="section-subtitle">Gruppo B — Determinazione del segno</h3>
+        <p>In questi esercizi è fondamentale determinare correttamente il quadrante.</p>
+
+        <div class="exercise-block">
+            <div class="exercise">
+                <span class="exercise-label">B1.</span>
+                Calcola \(\sen\dfrac{9}{8}\pi\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\dfrac{9}{8}\pi = \dfrac{1}{2}\cdot\dfrac{9}{4}\pi\), \(\theta = \dfrac{9}{4}\pi\), \(\cos\theta = \cos\dfrac{\pi}{4} = \dfrac{\sqrt{2}}{2}\).</p>
+                        <p>\(\sen^2\dfrac{9}{8}\pi = \dfrac{1 - \frac{\sqrt{2}}{2}}{2} = \dfrac{2-\sqrt{2}}{4}\)</p>
+                        <p>\(\dfrac{9}{8}\pi \approx 1.125\pi\) è nel <strong>terzo quadrante</strong>, seno <strong>negativo</strong>:</p>
+                        \[\sen\frac{9}{8}\pi = -\frac{\sqrt{2-\sqrt{2}}}{2}\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">B2.</span>
+                Calcola \(\cos\dfrac{5}{8}\pi\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\dfrac{5}{8}\pi = \dfrac{1}{2}\cdot\dfrac{5}{4}\pi\), \(\theta = \dfrac{5}{4}\pi\), \(\cos\theta = \cos\left(\pi + \dfrac{\pi}{4}\right) = -\dfrac{\sqrt{2}}{2}\).</p>
+                        <p>\(\cos^2\dfrac{5}{8}\pi = \dfrac{1 + \left(-\frac{\sqrt{2}}{2}\right)}{2} = \dfrac{2-\sqrt{2}}{4}\)</p>
+                        <p>\(\dfrac{5}{8}\pi \approx 0.625\pi\) è nel <strong>secondo quadrante</strong>, coseno <strong>negativo</strong>:</p>
+                        \[\cos\frac{5}{8}\pi = -\frac{\sqrt{2-\sqrt{2}}}{2}\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">B3.</span>
+                Calcola \(\sen\dfrac{5}{8}\pi\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\theta = \dfrac{5}{4}\pi\), \(\cos\theta = -\dfrac{\sqrt{2}}{2}\):</p>
+                        <p>\(\sen^2\dfrac{5}{8}\pi = \dfrac{1 - \left(-\frac{\sqrt{2}}{2}\right)}{2} = \dfrac{2+\sqrt{2}}{4}\)</p>
+                        <p>\(\dfrac{5}{8}\pi\) è nel <strong>secondo quadrante</strong>, seno <strong>positivo</strong>:</p>
+                        \[\sen\frac{5}{8}\pi = \frac{\sqrt{2+\sqrt{2}}}{2}\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">B4.</span>
+                Calcola \(\cos\dfrac{11}{8}\pi\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\dfrac{11}{8}\pi = \dfrac{1}{2}\cdot\dfrac{11}{4}\pi\), \(\theta = \dfrac{11}{4}\pi = 2\pi + \dfrac{3}{4}\pi\), \(\cos\theta = \cos\dfrac{3}{4}\pi = -\dfrac{\sqrt{2}}{2}\).</p>
+                        <p>\(\cos^2\dfrac{11}{8}\pi = \dfrac{1 - \frac{\sqrt{2}}{2}}{2} = \dfrac{2-\sqrt{2}}{4}\)</p>
+                        <p>\(\dfrac{11}{8}\pi \approx 1.375\pi\) è nel <strong>terzo quadrante</strong>, coseno <strong>negativo</strong>:</p>
+                        \[\cos\frac{11}{8}\pi = -\frac{\sqrt{2-\sqrt{2}}}{2}\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">B5.</span>
+                Calcola \(\sen\dfrac{13}{8}\pi\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\dfrac{13}{8}\pi = \dfrac{1}{2}\cdot\dfrac{13}{4}\pi\), \(\theta = \dfrac{13}{4}\pi = 2\pi + \dfrac{5}{4}\pi\), \(\cos\theta = \cos\dfrac{5}{4}\pi = -\dfrac{\sqrt{2}}{2}\).</p>
+                        <p>\(\sen^2\dfrac{13}{8}\pi = \dfrac{1 + \frac{\sqrt{2}}{2}}{2} = \dfrac{2+\sqrt{2}}{4}\)</p>
+                        <p>\(\dfrac{13}{8}\pi \approx 1.625\pi\) è nel <strong>quarto quadrante</strong>, seno <strong>negativo</strong>:</p>
+                        \[\sen\frac{13}{8}\pi = -\frac{\sqrt{2+\sqrt{2}}}{2}\]
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <h3 class="section-subtitle">Gruppo C — Con angoli associati a \(\pi/6\) e \(\pi/3\)</h3>
+
+        <div class="exercise-block">
+            <div class="exercise">
+                <span class="exercise-label">C1.</span>
+                Calcola \(\cos\dfrac{5}{12}\pi\).
+                <div class="exercise-hint">Suggerimento: \(\dfrac{5}{12}\pi = \dfrac{1}{2}\cdot\dfrac{5}{6}\pi\).</div>
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\theta = \dfrac{5}{6}\pi\), \(\cos\dfrac{5}{6}\pi = \cos\left(\pi - \dfrac{\pi}{6}\right) = -\dfrac{\sqrt{3}}{2}\).</p>
+                        <p>\(\cos^2\dfrac{5}{12}\pi = \dfrac{1 - \frac{\sqrt{3}}{2}}{2} = \dfrac{2-\sqrt{3}}{4}\)</p>
+                        <p>\(\dfrac{5}{12}\pi \approx 0.417\pi\) è nel <strong>primo quadrante</strong>, coseno <strong>positivo</strong>:</p>
+                        \[\cos\frac{5}{12}\pi = \frac{\sqrt{2-\sqrt{3}}}{2}\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">C2.</span>
+                Calcola \(\sen\dfrac{5}{12}\pi\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\theta = \dfrac{5}{6}\pi\), \(\cos\theta = -\dfrac{\sqrt{3}}{2}\):</p>
+                        <p>\(\sen^2\dfrac{5}{12}\pi = \dfrac{1 + \frac{\sqrt{3}}{2}}{2} = \dfrac{2+\sqrt{3}}{4}\)</p>
+                        <p>Primo quadrante, seno positivo:</p>
+                        \[\sen\frac{5}{12}\pi = \frac{\sqrt{2+\sqrt{3}}}{2}\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">C3.</span>
+                Calcola \(\cos\dfrac{7}{12}\pi\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\dfrac{7}{12}\pi = \dfrac{1}{2}\cdot\dfrac{7}{6}\pi\), \(\theta = \dfrac{7}{6}\pi\), \(\cos\theta = \cos\left(\pi + \dfrac{\pi}{6}\right) = -\dfrac{\sqrt{3}}{2}\).</p>
+                        <p>\(\cos^2\dfrac{7}{12}\pi = \dfrac{1 - \frac{\sqrt{3}}{2}}{2} = \dfrac{2-\sqrt{3}}{4}\)</p>
+                        <p>\(\dfrac{7}{12}\pi \approx 0.583\pi\) è nel <strong>secondo quadrante</strong>, coseno <strong>negativo</strong>:</p>
+                        \[\cos\frac{7}{12}\pi = -\frac{\sqrt{2-\sqrt{3}}}{2}\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">C4.</span>
+                Calcola \(\tan\dfrac{\pi}{12}\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\theta = \dfrac{\pi}{6}\), \(\cos\theta = \dfrac{\sqrt{3}}{2}\):</p>
+                        <p>\(\tan^2\dfrac{\pi}{12} = \dfrac{1 - \frac{\sqrt{3}}{2}}{1 + \frac{\sqrt{3}}{2}} = \dfrac{2-\sqrt{3}}{2+\sqrt{3}}\)</p>
+                        <p>Razionalizziamo: \(\dfrac{(2-\sqrt{3})^2}{4-3} = (2-\sqrt{3})^2 = 7 - 4\sqrt{3}\)</p>
+                        <p>Primo quadrante, tangente positiva:</p>
+                        \[\tan\frac{\pi}{12} = 2 - \sqrt{3}\]
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <h3 class="section-subtitle">Gruppo D — Esercizi con parametro</h3>
+        <p>In questi esercizi è dato il valore di una funzione goniometrica di \(\theta\) e bisogna trovare \(\cos\dfrac{\theta}{2}\), \(\sen\dfrac{\theta}{2}\) o \(\tan\dfrac{\theta}{2}\).</p>
+
+        <div class="exercise-block">
+            <div class="exercise">
+                <span class="exercise-label">D1.</span>
+                Sapendo che \(\cos\theta = \dfrac{3}{5}\) e che \(0 < \theta < \dfrac{\pi}{2}\), calcola \(\cos\dfrac{\theta}{2}\) e \(\sen\dfrac{\theta}{2}\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>Se \(0 < \theta < \dfrac{\pi}{2}\), allora \(0 < \dfrac{\theta}{2} < \dfrac{\pi}{4}\) (primo quadrante): sia seno che coseno sono positivi.</p>
+                        <p>\(\cos\dfrac{\theta}{2} = \sqrt{\dfrac{1 + \frac{3}{5}}{2}} = \sqrt{\dfrac{\frac{8}{5}}{2}} = \sqrt{\dfrac{4}{5}} = \dfrac{2}{\sqrt{5}} = \dfrac{2\sqrt{5}}{5}\)</p>
+                        <p>\(\sen\dfrac{\theta}{2} = \sqrt{\dfrac{1 - \frac{3}{5}}{2}} = \sqrt{\dfrac{\frac{2}{5}}{2}} = \sqrt{\dfrac{1}{5}} = \dfrac{1}{\sqrt{5}} = \dfrac{\sqrt{5}}{5}\)</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">D2.</span>
+                Sapendo che \(\cos\theta = -\dfrac{1}{3}\) e che \(\pi < \theta < \dfrac{3}{2}\pi\), calcola \(\cos\dfrac{\theta}{2}\) e \(\sen\dfrac{\theta}{2}\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>Se \(\pi < \theta < \dfrac{3}{2}\pi\), allora \(\dfrac{\pi}{2} < \dfrac{\theta}{2} < \dfrac{3}{4}\pi\) (secondo quadrante): seno positivo, coseno negativo.</p>
+                        <p>\(\cos^2\dfrac{\theta}{2} = \dfrac{1 - \frac{1}{3}}{2} = \dfrac{\frac{2}{3}}{2} = \dfrac{1}{3}\) &nbsp;⟹&nbsp; \(\cos\dfrac{\theta}{2} = -\dfrac{1}{\sqrt{3}} = -\dfrac{\sqrt{3}}{3}\)</p>
+                        <p>\(\sen^2\dfrac{\theta}{2} = \dfrac{1 + \frac{1}{3}}{2} = \dfrac{\frac{4}{3}}{2} = \dfrac{2}{3}\) &nbsp;⟹&nbsp; \(\sen\dfrac{\theta}{2} = \sqrt{\dfrac{2}{3}} = \dfrac{\sqrt{6}}{3}\)</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">D3.</span>
+                Sapendo che \(\cos\theta = \dfrac{7}{25}\) e che \(\dfrac{3}{2}\pi < \theta < 2\pi\), calcola \(\tan\dfrac{\theta}{2}\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>Se \(\dfrac{3}{2}\pi < \theta < 2\pi\), allora \(\dfrac{3}{4}\pi < \dfrac{\theta}{2} < \pi\) (secondo quadrante): tangente negativa.</p>
+                        <p>\(\tan^2\dfrac{\theta}{2} = \dfrac{1 - \frac{7}{25}}{1 + \frac{7}{25}} = \dfrac{\frac{18}{25}}{\frac{32}{25}} = \dfrac{18}{32} = \dfrac{9}{16}\)</p>
+                        <p>\(\tan\dfrac{\theta}{2} = -\dfrac{3}{4}\)</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">D4.</span>
+                Sapendo che \(\sen\theta = \dfrac{4}{5}\) e che \(\dfrac{\pi}{2} < \theta < \pi\), calcola \(\cos\dfrac{\theta}{2}\).
+                <div class="exercise-hint">Suggerimento: prima ricava \(\cos\theta\) dall'identità fondamentale, poi usa la bisezione.</div>
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>Nel secondo quadrante: \(\cos\theta = -\sqrt{1 - \frac{16}{25}} = -\dfrac{3}{5}\).</p>
+                        <p>Se \(\dfrac{\pi}{2} < \theta < \pi\), allora \(\dfrac{\pi}{4} < \dfrac{\theta}{2} < \dfrac{\pi}{2}\) (primo quadrante): coseno positivo.</p>
+                        <p>\(\cos\dfrac{\theta}{2} = \sqrt{\dfrac{1 - \frac{3}{5}}{2}} = \sqrt{\dfrac{1}{5}} = \dfrac{\sqrt{5}}{5}\)</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <h3 class="section-subtitle">Gruppo E — Semplificazione di espressioni</h3>
+
+        <div class="exercise-block">
+            <div class="exercise">
+                <span class="exercise-label">E1.</span>
+                Semplifica: \(\dfrac{1 - \cos(2\alpha)}{1 + \cos(2\alpha)}\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>Pensiamo a \(2\alpha\) come l'angolo \(\theta\) e ad \(\alpha\) come \(\theta/2\). Allora:</p>
+                        <p>Numeratore: \(1 - \cos(2\alpha) = 2\sen^2\alpha\)</p>
+                        <p>Denominatore: \(1 + \cos(2\alpha) = 2\cos^2\alpha\)</p>
+                        \[\frac{1 - \cos(2\alpha)}{1 + \cos(2\alpha)} = \frac{2\sen^2\alpha}{2\cos^2\alpha} = \tan^2\alpha\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">E2.</span>
+                Semplifica: \(\sqrt{\dfrac{1 + \cos(6x)}{2}}\), sapendo che \(0 < x < \dfrac{\pi}{6}\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(\dfrac{1 + \cos(6x)}{2} = \cos^2(3x)\) (formula di bisezione con \(\theta = 6x\)).</p>
+                        <p>Se \(0 < x < \dfrac{\pi}{6}\), allora \(0 < 3x < \dfrac{\pi}{2}\): coseno positivo.</p>
+                        \[\sqrt{\frac{1 + \cos(6x)}{2}} = |\cos(3x)| = \cos(3x)\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">E3.</span>
+                Semplifica: \(\dfrac{\sen\theta}{1 + \cos\theta}\).
+                <div class="exercise-hint">Suggerimento: usa le formule di bisezione al numeratore e al denominatore.</div>
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>Dalle formule di duplicazione/bisezione:</p>
+                        <p>\(\sen\theta = 2\sen\dfrac{\theta}{2}\cos\dfrac{\theta}{2}\) (duplicazione del seno)</p>
+                        <p>\(1 + \cos\theta = 2\cos^2\dfrac{\theta}{2}\)</p>
+                        \[\frac{\sen\theta}{1+\cos\theta} = \frac{2\sen\frac{\theta}{2}\cos\frac{\theta}{2}}{2\cos^2\frac{\theta}{2}} = \frac{\sen\frac{\theta}{2}}{\cos\frac{\theta}{2}} = \tan\frac{\theta}{2}\]
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <span class="exercise-label">E4.</span>
+                Verifica l'identità: \(\dfrac{1 - \cos\theta}{\sen\theta} = \tan\dfrac{\theta}{2}\).
+                <details class="solution-toggle">
+                    <summary>Mostra soluzione</summary>
+                    <div class="solution-content">
+                        <p>\(1 - \cos\theta = 2\sen^2\dfrac{\theta}{2}\)</p>
+                        <p>\(\sen\theta = 2\sen\dfrac{\theta}{2}\cos\dfrac{\theta}{2}\)</p>
+                        \[\frac{1-\cos\theta}{\sen\theta} = \frac{2\sen^2\frac{\theta}{2}}{2\sen\frac{\theta}{2}\cos\frac{\theta}{2}} = \frac{\sen\frac{\theta}{2}}{\cos\frac{\theta}{2}} = \tan\frac{\theta}{2} \quad\checkmark\]
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="section" style="text-align: center; color: var(--muted); font-size: 0.9rem; padding: 10px 0;">
+        <p><em>Prof. Pace — Formule di bisezione</em></p>
+    </div>
+
+</div>
+</body>
+</html>
