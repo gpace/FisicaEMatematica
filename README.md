@@ -4,8 +4,8 @@ Benvenuti nella repository delle relazioni di laboratorio! Qui trovate i templat
 
 | File | Esperienza |
 |------|-----------|
-| `relazione_MRU.html` | Moto Rettilineo Uniforme |
-| `relazione_QdM.html` | Conservazione della Quantità di Moto |
+| `RelazioneLabMotoRU.html` | Moto Rettilineo Uniforme |
+| `RelazioneLaboratorioConservazioneQuantitaMoto.html` | Conservazione della Quantità di Moto |
 
 Ogni gruppo lavorerà su **un paragrafo** della relazione. Il vostro compito è sostituire il testo in rosso (i campi `todo`) con il contenuto vero.
 
