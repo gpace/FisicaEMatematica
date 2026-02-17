@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relazione di Laboratorio — Moto Rettilineo Uniforme</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --border: #bdc3c7;
+            --bg-light: #f8f9fa;
+            --bg-section: #ffffff;
+            --text: #2c3e50;
+            --placeholder: #e74c3c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            background: var(--bg-light);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-section);
+            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        /* --- Header --- */
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem 2.5rem;
+        }
+        .header h1 { font-size: 1.6rem; margin-bottom: 0.3rem; }
+        .header .subtitle { font-size: 1rem; opacity: 0.85; }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem 2rem;
+            margin-top: 1.2rem;
+            font-size: 0.95rem;
+        }
+        .meta-grid .label { opacity: 0.7; }
+        .meta-grid .value { font-weight: 600; }
+        .meta-grid .fill { color: #f1c40f; font-style: italic; }
+
+        /* --- Sections --- */
+        .content { padding: 2rem 2.5rem; }
+
+        section {
+            margin-bottom: 2.2rem;
+            border-left: 4px solid var(--accent);
+            padding-left: 1.2rem;
+        }
+
+        section h2 {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        section h2 .num {
+            background: var(--accent);
+            color: white;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .todo {
+            color: var(--placeholder);
+            font-style: italic;
+            background: #fdf2f2;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            border: 1px dashed var(--placeholder);
+            margin: 0.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.8rem 0;
+            font-size: 0.92rem;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.55rem 0.8rem;
+            text-align: center;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f4f6f7; }
+
+        .media-placeholder {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: #7f8c8d;
+            margin: 0.8rem 0;
+            background: #fafbfc;
+        }
+        .media-placeholder .icon { font-size: 2rem; margin-bottom: 0.4rem; }
+        .media-placeholder p { font-size: 0.9rem; }
+        .media-placeholder code {
+            display: inline-block;
+            background: #ecf0f1;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.82rem;
+            margin-top: 0.3rem;
+        }
+
+        .formula-box {
+            background: #eaf2f8;
+            border: 1px solid #aed6f1;
+            border-radius: 6px;
+            padding: 0.8rem 1.2rem;
+            margin: 0.5rem 0;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.05rem;
+            text-align: center;
+        }
+
+        .checklist { list-style: none; padding: 0; }
+        .checklist li {
+            padding: 0.3rem 0 0.3rem 1.5rem;
+            position: relative;
+        }
+        .checklist li::before {
+            content: "\2610";
+            position: absolute;
+            left: 0;
+        }
+
+        @media print {
+            body { padding: 0; background: white; }
+            .container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- ========== HEADER ========== -->
+    <div class="header">
+        <h1>Moto Rettilineo Uniforme</h1>
+        <div class="subtitle">Verifica sperimentale: confronto delle velocità su due tratti</div>
+        <div class="meta-grid">
+            <div><span class="label">Classe: </span><span class="fill">__________</span></div>
+            <div><span class="label">Data esperienza: </span><span class="fill">__________</span></div>
+            <div><span class="label">Gruppo: </span><span class="fill">__________</span></div>
+            <div><span class="label">Data consegna: </span><span class="fill">__________</span></div>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- 1. OBIETTIVO -->
+        <section>
+            <h2><span class="num">1</span> Obiettivo</h2>
+            <p class="todo">Descrivere lo scopo dell'esperienza: verificare che un corpo in moto rettilineo uniforme percorre tratti diversi con la stessa velocità, entro il margine di errore sperimentale.</p>
+        </section>
+
+        <!-- 2. RICHIAMI TEORICI -->
+        <section>
+            <h2><span class="num">2</span> Richiami teorici</h2>
+            <p class="todo">Definizione di moto rettilineo uniforme. Relazione spazio-tempo. Significato fisico della velocità costante.</p>
+            <div class="formula-box">
+                v = &Delta;s / &Delta;t
+            </div>
+            <p class="todo">Richiamare il concetto di errore di misura e la propagazione dell'errore nel calcolo della velocità (errore relativo e assoluto).</p>
+        </section>
+
+        <!-- 3. MATERIALI E STRUMENTI -->
+        <section>
+            <h2><span class="num">3</span> Materiali e strumenti</h2>
+            <p class="todo">Elencare tutti i materiali e gli strumenti utilizzati, con le loro caratteristiche metrologiche.</p>
+            <table>
+                <tr>
+                    <th>Strumento</th>
+                    <th>Portata</th>
+                    <th>Sensibilità</th>
+                </tr>
+                <tr><td class="todo">...</td><td class="todo">...</td><td class="todo">...</td></tr>
+                <tr><td class="todo">...</td><td class="todo">...</td><td class="todo">...</td></tr>
+                <tr><td class="todo">...</td><td class="todo">...</td><td class="todo">...</td></tr>
+            </table>
+        </section>
+
+        <!-- 4. SCHEMA DELL'APPARATO -->
+        <section>
+            <h2><span class="num">4</span> Schema dell'apparato sperimentale</h2>
+            <div class="media-placeholder">
+                <div class="icon">&#128247;</div>
+                <p>Inserire qui una foto o uno schema dell'apparato.</p>
+                <code>&lt;img src="apparato_mru.jpg" alt="Schema apparato" style="max-width:100%"&gt;</code>
+            </div>
+            <p class="todo">Descrivere la disposizione: rotaia, posizione dei riferimenti che delimitano i due tratti, direzione del moto.</p>
+        </section>
+
+        <!-- 5. PROCEDIMENTO -->
+        <section>
+            <h2><span class="num">5</span> Procedimento</h2>
+            <p class="todo">Descrivere passo per passo come si è svolta l'esperienza: come è stato lanciato il carrello, come sono stati definiti i due tratti (A&rarr;B e B&rarr;C), come sono state misurate le distanze e i tempi, quante ripetizioni sono state effettuate.</p>
+        </section>
+
+        <!-- 6. VIDEO -->
+        <section>
+            <h2><span class="num">6</span> Video dell'esperienza</h2>
+            <div class="media-placeholder">
+                <div class="icon">&#127916;</div>
+                <p>Inserire qui il video dell'esperienza.</p>
+                <code>&lt;video src="video_mru.mp4" controls style="max-width:100%"&gt;&lt;/video&gt;</code>
+                <p style="margin-top:0.5rem;">Oppure un link esterno (YouTube / Google Drive):</p>
+                <p class="todo" style="display:inline-block; margin:0.3rem 0;">URL del video: __________</p>
+            </div>
+        </section>
+
+        <!-- 7. DATI SPERIMENTALI -->
+        <section>
+            <h2><span class="num">7</span> Dati sperimentali</h2>
+
+            <p><strong>Tratto 1</strong> &mdash; da __________ a __________</p>
+            <p class="todo">&Delta;s&#8321; = __________ &pm; __________ m</p>
+            <table>
+                <tr>
+                    <th>Misura n°</th>
+                    <th>&Delta;t&#8321; (s)</th>
+                </tr>
+                <tr><td>1</td><td class="todo"></td></tr>
+                <tr><td>2</td><td class="todo"></td></tr>
+                <tr><td>3</td><td class="todo"></td></tr>
+                <tr><td>4</td><td class="todo"></td></tr>
+                <tr><td>5</td><td class="todo"></td></tr>
+            </table>
+
+            <br>
+
+            <p><strong>Tratto 2</strong> &mdash; da __________ a __________</p>
+            <p class="todo">&Delta;s&#8322; = __________ &pm; __________ m</p>
+            <table>
+                <tr>
+                    <th>Misura n°</th>
+                    <th>&Delta;t&#8322; (s)</th>
+                </tr>
+                <tr><td>1</td><td class="todo"></td></tr>
+                <tr><td>2</td><td class="todo"></td></tr>
+                <tr><td>3</td><td class="todo"></td></tr>
+                <tr><td>4</td><td class="todo"></td></tr>
+                <tr><td>5</td><td class="todo"></td></tr>
+            </table>
+        </section>
+
+        <!-- 8. ELABORAZIONE DATI -->
+        <section>
+            <h2><span class="num">8</span> Elaborazione dei dati</h2>
+            <p class="todo">Calcolare per ciascun tratto: tempo medio, semidispersione, velocità media, propagazione dell'errore sulla velocità. Mostrare tutti i passaggi.</p>
+
+            <div class="formula-box">
+                v&#8321; = &Delta;s&#8321; / &Delta;t&#8321;<sub>medio</sub> = __________ &pm; __________ m/s
+            </div>
+            <div class="formula-box">
+                v&#8322; = &Delta;s&#8322; / &Delta;t&#8322;<sub>medio</sub> = __________ &pm; __________ m/s
+            </div>
+
+            <p class="todo">Confrontare gli intervalli di errore: [v&#8321; &minus; &delta;v&#8321; , v&#8321; + &delta;v&#8321;] e [v&#8322; &minus; &delta;v&#8322; , v&#8322; + &delta;v&#8322;]. Si sovrappongono?</p>
+
+            <div class="media-placeholder">
+                <div class="icon">&#128202;</div>
+                <p>Inserire qui un eventuale grafico spazio-tempo.</p>
+                <code>&lt;img src="grafico_mru.png" alt="Grafico s-t" style="max-width:100%"&gt;</code>
+            </div>
+        </section>
+
+        <!-- 9. CONCLUSIONI -->
+        <section>
+            <h2><span class="num">9</span> Conclusioni</h2>
+            <p class="todo">Rispondere alle seguenti domande:</p>
+            <ul class="checklist">
+                <li>Le due velocità sono compatibili entro il margine di errore?</li>
+                <li>Il moto può essere considerato rettilineo uniforme? Perché?</li>
+                <li>Quali sono le principali fonti di errore?</li>
+                <li>Come si potrebbe migliorare l'esperienza?</li>
+            </ul>
+        </section>
+
+    </div>
+</div>
+</body>
+</html>
