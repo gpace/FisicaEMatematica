@@ -1,6 +1,6 @@
 # 🔬 Relazioni di Laboratorio di Fisica
 
-Benvenuti nella repository delle relazioni di laboratorio! Qui trovate i template delle due esperienze:
+Benvenuti nella repository delle lezioni di Fisica e Matematica. Se sei un alunno, questo README ti serve a fare le relazioni di laboratorio. Qui trovate i template delle due esperienze:
 
 | File | Esperienza |
 |------|-----------|
