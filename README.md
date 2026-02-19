@@ -106,16 +106,17 @@ Oppure, più semplicemente: scaricate il file sul vostro computer e apritelo con
 | Richiami teorici | 1 |
 | Materiali e strumenti | 2 |
 | Schema apparato | 2 |
-| Procedimento | 2 |
-| Video | 4 |
+| Procedimento | 3 |
+| Video | 3 |
 | Dati sperimentali | 4 |
 | Elaborazione dati | 4 |
 | Conclusioni | 4 |
-
-Gruppo 1: Amico, Barberini, Boscolo, Carletti, Cavaliere
-Gruppo 2: Chiovetta, Di Carto, Fartas, Feruglio, Gehad
-Gruppo 3: Lazzarini, Marigo, Maschera, Mason, Mazzari
-Gruppo 4: Merlo, Momoli, Paolella, Sacchetto, Salviato, Zambon
----
+<ul>
+<li>Gruppo 1: Amico, Barberini, Boscolo, Carletti, Cavaliere</li>
+<li>Gruppo 2: Chiovetta, Di Carto, Fartas, Feruglio, Gehad</li>
+<li>Gruppo 3: Lazzarini, Marigo, Maschera, Mason, Mazzari</li>
+<li>Gruppo 4: Merlo, Momoli, Paolella, Sacchetto, Salviato, Zambon</li>
+</ul>
+  ---
 
 Buon lavoro! 💪
