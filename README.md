@@ -110,10 +110,10 @@ Oppure, più semplicemente: scaricate il file sul vostro computer e apritelo con
 | Video | 3 |
 | Dati sperimentali | 4 |
 | Elaborazione dati | 4 |
-| Conclusioni | 4 |
+| Conclusioni | insieme |
 <ul>
 <li>Gruppo 1: Amico, Barberini, Boscolo, Carletti, Cavaliere</li>
-<li>Gruppo 2: Chiovetta, Di Carto, Fartas, Feruglio, Gehad</li>
+<li>Gruppo 2: Chiovetta, Di Caro, Fartas, Feruglio, Gehad</li>
 <li>Gruppo 3: Lazzarini, Marigo, Maschera, Mason, Mazzari</li>
 <li>Gruppo 4: Merlo, Momoli, Paolella, Sacchetto, Salviato, Zambon</li>
 </ul>
