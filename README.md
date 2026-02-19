@@ -102,18 +102,20 @@ Oppure, più semplicemente: scaricate il file sul vostro computer e apritelo con
 
 | Sezione | Gruppo |
 |---------|--------|
-| Obiettivo | |
-| Richiami teorici | |
-| Materiali e strumenti | |
-| Schema apparato | |
-| Procedimento | |
-| Video | |
-| Dati sperimentali | |
-| Elaborazione dati | |
-| Conclusioni | |
+| Obiettivo | 1 |
+| Richiami teorici | 1 |
+| Materiali e strumenti | 2 |
+| Schema apparato | 2 |
+| Procedimento | 2 |
+| Video | 4 |
+| Dati sperimentali | 4 |
+| Elaborazione dati | 4 |
+| Conclusioni | 4 |
 
-*Il professore compilerà questa tabella con i nomi dei gruppi.*
-
+Gruppo 1: Amico, Barberini, Boscolo, Carletti, Cavaliere
+Gruppo 2: Chiovetta, Di Carto, Fartas, Feruglio, Gehad
+Gruppo 3: Lazzarini, Marigo, Maschera, Mason, Mazzari
+Gruppo 4: Merlo, Momoli, Paolella, Sacchetto, Salviato, Zambon
 ---
 
 Buon lavoro! 💪
