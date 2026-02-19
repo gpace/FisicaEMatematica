@@ -27,14 +27,14 @@
 Trovate i vostri compagni di gruppo nella tabella qui sopra e sedetevi insieme al computer.
 
 ### 2. Aprire il template HTML
-Aprite il file HTML della relazione nel browser per vedere **cosa vi si chiede** nella vostra sezione. È il vostro modello di riferimento: leggetelo, ma non dovete modificarlo.
+Aprite la pagina del [modello di relazione](https://gpace.github.io/FisicaEMatematica/RelazioneLabMotoRU.html), contiene un modello per vedere **cosa vi si chiede** nella vostra sezione. È il vostro modello di riferimento: completatelo (non siete obbligati a seguirlo alla lettera).
 
 ### 3. Creare il vostro documento
 - Andate su [docs.google.com](https://docs.google.com) e create un **nuovo documento Google**
 - Intitolate il documento: `Sezione [nome sezione] - Gruppo [numero]` (es. *Sezione Procedimento - Gruppo 3*)
-- Se dovete anche inserire dati in tabella, andate su [sheets.google.com](https://sheets.google.com) e usate il **Foglio Google condiviso** che vi indicherà il professore
+- Se dovete anche inserire dati in tabella, andate sul [Foglio Google condiviso](https://docs.google.com/spreadsheets/d/1Wj5qGNbmSLAPUHwToMCbaqjmDD5C0JeQ4lr1vL7VhAk/edit?usp=sharing) che abbiamo cominciato a fare
 
-### 4. Condividere con la classe
+### 4. Condividere con la classe (solo per i documenti, il foglio è già condiviso)
 - Cliccate il pulsante **Condividi** in alto a destra
 - Impostate: **Chiunque abbia il link → Può commentare**
 - Aggiungete il professore come **Editor**
@@ -55,7 +55,7 @@ Quando avete finito, alzate la mano! Il professore controllerà il vostro lavoro
 ## Alla fine: assemblaggio
 
 Quando tutte le sezioni sono pronte:
-1. Il professore (o un volontario per gruppo) raccoglie tutti i pezzi in un **unico documento Word**
+1. Un volontario per gruppo e il professore raccolgono tutti i pezzi in un **unico documento Word**
 2. Le tabelle dal Foglio Google si possono copiare e incollare direttamente nel documento Word
 3. Se avanza tempo, trasferiamo tutto nel file HTML su GitHub per un risultato ancora più bello
 
