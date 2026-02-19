@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4L — Urto Elastico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --bg: #0f1923;
+            --surface: #172a3a;
+            --surface2: #1e3a50;
+            --accent: #f0a500;
+            --accent2: #ff6b35;
+            --text: #e8e4df;
+            --text-dim: #8a9bae;
+            --success: #4ecdc4;
+            --formula-bg: #1a2f42;
+            --timer-bg: #2a1a0a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* ===== SLIDE SYSTEM ===== */
+        .slide {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            padding: 3vh 5vw;
+            animation: fadeIn 0.35s ease;
+        }
+        .slide.active { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== CARD CONTAINER ===== */
+        .card {
+            background: var(--surface);
+            border-radius: 18px;
+            padding: 3.5vh 4vw;
+            width: 90vw;
+            max-height: 88vh;
+            overflow-y: auto;
+            border: 1px solid rgba(240,165,0,0.12);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        .slide-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4vh;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--accent);
+            margin-bottom: 1.5vh;
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-size: 5.5vh;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1.15;
+            margin-bottom: 2vh;
+        }
+
+        h2 {
+            font-size: 4vh;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 2.5vh;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: 2.8vh;
+            font-weight: 600;
+            color: var(--success);
+            margin: 2vh 0 1.2vh;
+        }
+
+        p, li {
+            font-size: 2.8vh;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .subtitle {
+            font-size: 3vh;
+            color: var(--text-dim);
+            margin-bottom: 2vh;
+        }
+
+        /* ===== KaTeX overrides ===== */
+        .katex { font-size: 1.1em !important; }
+        .formula .katex { font-size: 1.25em !important; }
+        .formula.big .katex { font-size: 1.4em !important; }
+
+        /* ===== FORMULA BOX ===== */
+        .formula {
+            background: var(--formula-bg);
+            border: 2px solid var(--accent);
+            border-radius: 14px;
+            padding: 2.5vh 3vw;
+            margin: 2vh 0;
+            text-align: center;
+            font-size: 3.5vh;
+            color: var(--accent);
+            box-shadow: 0 0 20px rgba(240,165,0,0.08);
+        }
+        .formula.small {
+            font-size: 2.6vh;
+            padding: 1.8vh 2.5vw;
+        }
+        .formula .note {
+            display: block;
+            font-size: 2vh;
+            color: var(--text-dim);
+            margin-top: 1vh;
+            font-family: 'Source Serif 4', Georgia, serif;
+        }
+
+        /* ===== STEP LIST ===== */
+        .steps {
+            list-style: none;
+            counter-reset: step;
+        }
+        .steps li {
+            counter-increment: step;
+            padding: 1.2vh 0 1.2vh 4vw;
+            position: relative;
+            border-left: 2px solid var(--surface2);
+            margin-left: 1.5vw;
+        }
+        .steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: -1.6vw;
+            top: 1.2vh;
+            width: 3.2vw;
+            height: 3.2vw;
+            max-width: 42px;
+            max-height: 42px;
+            background: var(--accent);
+            color: var(--bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2vh;
+            font-weight: 700;
+        }
+        .steps li:last-child { border-left-color: transparent; }
+
+        /* ===== HIGHLIGHT / KEY CONCEPT ===== */
+        .key {
+            background: rgba(240,165,0,0.1);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 10px 10px 0;
+            padding: 2vh 2.5vw;
+            margin: 2vh 0;
+            font-size: 2.6vh;
+        }
+        .key strong { color: var(--accent); }
+
+        /* ===== TWO COLUMNS ===== */
+        .cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3vw;
+            margin: 2vh 0;
+        }
+        .col {
+            background: var(--surface2);
+            border-radius: 12px;
+            padding: 2.5vh 2vw;
+        }
+        .col h3 { margin-top: 0; }
+
+        /* ===== EXERCISE BOX ===== */
+        .exercise {
+            background: var(--surface2);
+            border: 2px solid var(--accent2);
+            border-radius: 14px;
+            padding: 2.5vh 3vw;
+            margin: 2vh 0;
+        }
+        .exercise-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.6vh;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent2);
+            margin-bottom: 1.5vh;
+        }
+        .exercise p { font-size: 2.6vh; }
+
+        /* ===== TIMER ===== */
+        .timer-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2vw;
+            margin-top: 2.5vh;
+        }
+        .timer-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 6vh;
+            font-weight: 700;
+            color: var(--accent);
+            background: var(--timer-bg);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 1vh 2.5vw;
+            min-width: 14vw;
+            text-align: center;
+            transition: color 0.3s;
+        }
+        .timer-display.warning { color: var(--accent2); border-color: var(--accent2); }
+        .timer-display.done { color: var(--success); border-color: var(--success); }
+
+        .timer-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2vh;
+            padding: 1.2vh 2vw;
+            border: 2px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.05em;
+        }
+        .timer-btn:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* ===== SOLUTION ===== */
+        .solution {
+            background: rgba(78,205,196,0.08);
+            border: 2px solid var(--success);
+            border-radius: 14px;
+            padding: 2.5vh 3vw;
+            margin-top: 2vh;
+            display: none;
+        }
+        .solution.visible { display: block; }
+        .solution p { color: var(--success); }
+        .solution .formula { border-color: var(--success); }
+        .solution .formula .katex { color: var(--success) !important; }
+
+        .sol-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8vh;
+            padding: 1vh 2vw;
+            border: 2px solid var(--success);
+            background: transparent;
+            color: var(--success);
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 2vh;
+            transition: all 0.2s;
+        }
+        .sol-btn:hover {
+            background: var(--success);
+            color: var(--bg);
+        }
+
+        /* ===== NAV BAR ===== */
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2vh 3vw;
+            background: rgba(15,25,35,0.92);
+            backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(240,165,0,0.15);
+            z-index: 100;
+        }
+        .nav-info {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.6vh;
+            color: var(--text-dim);
+        }
+        .nav-arrows { display: flex; gap: 1vw; }
+        .nav-arrows button {
+            font-size: 2.5vh;
+            padding: 0.6vh 1.5vw;
+            border: 1px solid var(--text-dim);
+            background: transparent;
+            color: var(--text-dim);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-arrows button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ===== PROGRESS DOTS ===== */
+        .progress { display: flex; gap: 0.5vw; }
+        .dot {
+            width: 0.7vw; height: 0.7vw;
+            min-width: 6px; min-height: 6px;
+            border-radius: 50%;
+            background: var(--surface2);
+            transition: all 0.3s;
+        }
+        .dot.active { background: var(--accent); transform: scale(1.4); }
+        .dot.visited { background: var(--text-dim); }
+
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2vh 0;
+            font-size: 2.4vh;
+        }
+        th, td {
+            padding: 1.3vh 1.5vw;
+            border: 1px solid rgba(240,165,0,0.2);
+            text-align: center;
+        }
+        th {
+            background: var(--accent);
+            color: var(--bg);
+            font-weight: 700;
+            font-size: 2.2vh;
+        }
+        td { background: var(--surface2); }
+
+        /* ===== DIAGRAM ===== */
+        .diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2vw;
+            margin: 3vh 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.4vh;
+        }
+        .cart {
+            background: var(--accent);
+            color: var(--bg);
+            padding: 2vh 2.5vw;
+            border-radius: 12px;
+            font-weight: 700;
+            text-align: center;
+            min-width: 10vw;
+        }
+        .cart.b { background: var(--success); }
+
+        /* ===== NEWTON CRADLE ===== */
+        .newton-img {
+            display: flex;
+            justify-content: center;
+            margin: 2vh 0;
+        }
+        .newton-img img {
+            border-radius: 12px;
+            max-height: 22vh;
+            border: 2px solid rgba(240,165,0,0.2);
+        }
+
+        /* ===== TITLE SLIDE ===== */
+        .title-slide { text-align: center; }
+        .title-slide h1 { font-size: 7vh; margin-bottom: 1vh; }
+        .title-slide .subtitle { font-size: 3.5vh; }
+        .title-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8vh;
+            color: var(--text-dim);
+            margin-top: 4vh;
+            letter-spacing: 0.1em;
+        }
+
+        /* ===== PRINT ===== */
+        @media print {
+            body { background: white; }
+            .slide { display: flex !important; page-break-after: always; height: auto; }
+            .nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- SLIDE 1: TITOLO -->
+<!-- ============================================================ -->
+<div class="slide active" id="s1">
+    <div class="card title-slide">
+        <div class="slide-tag">Classe 4L — Fisica</div>
+        <h1>L'urto elastico</h1>
+        <p class="subtitle">Quando due corpi si scontrano e l'energia si conserva</p>
+        <div class="title-meta">Usa ← → o clic per navigare &nbsp;|&nbsp; premi T per il timer</div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 2: COSA SAPPIAMO GIÀ -->
+<!-- ============================================================ -->
+<div class="slide" id="s2">
+    <div class="card">
+        <div class="slide-tag">Ripasso</div>
+        <h2>Cosa sappiamo già</h2>
+        <div class="key">
+            <strong>Quantità di moto:</strong> in un sistema isolato, la quantità di moto totale si conserva sempre, qualunque sia il tipo di urto.
+        </div>
+        <div class="formula big">
+            $$m_1 \vec{v}_{1i} + m_2 \vec{v}_{2i} = m_1 \vec{v}_{1f} + m_2 \vec{v}_{2f}$$
+            <span class="note">Vale SEMPRE (urto elastico, anelastico, totalmente anelastico)</span>
+        </div>
+        <p style="margin-top:2vh;">Ma che fine fa l'<strong style="color:var(--accent)">energia cinetica</strong>?</p>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 3: DEFINIZIONE URTO ELASTICO -->
+<!-- ============================================================ -->
+<div class="slide" id="s3">
+    <div class="card">
+        <div class="slide-tag">Definizione</div>
+        <h2>Cos'è un urto elastico?</h2>
+        <p>Un urto in cui si conservano <strong style="color:var(--accent)">sia la quantità di moto sia l'energia cinetica</strong>.</p>
+
+        <div class="cols" style="margin-top:3vh;">
+            <div class="col">
+                <h3>Si conserva la q.d.m.</h3>
+                <div class="formula small">
+                    $$m_1 v_{1i} + m_2 v_{2i} = m_1 v_{1f} + m_2 v_{2f}$$
+                </div>
+            </div>
+            <div class="col">
+                <h3>Si conserva \(E_k\)</h3>
+                <div class="formula small">
+                    $$\tfrac{1}{2}m_1 v_{1i}^2 + \tfrac{1}{2}m_2 v_{2i}^2 = \tfrac{1}{2}m_1 v_{1f}^2 + \tfrac{1}{2}m_2 v_{2f}^2$$
+                </div>
+            </div>
+        </div>
+
+        <div class="key" style="margin-top:2.5vh;">
+            <strong>Due equazioni, due incognite</strong> (\(v_{1f}\) e \(v_{2f}\)) → si può risolvere il sistema!
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 4: CONFRONTO TIPI DI URTO -->
+<!-- ============================================================ -->
+<div class="slide" id="s4">
+    <div class="card">
+        <div class="slide-tag">Confronto</div>
+        <h2>Tre tipi di urto</h2>
+        <table>
+            <tr>
+                <th></th>
+                <th>Q.d.m.</th>
+                <th>Energia cinetica</th>
+                <th>Dopo l'urto</th>
+            </tr>
+            <tr>
+                <td><strong style="color:var(--accent)">Elastico</strong></td>
+                <td>✅ conservata</td>
+                <td>✅ conservata</td>
+                <td>I corpi rimbalzano</td>
+            </tr>
+            <tr>
+                <td><strong>Anelastico</strong></td>
+                <td>✅ conservata</td>
+                <td>❌ parte si perde</td>
+                <td>I corpi si deformano</td>
+            </tr>
+            <tr>
+                <td><strong>Tot. anelastico</strong></td>
+                <td>✅ conservata</td>
+                <td>❌ massima perdita</td>
+                <td>I corpi restano uniti</td>
+            </tr>
+        </table>
+        <div class="key">
+            <strong>Nella realtà</strong> l'urto perfettamente elastico è un'idealizzazione. Le palle da biliardo ci si avvicinano molto; un incidente stradale no.
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 5: LE FORMULE RISOLUTIVE -->
+<!-- ============================================================ -->
+<div class="slide" id="s5">
+    <div class="card">
+        <div class="slide-tag">Le formule</div>
+        <h2>Velocità finali nell'urto elastico</h2>
+        <p>Risolvendo il sistema delle due conservazioni si ottiene:</p>
+
+        <div class="formula big" style="margin-top:3vh;">
+            $$v_{1f} = \frac{m_1 - m_2}{m_1 + m_2}\, v_{1i} \;+\; \frac{2\,m_2}{m_1 + m_2}\, v_{2i}$$
+        </div>
+        <div class="formula big">
+            $$v_{2f} = \frac{2\,m_1}{m_1 + m_2}\, v_{1i} \;+\; \frac{m_2 - m_1}{m_1 + m_2}\, v_{2i}$$
+        </div>
+
+        <div class="key" style="margin-top: 2vh;">
+            <strong>Non serve impararle a memoria!</strong> È più utile saper impostare il sistema e ricavare i risultati. Le formule ci servono per capire i casi particolari.
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 6: CASO PARTICOLARE — MASSE UGUALI -->
+<!-- ============================================================ -->
+<div class="slide" id="s6">
+    <div class="card">
+        <div class="slide-tag">Caso particolare 1</div>
+        <h2>Masse uguali: \(m_1 = m_2\)</h2>
+        <p>Se \(m_1 = m_2 = m\), le formule diventano semplicissime:</p>
+
+        <div class="formula" style="margin-top:2vh;">
+            $$v_{1f} = v_{2i} \qquad v_{2f} = v_{1i}$$
+            <span class="note">I due corpi si scambiano le velocità!</span>
+        </div>
+
+        <div class="diagram">
+            <div>
+                <div class="cart">m<br>→ v</div>
+                <div style="font-size:1.6vh; margin-top:0.5vh;">Prima</div>
+            </div>
+            <div style="font-size:4vh; color:var(--text-dim);">→</div>
+            <div>
+                <div class="cart b">m<br>fermo</div>
+            </div>
+            <div style="font-size:3vh; color:var(--text-dim); margin: 0 1vw;">⟹</div>
+            <div>
+                <div class="cart">m<br>fermo</div>
+                <div style="font-size:1.6vh; margin-top:0.5vh;">Dopo</div>
+            </div>
+            <div style="font-size:4vh; color:var(--success);">→</div>
+            <div>
+                <div class="cart b">m<br>→ v</div>
+            </div>
+        </div>
+
+        <div class="key" style="display:flex; align-items:center; gap: 2vw;">
+            <div style="flex:1;">
+                <strong>Esempio famoso:</strong> il pendolo di Newton! Ogni pallina trasferisce la sua velocità alla successiva.
+            </div>
+            <div class="newton-img">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Newtons_cradle_animation_book_2.gif" alt="Pendolo di Newton - animazione">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 7: CASO — BERSAGLIO FERMO, MASSE DIVERSE -->
+<!-- ============================================================ -->
+<div class="slide" id="s7">
+    <div class="card">
+        <div class="slide-tag">Caso particolare 2</div>
+        <h2>Bersaglio fermo (\(v_{2i} = 0\))</h2>
+        <p>Un corpo colpisce un altro che è fermo. Le formule si semplificano:</p>
+
+        <div class="formula">
+            $$v_{1f} = \frac{m_1 - m_2}{m_1 + m_2}\, v_{1i} \qquad v_{2f} = \frac{2\,m_1}{m_1 + m_2}\, v_{1i}$$
+        </div>
+
+        <div class="cols" style="margin-top:2vh;">
+            <div class="col">
+                <h3>Se \(m_1 \gg m_2\)</h3>
+                <p>\(v_{1f} \approx v_{1i}\) (il grosso va dritto)<br>
+                \(v_{2f} \approx 2\,v_{1i}\) (il piccolo schizza via)</p>
+                <p style="color:var(--text-dim); margin-top:1vh; font-size:2vh;">Es: palla da bowling contro biglia</p>
+            </div>
+            <div class="col">
+                <h3>Se \(m_1 \ll m_2\)</h3>
+                <p>\(v_{1f} \approx -v_{1i}\) (il piccolo rimbalza indietro)<br>
+                \(v_{2f} \approx 0\) (il grosso quasi non si muove)</p>
+                <p style="color:var(--text-dim); margin-top:1vh; font-size:2vh;">Es: pallina contro un muro</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 8: ESERCIZIO GUIDATO 1 -->
+<!-- ============================================================ -->
+<div class="slide" id="s8">
+    <div class="card">
+        <div class="slide-tag">Esercizio guidato</div>
+        <h2>Esercizio 1 — Masse uguali</h2>
+
+        <div class="exercise">
+            <div class="exercise-label">Problema</div>
+            <p>Due carrelli identici di massa \(m = 0{,}50 \text{ kg}\) si muovono sulla stessa rotaia.
+            Il carrello A ha velocità \(v_{1i} = 0{,}80 \text{ m/s}\) verso destra.
+            Il carrello B è <strong style="color:var(--accent)">fermo</strong>.
+            L'urto è elastico. Trovare le velocità dopo l'urto.</p>
+        </div>
+
+        <ol class="steps">
+            <li><strong>Riconoscere il caso:</strong> masse uguali, bersaglio fermo → i corpi si scambiano le velocità</li>
+            <li><strong>Applicare:</strong> \(v_{1f} = v_{2i} = 0\) &nbsp;e&nbsp; \(v_{2f} = v_{1i} = 0{,}80 \text{ m/s}\)</li>
+            <li><strong>Verifica q.d.m.:</strong> prima: \(0{,}50 \times 0{,}80 = 0{,}40 \text{ kg·m/s}\) — dopo: \(0{,}50 \times 0{,}80 = 0{,}40 \text{ kg·m/s}\) ✅</li>
+            <li><strong>Verifica \(E_k\):</strong> prima: \(\tfrac{1}{2} \cdot 0{,}50 \cdot 0{,}80^2 = 0{,}16 \text{ J}\) — dopo: \(\tfrac{1}{2} \cdot 0{,}50 \cdot 0{,}80^2 = 0{,}16 \text{ J}\) ✅</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 9: ESERCIZIO GUIDATO 2 -->
+<!-- ============================================================ -->
+<div class="slide" id="s9">
+    <div class="card">
+        <div class="slide-tag">Esercizio guidato</div>
+        <h2>Esercizio 2 — Masse diverse</h2>
+
+        <div class="exercise">
+            <div class="exercise-label">Problema</div>
+            <p>Carrello A: \(m_1 = 1{,}0 \text{ kg}\), \(v_{1i} = 3{,}0 \text{ m/s}\) → destra.<br>
+            Carrello B: \(m_2 = 2{,}0 \text{ kg}\), <strong style="color:var(--accent)">fermo</strong>.<br>
+            Urto elastico. Trovare \(v_{1f}\) e \(v_{2f}\).</p>
+        </div>
+
+        <ol class="steps">
+            <li><strong>Dati:</strong> \(m_1 = 1{,}0\), \(m_2 = 2{,}0\), \(v_{1i} = 3{,}0\), \(v_{2i} = 0\)</li>
+            <li><strong>Calcolo \(v_{1f}\):</strong> \(\displaystyle v_{1f} = \frac{1{,}0 - 2{,}0}{1{,}0 + 2{,}0} \times 3{,}0 = \frac{-1}{3} \times 3{,}0 =\) <strong style="color:var(--accent)">\(-1{,}0 \text{ m/s}\)</strong></li>
+            <li><strong>Calcolo \(v_{2f}\):</strong> \(\displaystyle v_{2f} = \frac{2 \times 1{,}0}{1{,}0 + 2{,}0} \times 3{,}0 = \frac{2}{3} \times 3{,}0 =\) <strong style="color:var(--accent)">\(+2{,}0 \text{ m/s}\)</strong></li>
+            <li><strong>Interpretazione:</strong> A rimbalza indietro (segno −), B parte verso destra</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 10: ESERCIZIO AUTONOMO 1 -->
+<!-- ============================================================ -->
+<div class="slide" id="s10">
+    <div class="card">
+        <div class="slide-tag">Ora tocca a voi</div>
+        <h2>Esercizio 3 — Provate voi! ✏️</h2>
+
+        <div class="exercise">
+            <div class="exercise-label">Problema</div>
+            <p>Due carrelli su una rotaia a cuscino d'aria. Urto elastico frontale.<br>
+            Carrello A: \(m_1 = 0{,}60 \text{ kg}\), \(v_{1i} = 2{,}0 \text{ m/s}\) → destra.<br>
+            Carrello B: \(m_2 = 0{,}40 \text{ kg}\), \(v_{2i} = -1{,}0 \text{ m/s}\) ← sinistra.<br>
+            Trovare \(v_{1f}\) e \(v_{2f}\). Verificare le due conservazioni.</p>
+        </div>
+
+        <div class="timer-row">
+            <button class="timer-btn" onclick="startTimer(this, 480)">▶ Start 8 min</button>
+            <div class="timer-display">08:00</div>
+            <button class="timer-btn" onclick="resetTimer(this)">↺ Reset</button>
+        </div>
+
+        <button class="sol-btn" onclick="toggleSolution(this)">Mostra soluzione</button>
+        <div class="solution">
+            <div class="formula small" style="border-color:var(--success)">
+                $$v_{1f} = \frac{0{,}6-0{,}4}{0{,}6+0{,}4}\cdot 2{,}0 + \frac{2\cdot 0{,}4}{0{,}6+0{,}4}\cdot(-1{,}0) = 0{,}4 - 0{,}8 = -0{,}4 \text{ m/s}$$
+            </div>
+            <div class="formula small" style="border-color:var(--success)">
+                $$v_{2f} = \frac{2\cdot 0{,}6}{1{,}0}\cdot 2{,}0 + \frac{0{,}4-0{,}6}{1{,}0}\cdot(-1{,}0) = 2{,}4 + 0{,}2 = +2{,}6 \text{ m/s}$$
+            </div>
+            <p style="margin-top:1.5vh;"><strong>Verifica q.d.m.:</strong> prima: \(0{,}6 \times 2{,}0 + 0{,}4 \times (-1{,}0) = 0{,}80\) — dopo: \(0{,}6 \times (-0{,}4) + 0{,}4 \times 2{,}6 = 0{,}80\) ✅</p>
+            <p><strong>Verifica \(E_k\):</strong> prima: \(1{,}20 + 0{,}20 = 1{,}40 \text{ J}\) — dopo: \(0{,}048 + 1{,}352 = 1{,}40 \text{ J}\) ✅</p>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 11: ESERCIZIO AUTONOMO 2 -->
+<!-- ============================================================ -->
+<div class="slide" id="s11">
+    <div class="card">
+        <div class="slide-tag">Ora tocca a voi</div>
+        <h2>Esercizio 4 — Di nuovo voi! ✏️</h2>
+
+        <div class="exercise">
+            <div class="exercise-label">Problema</div>
+            <p>Una biglia d'acciaio (\(m_1 = 0{,}10 \text{ kg}\)) si muove a \(v_{1i} = 5{,}0 \text{ m/s}\) e colpisce una biglia di vetro ferma (\(m_2 = 0{,}030 \text{ kg}\)). Urto elastico.<br><br>
+            a) Trovare le velocità finali.<br>
+            b) A che velocità andrebbe la biglia di vetro se avesse massa \(m_2 = 0{,}10 \text{ kg}\)?</p>
+        </div>
+
+        <div class="timer-row">
+            <button class="timer-btn" onclick="startTimer(this, 480)">▶ Start 8 min</button>
+            <div class="timer-display">08:00</div>
+            <button class="timer-btn" onclick="resetTimer(this)">↺ Reset</button>
+        </div>
+
+        <button class="sol-btn" onclick="toggleSolution(this)">Mostra soluzione</button>
+        <div class="solution">
+            <p><strong>a)</strong> Bersaglio fermo → formule semplificate:</p>
+            <p>\(\displaystyle v_{1f} = \frac{0{,}10 - 0{,}030}{0{,}10 + 0{,}030} \times 5{,}0 = \frac{0{,}070}{0{,}130} \times 5{,}0 \approx\) <strong>2,7 m/s</strong></p>
+            <p>\(\displaystyle v_{2f} = \frac{2 \times 0{,}10}{0{,}130} \times 5{,}0 = \frac{0{,}20}{0{,}130} \times 5{,}0 \approx\) <strong>7,7 m/s</strong></p>
+            <p style="margin-top:1vh; color:var(--text-dim);">La biglia leggera schizza via più veloce del proiettile! (\(m_1 > m_2\))</p>
+            <p style="margin-top:1.5vh;"><strong>b)</strong> Se \(m_2 = m_1 = 0{,}10 \text{ kg}\) → scambio di velocità: \(v_{1f} = 0\), \(v_{2f} = 5{,}0 \text{ m/s}\)</p>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 12: RIEPILOGO -->
+<!-- ============================================================ -->
+<div class="slide" id="s12">
+    <div class="card">
+        <div class="slide-tag">Riepilogo</div>
+        <h2>Cosa portare a casa</h2>
+
+        <ol class="steps">
+            <li><strong>Urto elastico</strong> = si conservano sia la quantità di moto sia l'energia cinetica</li>
+            <li><strong>Due equazioni, due incognite:</strong> il sistema si risolve sempre</li>
+            <li><strong>Masse uguali:</strong> i corpi si scambiano le velocità</li>
+            <li><strong>Bersaglio fermo:</strong> le formule si semplificano; se \(m_1 \gg m_2\) il piccolo schizza via, se \(m_1 \ll m_2\) il piccolo rimbalza</li>
+            <li><strong>Verifica:</strong> controllare sempre che \(\vec{p}\) e \(E_k\) tornino!</li>
+        </ol>
+    </div>
+</div>
+
+
+<!-- ===== NAVIGATION BAR ===== -->
+<div class="nav">
+    <div class="nav-info">
+        <span id="slideNum">1</span> / <span id="slideTotal"></span>
+    </div>
+    <div class="progress" id="progress"></div>
+    <div class="nav-arrows">
+        <button onclick="changeSlide(-1)">←</button>
+        <button onclick="changeSlide(1)">→</button>
+    </div>
+</div>
+
+
+<script>
+    // ===== SLIDE NAVIGATION =====
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+    const visited = new Set([0]);
+
+    document.getElementById('slideTotal').textContent = slides.length;
+
+    const progressEl = document.getElementById('progress');
+    slides.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        dot.style.cursor = 'pointer';
+        progressEl.appendChild(dot);
+    });
+
+    function goToSlide(n) {
+        if (n < 0 || n >= slides.length) return;
+        slides[current].classList.remove('active');
+        current = n;
+        visited.add(current);
+        slides[current].classList.add('active');
+        document.getElementById('slideNum').textContent = current + 1;
+        updateDots();
+        // Re-render KaTeX on new slide
+        renderMathInElement(slides[current], {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '\\(', right: '\\)', display: false}
+            ],
+            throwOnError: false
+        });
+    }
+
+    function changeSlide(dir) { goToSlide(current + dir); }
+
+    function updateDots() {
+        const dots = progressEl.children;
+        for (let i = 0; i < dots.length; i++) {
+            dots[i].className = 'dot';
+            if (i === current) dots[i].classList.add('active');
+            else if (visited.has(i)) dots[i].classList.add('visited');
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+        else if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
+        else if (e.key === 'End') { e.preventDefault(); goToSlide(slides.length - 1); }
+    });
+
+    // ===== TIMER =====
+    let timerIntervals = new Map();
+
+    function startTimer(btn, seconds) {
+        const row = btn.closest('.timer-row');
+        const display = row.querySelector('.timer-display');
+
+        if (timerIntervals.has(display)) {
+            clearInterval(timerIntervals.get(display));
+            timerIntervals.delete(display);
+            btn.textContent = '▶ Riprendi';
+            return;
+        }
+
+        let remaining = display.dataset.remaining ? parseInt(display.dataset.remaining) : seconds;
+        btn.textContent = '⏸ Pausa';
+        display.className = 'timer-display';
+
+        const interval = setInterval(() => {
+            remaining--;
+            display.dataset.remaining = remaining;
+            const min = Math.floor(remaining / 60);
+            const sec = remaining % 60;
+            display.textContent = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+
+            if (remaining <= 60 && remaining > 0) display.className = 'timer-display warning';
+            if (remaining <= 0) {
+                clearInterval(interval);
+                timerIntervals.delete(display);
+                display.textContent = '00:00';
+                display.className = 'timer-display done';
+                btn.textContent = '✓ Tempo!';
+            }
+        }, 1000);
+
+        timerIntervals.set(display, interval);
+    }
+
+    function resetTimer(btn) {
+        const row = btn.closest('.timer-row');
+        const display = row.querySelector('.timer-display');
+        const startBtn = row.querySelector('.timer-btn');
+
+        if (timerIntervals.has(display)) {
+            clearInterval(timerIntervals.get(display));
+            timerIntervals.delete(display);
+        }
+        display.textContent = '08:00';
+        display.dataset.remaining = '';
+        display.className = 'timer-display';
+        startBtn.textContent = '▶ Start 8 min';
+    }
+
+    // ===== SOLUTION TOGGLE =====
+    function toggleSolution(btn) {
+        const sol = btn.nextElementSibling;
+        sol.classList.toggle('visible');
+        btn.textContent = sol.classList.contains('visible') ? 'Nascondi soluzione' : 'Mostra soluzione';
+        if (sol.classList.contains('visible')) {
+            renderMathInElement(sol, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\(', right: '\\)', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+    }
+
+    // ===== INITIAL KaTeX RENDER =====
+    document.addEventListener('DOMContentLoaded', () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '\\(', right: '\\)', display: false}
+            ],
+            throwOnError: false
+        });
+    });
+</script>
+
+</body>
+</html>
