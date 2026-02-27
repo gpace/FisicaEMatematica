@@ -14,20 +14,22 @@
 | Elaborazione dati | 4 | Google Doc + Foglio Google per i calcoli |
 | Conclusioni | tutti insieme | Google Doc |
 
-- **Gruppo 1:** Amico, Barberini, Boscolo, Carletti, Cavaliere
-- **Gruppo 2:** Chiovetta, Di Caro, Fartas, Feruglio, Gehad
-- **Gruppo 3:** Lazzarini, Marigo, Maschera, Mason, Mazzari
-- **Gruppo 4:** Merlo, Momoli, Paolella, Sacchetto, Salviato, Zambon
-
+- **Gruppo 1:** 
+- **Gruppo 2:** 
+- **Gruppo 3:** 
+- **Gruppo 4:** 
+- **Gruppo 5:**
+- **Gruppo 6:**
+- **Gruppo 7:**  
 ---
 
 ## Passo per passo
 
 ### 1. Riunirsi in gruppo
-Trovate i vostri compagni di gruppo nella tabella qui sopra e sedetevi insieme al computer.
+Formate i gruppi, max 4 persone
 
 ### 2. Aprire il template HTML
-Aprite la pagina del [modello di relazione](https://gpace.github.io/FisicaEMatematica/RelazioneLabMotoRU.html), contiene un modello per vedere **cosa vi si chiede** nella vostra sezione. È il vostro modello di riferimento: completatelo (non siete obbligati a seguirlo alla lettera).
+Aprite la pagina del [modello di relazione](https://gpace.github.io/FisicaEMatematica/RelazioneLaboratorioConservazioneQuantitaMoto.html), contiene un modello per vedere **cosa vi si chiede** nella vostra sezione. È il vostro modello di riferimento: completatelo (non siete obbligati a seguirlo alla lettera).
 
 ### 3. Creare il vostro documento
 - Andate su [docs.google.com](https://docs.google.com) e create un **nuovo documento Google**
