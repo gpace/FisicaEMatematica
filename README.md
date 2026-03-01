@@ -7,12 +7,13 @@
 | Obiettivo | - | Google Doc |
 | Richiami teorici | 1 | Google Doc |
 | Materiali e strumenti | 2 | Google Doc + tabella strumenti nel Foglio Google |
-| Schema apparato | 2 | Google Doc (inserite foto) |
+| Schema apparato | 2 | Google Doc (inserite foto o disegno) |
 | Procedimento | 3 | Google Doc |
 | Video | 3 | Google Doc (inserite link al video) |
 | Dati sperimentali | 4 | Foglio Google |
 | Elaborazione dati | 4 | Google Doc + Foglio Google per i calcoli |
-| Conclusioni | tutti insieme | Google Doc |
+| Calcolo dell'energia cinetica dopo l'urto | 5 | Google Doc |
+| Conclusioni | 5 | Google Doc |
 
 - **Gruppo 1:** 
 - **Gruppo 2:** 
