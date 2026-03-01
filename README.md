@@ -12,13 +12,14 @@
 | Video | 3 | Google Doc (inserite link al video) |
 | Dati sperimentali | 4 | Foglio Google |
 | Elaborazione dati | 4 | Google Doc + Foglio Google per i calcoli |
-| Calcolo dell'energia cinetica dopo l'urto | 5 | Google Doc |
+| Calcolo dell'energia cinetica dopo l'urto | 4 | Google Doc |
 | Conclusioni | 5 | Google Doc |
 
 - **Gruppo 1:** 
 - **Gruppo 2:** 
 - **Gruppo 3:** 
-- **Gruppo 4:** 
+- **Gruppo 4:**
+- **Gruppo 5:** Tutta la classe
 ---
 
 ## Passo per passo
