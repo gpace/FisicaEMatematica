@@ -4,7 +4,7 @@
 
 | Sezione | Gruppo | Cosa fare |
 |---------|--------|-----------|
-| Obiettivo | 1 | Google Doc |
+| Obiettivo | - | Google Doc |
 | Richiami teorici | 1 | Google Doc |
 | Materiali e strumenti | 2 | Google Doc + tabella strumenti nel Foglio Google |
 | Schema apparato | 2 | Google Doc (inserite foto) |
@@ -18,9 +18,6 @@
 - **Gruppo 2:** 
 - **Gruppo 3:** 
 - **Gruppo 4:** 
-- **Gruppo 5:**
-- **Gruppo 6:**
-- **Gruppo 7:**  
 ---
 
 ## Passo per passo
