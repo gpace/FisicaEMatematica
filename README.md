@@ -34,7 +34,6 @@ Aprite la pagina del [modello di relazione](https://gpace.github.io/FisicaEMatem
 ### 3. Creare il vostro documento
 - Andate su [docs.google.com](https://docs.google.com) e create un **nuovo documento Google**
 - Intitolate il documento: `Sezione [nome sezione] - Gruppo [numero]` (es. *Sezione Procedimento - Gruppo 3*)
-- Se dovete anche inserire dati in tabella, andate sul [Foglio Google condiviso](https://docs.google.com/spreadsheets/d/1Wj5qGNbmSLAPUHwToMCbaqjmDD5C0JeQ4lr1vL7VhAk/edit?usp=sharing) che abbiamo cominciato a fare
 
 ### 4. Condividere con la classe (solo per i documenti, il foglio è già condiviso)
 - Cliccate il pulsante **Condividi** in alto a destra
