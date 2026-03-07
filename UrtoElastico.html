@@ -387,16 +387,47 @@
             border: 2px solid rgba(240,165,0,0.2);
         }
 
-        /* ===== NEWTON CRADLE ===== */
-        .YoutubeVideo {
-            display: flex;
-            justify-content: center;
-            margin: 2vh 0;
+        /* ===== YOUTUBE EMBED ===== */
+        .video-block {
+            margin-top: 1.8vh;
         }
-        .YoutubeVideo img {
+        .video-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.35vh;
+            color: var(--text-dim);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.8vh;
+            display: flex;
+            align-items: center;
+            gap: 0.5vw;
+        }
+        .video-label::before {
+            content: '▶';
+            font-size: 1.1vh;
+            color: var(--accent2);
+        }
+        .youtube-wrap {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
             border-radius: 12px;
-            max-height: 22vh;
-            border: 2px solid rgba(240,165,0,0.2);
+            overflow: hidden;
+            border: 2px solid rgba(240,165,0,0.18);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+            background: #000;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+        .youtube-wrap:hover {
+            border-color: var(--accent);
+            box-shadow: 0 6px 32px rgba(240,165,0,0.18);
+        }
+        .youtube-wrap iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         /* ===== TITLE SLIDE ===== */
@@ -600,23 +631,39 @@
             $$v_{1f} = \frac{m_1 - m_2}{m_1 + m_2}\, v_{1i} \qquad v_{2f} = \frac{2\,m_1}{m_1 + m_2}\, v_{1i}$$
         </div>
 
-        <div class="cols" style="margin-top:2vh;">
+        <div class="cols" style="margin-top:1.5vh;">
             <div class="col">
                 <h3>Se \(m_1 \gg m_2\)</h3>
                 <p>\(v_{1f} \approx v_{1i}\) (il grosso va dritto)<br>
                 \(v_{2f} \approx 2\,v_{1i}\) (il piccolo schizza via)</p>
-                <p style="color:var(--text-dim); margin-top:1vh; font-size:2vh;">Es: palla da bowling contro biglia</p>
-                <div class="youtubeVideo">
-                       <img src="https://youtu.be/g7Z6TFFNsxQ" alt="Massa grande contro massa piccola - animazione">
+                <p style="color:var(--text-dim); margin-top:0.6vh; font-size:2vh;">Es: palla da bowling contro biglia</p>
+                <div class="video-block">
+                    <div class="video-label">Simulazione — massa grande contro piccola</div>
+                    <div class="youtube-wrap">
+                        <iframe
+                            src="https://www.youtube.com/embed/g7Z6TFFNsxQ?rel=0&modestbranding=1"
+                            title="Massa grande contro massa piccola"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
                 </div>
             </div>
             <div class="col">
                 <h3>Se \(m_1 \ll m_2\)</h3>
                 <p>\(v_{1f} \approx -v_{1i}\) (il piccolo rimbalza indietro)<br>
                 \(v_{2f} \approx 0\) (il grosso quasi non si muove)</p>
-                <p style="color:var(--text-dim); margin-top:1vh; font-size:2vh;">Es: pallina contro un muro</p>
-                <div class="youtubeVideo">
-                       <img src="https://youtu.be/6Bx90kD3_2k" alt="Massa piccola contro massa grande - animazione">
+                <p style="color:var(--text-dim); margin-top:0.6vh; font-size:2vh;">Es: pallina contro un muro</p>
+                <div class="video-block">
+                    <div class="video-label">Simulazione — massa piccola contro grande</div>
+                    <div class="youtube-wrap">
+                        <iframe
+                            src="https://www.youtube.com/embed/6Bx90kD3_2k?rel=0&modestbranding=1"
+                            title="Massa piccola contro massa grande"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
                 </div>
             </div>
         </div>
@@ -797,7 +844,6 @@
         slides[current].classList.add('active');
         document.getElementById('slideNum').textContent = current + 1;
         updateDots();
-        // Re-render KaTeX on new slide
         renderMathInElement(slides[current], {
             delimiters: [
                 {left: '$$', right: '$$', display: true},
