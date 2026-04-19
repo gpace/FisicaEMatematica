@@ -3,759 +3,666 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trigonometria – Teoremi sui triangoli rettangoli e area</title>
+<title>Trigonometria nei triangoli — 4L</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script>
 <style>
 :root {
-  --blu: #1a4a8a;
-  --blu-chiaro: #e8f0fb;
-  --blu-medio: #4a7fc1;
-  --verde: #0f6e56;
-  --verde-chiaro: #e1f5ee;
-  --arancio: #ba7517;
-  --arancio-chiaro: #faeeda;
-  --rosso: #a32d2d;
-  --rosso-chiaro: #fcebeb;
-  --viola: #534ab7;
-  --viola-chiaro: #eeedfe;
-  --grigio: #444441;
-  --grigio-chiaro: #f1efe8;
-  --testo: #1a1a18;
-  --testo-secondario: #5f5e5a;
-  --bordo: #d3d1c7;
-  --sfondo: #fafaf8;
+  --blu:#1a4a8a;--blu-c:#e8f0fb;--blu-m:#4a7fc1;
+  --verde:#0f6e56;--verde-c:#e1f5ee;
+  --arancio:#ba7517;--ara-c:#faeeda;
+  --rosso:#a32d2d;--ros-c:#fcebeb;
+  --viola:#534ab7;--vio-c:#eeedfe;
+  --grigio:#444441;--gri-c:#f1efe8;
+  --testo:#1a1a18;--tes2:#5f5e5a;
+  --bordo:#d3d1c7;--sfondo:#f4f2ee;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: Georgia, 'Times New Roman', serif;
-  background: var(--sfondo);
-  color: var(--testo);
-  line-height: 1.75;
-  font-size: 16px;
-}
-.pagina {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
-}
-/* intestazione */
-.intestazione {
-  border-bottom: 3px solid var(--blu);
-  padding-bottom: 1.2rem;
-  margin-bottom: 2.5rem;
-}
-.intestazione .classe {
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--testo-secondario);
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  margin-bottom: 0.4rem;
-}
-.intestazione h1 {
-  font-size: 2rem;
-  font-weight: normal;
-  color: var(--blu);
-  line-height: 1.2;
-}
-.intestazione .sottotitolo {
-  font-size: 1rem;
-  color: var(--testo-secondario);
-  font-style: italic;
-  margin-top: 0.3rem;
-}
-
-/* sezioni teorema */
-.teorema-box {
-  border-left: 4px solid var(--blu);
-  background: var(--blu-chiaro);
-  border-radius: 0 8px 8px 0;
-  padding: 1.2rem 1.5rem;
-  margin: 2rem 0 1.5rem;
-}
-.teorema-box.verde {
-  border-color: var(--verde);
-  background: var(--verde-chiaro);
-}
-.teorema-box.arancio {
-  border-color: var(--arancio);
-  background: var(--arancio-chiaro);
-}
-.teorema-numero {
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  color: var(--testo-secondario);
-  margin-bottom: 0.4rem;
-}
-.teorema-titolo {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: var(--blu);
-  margin-bottom: 0.6rem;
-}
-.verde .teorema-titolo { color: var(--verde); }
-.arancio .teorema-titolo { color: var(--arancio); }
-
-/* formula evidenziata */
-.formula-principale {
-  background: white;
-  border: 1.5px solid var(--blu-medio);
-  border-radius: 8px;
-  padding: 0.8rem 1.2rem;
-  margin: 1rem 0;
-  text-align: center;
-  font-size: 1.05rem;
-}
-.verde .formula-principale { border-color: var(--verde); }
-.arancio .formula-principale { border-color: var(--arancio); }
-
-/* figure SVG */
-.figura-contenitore {
-  display: flex;
-  gap: 1.5rem;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  margin: 1.5rem 0;
-}
-.figura-box {
-  flex: 1;
-  min-width: 240px;
-  background: white;
-  border: 0.5px solid var(--bordo);
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-}
-.figura-box .etichetta {
-  font-size: 12px;
-  color: var(--testo-secondario);
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 0.5rem;
-}
-
-/* passi dimostrazione */
-.passo {
-  display: flex;
-  gap: 1rem;
-  margin: 0.8rem 0;
-  align-items: baseline;
-}
-.passo-numero {
-  background: var(--blu);
-  color: white;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-  min-width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.verde .passo-numero { background: var(--verde); }
-.arancio .passo-numero { background: var(--arancio); }
-
-/* esempio svolto */
-.esempio {
-  background: var(--grigio-chiaro);
-  border-radius: 8px;
-  padding: 1.2rem 1.5rem;
-  margin: 1.5rem 0;
-}
-.esempio-titolo {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--testo-secondario);
-  margin-bottom: 0.6rem;
-}
-.riga-calcolo {
-  margin: 0.3rem 0 0.3rem 1rem;
-  font-size: 0.97rem;
-}
-.freccia-calcolo {
-  color: var(--testo-secondario);
-  margin-right: 0.3rem;
-}
-
-/* foglietto */
-.foglietto {
-  background: #fffef0;
-  border: 1.5px dashed #c0b060;
-  border-radius: 8px;
-  padding: 1rem 1.5rem;
-  margin: 1.5rem 0;
-  font-style: italic;
-  color: #5a4a10;
-}
-.foglietto strong { font-style: normal; }
-
-/* nota libro */
-.nota-libro {
-  background: var(--viola-chiaro);
-  border-left: 3px solid var(--viola);
-  border-radius: 0 6px 6px 0;
-  padding: 0.8rem 1.2rem;
-  margin: 1.2rem 0;
-  font-size: 0.93rem;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-}
-.nota-libro strong { color: var(--viola); }
-
-/* sezione separatore */
-.sep {
-  border: none;
-  border-top: 2px solid var(--bordo);
-  margin: 2.5rem 0;
-}
-
-h2 {
-  font-size: 1.4rem;
-  color: var(--blu);
-  font-weight: normal;
-  margin: 2rem 0 0.8rem;
-}
-h3 {
-  font-size: 1.05rem;
-  color: var(--grigio);
-  margin: 1.2rem 0 0.5rem;
-}
-p { margin: 0.5rem 0; }
-
-/* attenzione */
-.attenzione {
-  background: var(--rosso-chiaro);
-  border-left: 3px solid var(--rosso);
-  border-radius: 0 6px 6px 0;
-  padding: 0.7rem 1rem;
-  margin: 1rem 0;
-  font-size: 0.93rem;
-  color: var(--rosso);
-}
-
-/* tabella riepilogo */
-.tabella-riepilogo {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.2rem 0;
-  font-size: 0.95rem;
-}
-.tabella-riepilogo th {
-  background: var(--blu);
-  color: white;
-  padding: 0.6rem 0.8rem;
-  text-align: left;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 12px;
-  letter-spacing: 1px;
-}
-.tabella-riepilogo td {
-  padding: 0.5rem 0.8rem;
-  border-bottom: 0.5px solid var(--bordo);
-  vertical-align: top;
-}
-.tabella-riepilogo tr:nth-child(even) td { background: var(--grigio-chiaro); }
-
-/* interactive SVG hover */
-svg .lato-hover { cursor: pointer; transition: stroke-width 0.2s; }
-svg .lato-hover:hover { stroke-width: 4; }
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;}
+body{font-family:Georgia,'Times New Roman',serif;background:var(--sfondo);color:var(--testo);font-size:18px;line-height:1.7;}
+#deck{width:100vw;height:100vh;position:relative;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s ease;overflow:hidden;}
+.slide.attiva{opacity:1;pointer-events:all;}
+.slide-header{display:flex;align-items:center;padding:0.5rem 2rem;border-bottom:2px solid var(--bordo);background:white;gap:1rem;flex-shrink:0;}
+.slide-header .numero{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--tes2);white-space:nowrap;}
+.slide-header h1{font-size:1.35rem;font-weight:normal;color:var(--blu);flex:1;}
+.tipo-badge{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:12px;white-space:nowrap;}
+.badge-teoria{background:var(--blu-c);color:var(--blu);}
+.badge-esercizio{background:var(--ara-c);color:var(--arancio);}
+.badge-ripasso{background:var(--vio-c);color:var(--viola);}
+.badge-raccordo{background:var(--verde-c);color:var(--verde);}
+.slide-body{flex:1;overflow-y:auto;padding:1.5rem 2.5rem 4.5rem;display:flex;flex-direction:column;gap:1rem;}
+#nav{position:fixed;bottom:0;left:0;right:0;height:50px;background:white;border-top:1px solid var(--bordo);display:flex;align-items:center;justify-content:center;gap:1rem;z-index:100;}
+.nav-btn{background:none;border:1px solid var(--bordo);border-radius:6px;padding:5px 18px;font-size:15px;cursor:pointer;color:var(--blu);font-family:'Helvetica Neue',Arial,sans-serif;transition:background 0.15s;}
+.nav-btn:hover{background:var(--blu-c);}
+.nav-btn:disabled{opacity:0.3;cursor:default;}
+.nav-btn.primario{background:var(--blu);color:white;border-color:var(--blu);}
+.nav-btn.primario:hover{background:var(--blu-m);}
+#nav-dots{display:flex;gap:6px;align-items:center;}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--bordo);cursor:pointer;transition:background 0.2s,transform 0.2s;}
+.dot.attivo{background:var(--blu);transform:scale(1.35);}
+.dot.es-dot{background:#f0d8b0;border:1.5px solid var(--arancio);}
+.dot.es-dot.attivo{background:var(--arancio);}
+#nav-label{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--tes2);min-width:140px;text-align:center;}
+.formula-grande{background:white;border:2px solid var(--blu-m);border-radius:12px;padding:1rem 1.5rem;text-align:center;font-size:1.3rem;}
+.formula-grande.verde{border-color:var(--verde);}
+.formula-grande.arancio{border-color:var(--arancio);}
+.box-blu{background:var(--blu-c);border-left:5px solid var(--blu);border-radius:0 10px 10px 0;padding:0.9rem 1.3rem;}
+.box-verde{background:var(--verde-c);border-left:5px solid var(--verde);border-radius:0 10px 10px 0;padding:0.9rem 1.3rem;}
+.box-arancio{background:var(--ara-c);border-left:5px solid var(--arancio);border-radius:0 10px 10px 0;padding:0.9rem 1.3rem;}
+.box-rosso{background:var(--ros-c);border-left:5px solid var(--rosso);border-radius:0 10px 10px 0;padding:0.8rem 1rem;font-size:0.93rem;color:var(--rosso);}
+.box-grigio{background:var(--gri-c);border-radius:10px;padding:0.9rem 1.3rem;}
+.due-col{display:flex;gap:1.8rem;align-items:flex-start;flex-wrap:wrap;}
+.col{flex:1;min-width:220px;}
+.passo{display:flex;gap:1rem;margin:0.55rem 0;align-items:baseline;font-size:1rem;}
+.passo-n{background:var(--blu);color:white;font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;font-weight:bold;min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+.riga{margin:0.35rem 0 0.35rem 1.2rem;font-size:1rem;}
+.arr{color:var(--tes2);margin-right:0.4rem;}
+.fig-box{background:white;border:0.5px solid var(--bordo);border-radius:10px;padding:0.9rem;text-align:center;flex:1;min-width:190px;}
+.fig-box .cap{font-size:12px;color:var(--tes2);font-family:'Helvetica Neue',Arial,sans-serif;text-transform:uppercase;letter-spacing:1px;margin-top:0.4rem;}
+.fig-box .fsotto{font-size:1.05rem;margin-top:0.3rem;}
+.griglia-es{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;}
+.card-es{background:white;border:0.5px solid var(--bordo);border-radius:10px;padding:1rem 1.2rem;}
+.card-es .num-es{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--arancio);margin-bottom:0.35rem;}
+details{margin-top:0.5rem;}
+details summary{cursor:pointer;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--blu);user-select:none;list-style:none;display:flex;align-items:center;gap:0.4rem;}
+details summary::before{content:'▶';font-size:10px;transition:transform 0.2s;}
+details[open] summary::before{transform:rotate(90deg);}
+.sol{margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--bordo);}
+.val-riga{display:flex;align-items:center;gap:0.5rem;font-family:'Helvetica Neue',Arial,sans-serif;font-size:1rem;line-height:2.4;}
+.val-str{display:inline-block;width:22px;height:4px;border-radius:2px;vertical-align:middle;flex-shrink:0;}
+h2{font-size:1.2rem;color:var(--blu);font-weight:normal;margin-bottom:0.4rem;}
+h3{font-size:1rem;color:var(--grigio);margin:0.5rem 0 0.3rem;}
+p{margin:0.3rem 0;}
+ul{margin:0.3rem 0 0.3rem 1.4rem;}
+li{margin:0.2rem 0;}
+strong{font-weight:bold;}
 </style>
 </head>
 <body>
-<div class="pagina">
+<div id="deck">
 
-<div class="intestazione">
-  <div class="classe">Classe 4L · Liceo Scientifico G. Galilei di Dolo</div>
-  <h1>Trigonometria nei triangoli</h1>
-  <div class="sottotitolo">Teoremi sui triangoli rettangoli · Area con il seno</div>
+<!-- SLIDE 1: CERCHIO GONIOMETRICO -->
+<div class="slide attiva" data-tipo="ripasso">
+<div class="slide-header">
+  <div class="numero">1 / 9</div>
+  <h1>Ripasso — Il cerchio goniometrico</h1>
+  <span class="tipo-badge badge-ripasso">Ripasso</span>
 </div>
-
-<!-- ===================== FOGLIETTO ===================== -->
-<div class="foglietto">
-  <strong>Materiale della lezione:</strong> ogni alunno riceve un foglietto da ritagliare in piccoli triangoli rettangoli. Sui triangolini sono indicati, fronte e retro, i nomi dei lati (<em>ipotenusa a</em>, <em>cateto b</em>, <em>cateto c</em>) e degli angoli (<em>angolo retto C = 90°</em>, <em>angolo acuto A</em>, <em>angolo acuto B</em>). Tienilo sul banco durante tutta la spiegazione e usalo per seguire i ragionamenti.
-</div>
-
-<!-- ===================== TRIANGOLO DI RIFERIMENTO ===================== -->
-<h2>Il triangolo di riferimento</h2>
-<p>In tutta questa lezione useremo sempre lo stesso triangolo rettangolo con la seguente convenzione sui nomi:</p>
-
-<div class="figura-contenitore">
-  <div class="figura-box" style="flex:2; min-width:300px;">
-    <svg width="100%" viewBox="0 0 420 270" xmlns="http://www.w3.org/2000/svg">
-      <!-- triangolo rettangolo -->
-      <polygon points="60,220 340,220 60,50" fill="#e8f0fb" stroke="#1a4a8a" stroke-width="2"/>
-      <!-- angolo retto -->
-      <rect x="60" y="200" width="20" height="20" fill="none" stroke="#1a4a8a" stroke-width="1.5"/>
-      <!-- angolo A -->
-      <path d="M60,220 Q90,210 85,185" fill="none" stroke="#a32d2d" stroke-width="1.5"/>
-      <!-- angolo B -->
-      <path d="M340,220 Q310,210 295,200" fill="none" stroke="#0f6e56" stroke-width="1.5"/>
-      <!-- lati con etichette -->
-      <!-- ipotenusa a (dal vertice B in alto al vertice C in basso a destra) -->
-      <text x="215" y="118" text-anchor="middle" font-size="17" font-style="italic" fill="#1a4a8a" font-family="Georgia, serif" transform="rotate(-33, 215, 130)">a</text>
-      <text x="215" y="96" text-anchor="middle" font-size="11" fill="#4a7fc1" font-family="Helvetica Neue, Arial, sans-serif" transform="rotate(-33, 215, 108)">(ipotenusa)</text>
-      <!-- cateto b (verticale, dal vertice A al vertice C) -->
-      <text x="35" y="140" text-anchor="middle" font-size="17" font-style="italic" fill="#0f6e56" font-family="Georgia, serif">b</text>
-      <text x="35" y="155" text-anchor="middle" font-size="10" fill="#0f6e56" font-family="Helvetica Neue, Arial, sans-serif">(cateto)</text>
-      <!-- cateto c (orizzontale) -->
-      <text x="200" y="247" text-anchor="middle" font-size="17" font-style="italic" fill="#ba7517" font-family="Georgia, serif">c</text>
-      <text x="200" y="260" text-anchor="middle" font-size="10" fill="#ba7517" font-family="Helvetica Neue, Arial, sans-serif">(cateto)</text>
-      <!-- vertici -->
-      <text x="45" y="45" font-size="16" font-weight="bold" fill="#1a4a8a" font-family="Georgia, serif">B</text>
-      <text x="40" y="240" font-size="16" font-weight="bold" fill="#a32d2d" font-family="Georgia, serif">A</text>
-      <text x="346" y="240" font-size="16" font-weight="bold" fill="#0f6e56" font-family="Georgia, serif">C</text>
-      <!-- angolo A label -->
-      <text x="92" y="216" font-size="13" font-style="italic" fill="#a32d2d" font-family="Georgia, serif">α</text>
-      <!-- angolo B label -->
-      <text x="300" y="212" font-size="13" font-style="italic" fill="#0f6e56" font-family="Georgia, serif">β</text>
-      <!-- angolo retto label -->
-      <text x="85" y="238" font-size="10" fill="#1a4a8a" font-family="Helvetica Neue, Arial, sans-serif">90°</text>
-    </svg>
-    <div class="etichetta">Triangolo di riferimento</div>
-  </div>
-  <div style="flex:1; min-width:220px; font-size:0.93rem; line-height:1.8;">
-    <p><strong>Convenzioni:</strong></p>
-    <p>🔵 <em>a</em> = ipotenusa (lato opposto al retto)</p>
-    <p>🟢 <em>b</em> = cateto (verticale)</p>
-    <p>🟠 <em>c</em> = cateto (orizzontale)</p>
-    <p><br></p>
-    <p>🔴 <em>α</em> = angolo acuto in <em>A</em></p>
-    <p>🟢 <em>β</em> = angolo acuto in <em>C</em></p>
-    <p>⬛ angolo retto in <em>B</em> (= 90°)</p>
-    <p><br></p>
-    <p style="font-style:italic; color:var(--testo-secondario);">Nota: <em>α + β = 90°</em>, quindi <em>β = 90° − α</em></p>
-  </div>
-</div>
-
-<p>Ricordiamo le definizioni di seno, coseno e tangente (le usiamo già dal capitolo precedente):</p>
-
-<div class="formula-principale">
-  \(\sin\alpha = \dfrac{b}{a}\) &ensp;·&ensp; \(\cos\alpha = \dfrac{c}{a}\) &ensp;·&ensp; \(\tan\alpha = \dfrac{b}{c}\)
-</div>
-
-<hr class="sep">
-
-<!-- ===================== TEOREMA 1 ===================== -->
-<div class="teorema-box">
-  <div class="teorema-numero">Teorema 1</div>
-  <div class="teorema-titolo">Il cateto in funzione dell'ipotenusa</div>
-  <p>La lunghezza di un cateto è uguale al prodotto della lunghezza dell'ipotenusa per il <strong>seno dell'angolo opposto</strong> a quel cateto, oppure per il <strong>coseno dell'angolo adiacente</strong>.</p>
-</div>
-
-<h3>Come si ottiene?</h3>
-<p>Partiamo dalla definizione di seno e coseno e <em>isoliamo il cateto</em>.</p>
-
-<div class="passo">
-  <div class="passo-numero">1</div>
-  <div>Dalla definizione: \(\;\sin\alpha = \dfrac{b}{a}\)</div>
-</div>
-<div class="passo">
-  <div class="passo-numero">2</div>
-  <div>Moltiplico entrambi i membri per \(a\): \(\;a\cdot\sin\alpha = b\)</div>
-</div>
-<div class="passo">
-  <div class="passo-numero">3</div>
-  <div>Quindi: \(\;b = a\cdot\sin\alpha\) &nbsp;←&nbsp; cateto per seno dell'angolo <em>opposto</em></div>
-</div>
-<div class="passo">
-  <div class="passo-numero">4</div>
-  <div>Dalla definizione: \(\;\cos\beta = \dfrac{b}{a}\) &nbsp; (perché \(\beta\) è adiacente a \(b\))</div>
-</div>
-<div class="passo">
-  <div class="passo-numero">5</div>
-  <div>Quindi anche: \(\;b = a\cdot\cos\beta\) &nbsp;←&nbsp; cateto per coseno dell'angolo <em>adiacente</em></div>
-</div>
-
-<div class="formula-principale">
-  \[b = a\cdot\sin\alpha = a\cdot\cos\beta\]
-  \[c = a\cdot\sin\beta = a\cdot\cos\alpha\]
-</div>
-
-<div class="attenzione">
-  ⚠️ Attenzione a non confondere: il seno usa l'angolo <em>opposto</em> al cateto; il coseno usa l'angolo <em>adiacente</em> (che è l'altro angolo acuto). Usa il tuo foglietto per verificarlo ogni volta!
-</div>
-
-<h3>Come usarlo: le due figure</h3>
-<div class="figura-contenitore">
-  <!-- Figura: dato angolo α, trova b -->
-  <div class="figura-box">
-    <svg width="100%" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="40,170 200,170 40,40" fill="#e8f0fb" stroke="#1a4a8a" stroke-width="1.5"/>
-      <rect x="40" y="150" width="20" height="20" fill="none" stroke="#1a4a8a" stroke-width="1"/>
-      <!-- ipotenusa evidenziata -->
-      <line x1="40" y1="40" x2="200" y2="170" stroke="#1a4a8a" stroke-width="3"/>
-      <!-- cateto b evidenziato in verde -->
-      <line x1="40" y1="40" x2="40" y2="170" stroke="#0f6e56" stroke-width="3.5"/>
-      <!-- etichette -->
-      <text x="136" y="98" font-size="15" font-style="italic" fill="#1a4a8a" font-family="Georgia" transform="rotate(-38,136,106)">a</text>
-      <text x="22" y="110" font-size="15" font-style="italic" fill="#0f6e56" font-family="Georgia" font-weight="bold">b</text>
-      <text x="52" y="166" font-size="12" font-style="italic" fill="#a32d2d" font-family="Georgia">α</text>
-      <!-- dato / cerchiato -->
-      <circle cx="40" cy="170" r="14" fill="none" stroke="#a32d2d" stroke-width="1.5" stroke-dasharray="3 2"/>
-      <text x="130" y="190" font-size="10" fill="#a32d2d" font-family="Helvetica Neue, Arial">dato: α, a</text>
-    </svg>
-    <div class="etichetta">Caso A: cerco <em>b</em></div>
-    <div style="margin-top:0.5rem; font-size:0.9rem;">\(b = a\cdot\sin\alpha\)</div>
-  </div>
-  <!-- Figura: dato angolo α, trova c -->
-  <div class="figura-box">
-    <svg width="100%" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="40,170 200,170 40,40" fill="#e8f0fb" stroke="#1a4a8a" stroke-width="1.5"/>
-      <rect x="40" y="150" width="20" height="20" fill="none" stroke="#1a4a8a" stroke-width="1"/>
-      <line x1="40" y1="40" x2="200" y2="170" stroke="#1a4a8a" stroke-width="3"/>
-      <!-- cateto c evidenziato in arancio -->
-      <line x1="40" y1="170" x2="200" y2="170" stroke="#ba7517" stroke-width="3.5"/>
-      <text x="136" y="98" font-size="15" font-style="italic" fill="#1a4a8a" font-family="Georgia" transform="rotate(-38,136,106)">a</text>
-      <text x="120" y="188" font-size="15" font-style="italic" fill="#ba7517" font-family="Georgia" font-weight="bold">c</text>
-      <text x="52" y="166" font-size="12" font-style="italic" fill="#a32d2d" font-family="Georgia">α</text>
-      <circle cx="40" cy="170" r="14" fill="none" stroke="#a32d2d" stroke-width="1.5" stroke-dasharray="3 2"/>
-      <text x="130" y="200" font-size="10" fill="#a32d2d" font-family="Helvetica Neue, Arial">dato: α, a</text>
-    </svg>
-    <div class="etichetta">Caso B: cerco <em>c</em></div>
-    <div style="margin-top:0.5rem; font-size:0.9rem;">\(c = a\cdot\sin\beta = a\cdot\cos\alpha\)</div>
-  </div>
-</div>
-
-<!-- ESEMPIO 1 -->
-<div class="esempio">
-  <div class="esempio-titolo">Esempio svolto — Teorema 1</div>
-  <p><strong>Dati:</strong> \(a = 10\) cm, \(\alpha = 40°\). Calcola i cateti \(b\) e \(c\).</p>
-  <p style="margin-top:0.8rem;"><strong>Soluzione:</strong></p>
-  <div class="riga-calcolo"><span class="freccia-calcolo">→</span> Il cateto \(b\) è opposto ad \(\alpha\), quindi: \(b = a\cdot\sin\alpha = 10\cdot\sin 40°\)</div>
-  <div class="riga-calcolo"><span class="freccia-calcolo">→</span> \(b = 10\cdot 0{,}6428 \approx 6{,}43\) cm</div>
-  <div class="riga-calcolo" style="margin-top:0.5rem;"><span class="freccia-calcolo">→</span> Il cateto \(c\) è adiacente ad \(\alpha\) (opposto a \(\beta = 50°\)), quindi: \(c = a\cdot\cos\alpha = 10\cdot\cos 40°\)</div>
-  <div class="riga-calcolo"><span class="freccia-calcolo">→</span> \(c = 10\cdot 0{,}7660 \approx 7{,}66\) cm</div>
-  <div class="riga-calcolo" style="margin-top:0.5rem; font-style:italic; color:var(--testo-secondario);"><span class="freccia-calcolo">✓</span> Verifica con Pitagora: \(\sqrt{6{,}43^2 + 7{,}66^2} = \sqrt{41{,}3 + 58{,}7} = \sqrt{100} = 10\) ✓</div>
-</div>
-
-<div class="nota-libro">
-  <strong>📖 Dal libro (pag. 73):</strong> esercizi guidati 7–11 (con calcolatrice) e 12–17 (senza calcolatrice). Inizia dagli esercizi 7 e 8, poi confronta con i risultati in parentesi.
-</div>
-
-<hr class="sep">
-
-<!-- ===================== TEOREMA 2 ===================== -->
-<div class="teorema-box verde">
-  <div class="teorema-numero">Teorema 2</div>
-  <div class="teorema-titolo">Il cateto in funzione dell'altro cateto</div>
-  <p>La lunghezza di un cateto è uguale al prodotto della lunghezza dell'altro cateto per la <strong>tangente dell'angolo opposto</strong> a quel cateto, oppure per la <strong>cotangente dell'angolo adiacente</strong>.</p>
-</div>
-
-<h3>Come si ottiene?</h3>
-
-<div class="passo verde">
-  <div class="passo-numero" style="background:var(--verde);">1</div>
-  <div>Dalla definizione: \(\;\tan\alpha = \dfrac{b}{c}\)</div>
-</div>
-<div class="passo verde">
-  <div class="passo-numero" style="background:var(--verde);">2</div>
-  <div>Moltiplico per \(c\): \(\;b = c\cdot\tan\alpha\) &nbsp;←&nbsp; cateto per tangente dell'angolo <em>opposto</em></div>
-</div>
-<div class="passo verde">
-  <div class="passo-numero" style="background:var(--verde);">3</div>
-  <div>La cotangente: \(\;\cot\beta = \dfrac{c}{b}\;\Rightarrow\; b = c\cdot\cot\beta\) &nbsp;←&nbsp; cateto per cotangente dell'angolo <em>adiacente</em></div>
-</div>
-
-<div class="formula-principale verde">
-  \[b = c\cdot\tan\alpha = c\cdot\cot\beta\]
-  \[c = b\cdot\tan\beta = b\cdot\cot\alpha\]
-</div>
-
-<p><em>Ricorda:</em> \(\cot\alpha = \dfrac{1}{\tan\alpha} = \dfrac{\cos\alpha}{\sin\alpha}\). Se la calcolatrice non ha il tasto cot, usi direttamente \(\dfrac{1}{\tan\alpha}\).</p>
-
-<h3>Quando si usa il Teorema 2?</h3>
-<p>Quando <strong>non conosci l'ipotenusa</strong> ma conosci un cateto e un angolo, oppure i due cateti.</p>
-
-<div class="figura-contenitore">
-  <div class="figura-box">
-    <svg width="100%" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="40,170 200,170 40,40" fill="#e1f5ee" stroke="#0f6e56" stroke-width="1.5"/>
-      <rect x="40" y="150" width="20" height="20" fill="none" stroke="#0f6e56" stroke-width="1"/>
-      <!-- cateto c in basso, evidenziato -->
-      <line x1="40" y1="170" x2="200" y2="170" stroke="#ba7517" stroke-width="3.5"/>
-      <!-- cateto b, ricercato -->
-      <line x1="40" y1="40" x2="40" y2="170" stroke="#0f6e56" stroke-width="3.5"/>
-      <text x="22" y="110" font-size="15" font-style="italic" fill="#0f6e56" font-family="Georgia" font-weight="bold">b</text>
-      <text x="120" y="188" font-size="15" font-style="italic" fill="#ba7517" font-family="Georgia">c</text>
-      <text x="52" y="166" font-size="12" font-style="italic" fill="#a32d2d" font-family="Georgia">α</text>
-      <circle cx="200" cy="170" r="14" fill="none" stroke="#ba7517" stroke-width="1.5" stroke-dasharray="3 2"/>
-      <text x="115" y="200" font-size="10" fill="#0f6e56" font-family="Helvetica Neue, Arial">dato: α, c — cerco b</text>
-    </svg>
-    <div class="etichetta">Conosco \(c\) e \(\alpha\)</div>
-    <div style="margin-top:0.5rem; font-size:0.9rem;">\(b = c\cdot\tan\alpha\)</div>
-  </div>
-  <div class="figura-box">
-    <svg width="100%" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="40,170 200,170 40,40" fill="#e1f5ee" stroke="#0f6e56" stroke-width="1.5"/>
-      <rect x="40" y="150" width="20" height="20" fill="none" stroke="#0f6e56" stroke-width="1"/>
-      <line x1="40" y1="40" x2="40" y2="170" stroke="#0f6e56" stroke-width="3.5"/>
-      <line x1="40" y1="170" x2="200" y2="170" stroke="#ba7517" stroke-width="3.5"/>
-      <text x="22" y="110" font-size="15" font-style="italic" fill="#0f6e56" font-family="Georgia">b</text>
-      <text x="120" y="188" font-size="15" font-style="italic" fill="#ba7517" font-family="Georgia" font-weight="bold">c</text>
-      <text x="165" y="162" font-size="12" font-style="italic" fill="#0f6e56" font-family="Georgia">β</text>
-      <path d="M200,170 Q182,162 180,148" fill="none" stroke="#0f6e56" stroke-width="1.2"/>
-      <circle cx="40" cy="170" r="14" fill="none" stroke="#0f6e56" stroke-width="1.5" stroke-dasharray="3 2"/>
-      <text x="115" y="200" font-size="10" fill="#ba7517" font-family="Helvetica Neue, Arial">dato: β, b — cerco c</text>
-    </svg>
-    <div class="etichetta">Conosco \(b\) e \(\beta\)</div>
-    <div style="margin-top:0.5rem; font-size:0.9rem;">\(c = b\cdot\tan\beta\)</div>
-  </div>
-</div>
-
-<!-- ESEMPIO 2 -->
-<div class="esempio">
-  <div class="esempio-titolo">Esempio svolto — Teorema 2</div>
-  <p><strong>Dati:</strong> cateto \(b = 6\) cm, \(\alpha = 30°\). Calcola il cateto \(c\) e l'ipotenusa \(a\).</p>
-  <p style="margin-top:0.8rem;"><strong>Cateto \(c\):</strong></p>
-  <div class="riga-calcolo"><span class="freccia-calcolo">→</span> \(b\) è opposto ad \(\alpha\), quindi \(c = \dfrac{b}{\tan\alpha}\) (perché \(b = c\cdot\tan\alpha\), quindi \(c = \dfrac{b}{\tan\alpha}\))</div>
-  <div class="riga-calcolo"><span class="freccia-calcolo">→</span> \(c = \dfrac{6}{\tan 30°} = \dfrac{6}{0{,}5774} \approx 10{,}39\) cm</div>
-  <div class="riga-calcolo"><span class="freccia-calcolo">→</span> Oppure, con la cotangente: \(c = b\cdot\cot\alpha = 6\cdot\cot 30° = 6\cdot 1{,}732 \approx 10{,}39\) cm ✓</div>
-  <p style="margin-top:0.8rem;"><strong>Ipotenusa \(a\):</strong></p>
-  <div class="riga-calcolo"><span class="freccia-calcolo">→</span> Ora uso il Teorema 1: \(a = \dfrac{b}{\sin\alpha} = \dfrac{6}{\sin 30°} = \dfrac{6}{0{,}5} = 12\) cm</div>
-</div>
-
-<div class="nota-libro">
-  <strong>📖 Dal libro (pag. 73, esercizio guidato):</strong> segui passo per passo l'esercizio con \(a=5\), \(\beta=40°\), \(b=6\), \(c=b\), \(\beta=60°\). Nota come il libro usa sia la calcolatrice (arrotondamento al centesimo) che le misure esatte in forma con radicali.
-</div>
-
-<hr class="sep">
-
-<!-- ===================== RIEPILOGO TEOREMI 1 E 2 ===================== -->
-<h2>Riepilogo: quando uso quale formula?</h2>
-
-<table class="tabella-riepilogo">
-  <thead>
-    <tr>
-      <th>Voglio calcolare</th>
-      <th>Conosco</th>
-      <th>Formula</th>
-      <th>Teorema</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>cateto \(b\)</td>
-      <td>ipotenusa \(a\), angolo \(\alpha\) opposto a \(b\)</td>
-      <td>\(b = a\cdot\sin\alpha\)</td>
-      <td>T1</td>
-    </tr>
-    <tr>
-      <td>cateto \(b\)</td>
-      <td>ipotenusa \(a\), angolo \(\beta\) adiacente a \(b\)</td>
-      <td>\(b = a\cdot\cos\beta\)</td>
-      <td>T1</td>
-    </tr>
-    <tr>
-      <td>cateto \(b\)</td>
-      <td>cateto \(c\), angolo \(\alpha\) opposto a \(b\)</td>
-      <td>\(b = c\cdot\tan\alpha\)</td>
-      <td>T2</td>
-    </tr>
-    <tr>
-      <td>cateto \(b\)</td>
-      <td>cateto \(c\), angolo \(\beta\) adiacente a \(b\)</td>
-      <td>\(b = c\cdot\cot\beta = \dfrac{c}{\tan\beta}\)</td>
-      <td>T2</td>
-    </tr>
-    <tr>
-      <td>ipotenusa \(a\)</td>
-      <td>cateto \(b\), angolo \(\alpha\) opposto</td>
-      <td>\(a = \dfrac{b}{\sin\alpha}\)</td>
-      <td>T1 invertito</td>
-    </tr>
-    <tr>
-      <td>ipotenusa \(a\)</td>
-      <td>cateto \(b\), angolo \(\beta\) adiacente</td>
-      <td>\(a = \dfrac{b}{\cos\beta}\)</td>
-      <td>T1 invertito</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr class="sep">
-
-<!-- ===================== TEOREMA 3: AREA ===================== -->
-<div class="teorema-box arancio">
-  <div class="teorema-numero">Teorema 3 — Triangoli qualsiasi</div>
-  <div class="teorema-titolo">L'area di un triangolo con il seno</div>
-  <p>L'area di un triangolo qualsiasi è uguale al <strong>semiprodotto di due lati qualsiasi</strong> moltiplicato per il <strong>seno dell'angolo compreso</strong> tra quei due lati.</p>
-</div>
-
-<div class="formula-principale arancio" style="font-size:1.15rem;">
-  \[\mathcal{A} = \tfrac{1}{2}\,p\cdot q\cdot\sin\theta\]
-  dove \(p\) e \(q\) sono due lati qualsiasi e \(\theta\) è l'angolo tra loro compreso.
-</div>
-
-<h3>Dimostrazione (idea intuitiva)</h3>
-<p>Consideriamo un triangolo con lati \(p\) e \(q\) e angolo compreso \(\theta\). Tracciamo l'altezza \(h\) relativa al lato \(q\).</p>
-
-<div class="figura-contenitore">
-  <div class="figura-box" style="flex:2; min-width:300px;">
-    <svg width="100%" viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg">
-      <!-- triangolo generico -->
-      <polygon points="40,190 300,190 180,40" fill="#faeeda" stroke="#ba7517" stroke-width="2"/>
-      <!-- altezza tratteggiata -->
-      <line x1="180" y1="40" x2="180" y2="190" stroke="#ba7517" stroke-width="1.5" stroke-dasharray="5 3"/>
-      <!-- angolo retto dell'altezza -->
-      <rect x="180" y="170" width="18" height="18" fill="none" stroke="#ba7517" stroke-width="1"/>
-      <!-- etichette lati -->
-      <!-- lato q (base) -->
-      <text x="172" y="208" font-size="15" font-style="italic" fill="#ba7517" font-family="Georgia" font-weight="bold">q</text>
-      <!-- lato p (sinistra) -->
-      <text x="95" y="118" font-size="15" font-style="italic" fill="#0f6e56" font-family="Georgia" font-weight="bold">p</text>
-      <!-- altezza h -->
-      <text x="186" y="122" font-size="14" font-style="italic" fill="#a32d2d" font-family="Georgia">h</text>
-      <!-- angolo theta -->
-      <path d="M40,190 Q60,178 58,162" fill="none" stroke="#534ab7" stroke-width="1.5"/>
-      <text x="65" y="183" font-size="14" font-style="italic" fill="#534ab7" font-family="Georgia">θ</text>
-      <!-- freccia indicazione -->
-      <text x="310" y="130" font-size="11" fill="#ba7517" font-family="Helvetica Neue, Arial" text-anchor="start">h = p·sin θ</text>
-    </svg>
-    <div class="etichetta">Triangolo qualsiasi con altezza</div>
-  </div>
-  <div style="flex:1; min-width:200px; font-size:0.93rem; line-height:2;">
-    <div class="passo">
-      <div class="passo-numero" style="background:var(--arancio);">1</div>
-      <div>Area base = \(\dfrac{1}{2}\cdot q\cdot h\)</div>
+<div class="slide-body">
+  <p>Il <strong>cerchio goniometrico</strong> ha raggio 1. Per ogni angolo&nbsp;\(\alpha\), il punto&nbsp;\(P\) ha coordinate \((\cos\alpha,\;\sin\alpha)\). La <strong style="color:var(--rosso)">tangente</strong> si legge sulla retta \(x=1\).</p>
+  <div class="due-col" style="align-items:flex-start;">
+    <div style="flex:2;min-width:280px;background:white;border:0.5px solid var(--bordo);border-radius:10px;padding:1rem;">
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.6rem;">
+        <div style="flex:2;min-width:160px;">
+          <div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:var(--tes2);">α = <strong id="ang-lbl" style="color:var(--blu);font-size:1.2rem;">40°</strong></div>
+          <input type="range" id="sl" min="3" max="87" value="40" style="width:100%;margin-top:4px;accent-color:#1a4a8a;">
+        </div>
+        <div>
+          <div class="val-riga"><span class="val-str" style="background:#ba7517;"></span>cos α = <strong id="v-cos">0.766</strong></div>
+          <div class="val-riga"><span class="val-str" style="background:#0f6e56;"></span>sin α = <strong id="v-sin">0.643</strong></div>
+          <div class="val-riga"><span class="val-str" style="background:#a32d2d;"></span>tan α = <strong id="v-tan">0.839</strong></div>
+        </div>
+      </div>
+      <svg id="svg-c" width="100%" viewBox="0 0 430 320" xmlns="http://www.w3.org/2000/svg">
+        <line x1="10" y1="165" x2="420" y2="165" stroke="#d3d1c7" stroke-width="0.8"/>
+        <line x1="155" y1="10" x2="155" y2="315" stroke="#d3d1c7" stroke-width="0.8"/>
+        <circle cx="155" cy="165" r="130" fill="#f7f7f5" stroke="#b4b2a9" stroke-width="1.2"/>
+        <text x="422" y="169" font-size="13" fill="#888780" font-family="Helvetica Neue,Arial" font-style="italic">x</text>
+        <text x="159" y="12" font-size="13" fill="#888780" font-family="Helvetica Neue,Arial" font-style="italic">y</text>
+        <circle cx="285" cy="165" r="2.5" fill="#888780"/>
+        <text x="285" y="181" font-size="11" fill="#888780" font-family="Helvetica Neue,Arial" text-anchor="middle">1</text>
+        <line x1="285" y1="15" x2="285" y2="315" stroke="#f5c4b3" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="288" y="14" font-size="10" fill="#a32d2d" font-family="Helvetica Neue,Arial" opacity="0.8">x=1</text>
+        <path id="settore" d="" fill="#dce8f8"/>
+        <path id="arco" d="" fill="none" stroke="#1a4a8a" stroke-width="1.5"/>
+        <line id="s-cos" x1="155" y1="165" x2="285" y2="165" stroke="#ba7517" stroke-width="3.5" stroke-linecap="round"/>
+        <line id="s-sin" x1="285" y1="165" x2="285" y2="80" stroke="#0f6e56" stroke-width="3.5" stroke-linecap="round"/>
+        <line id="s-ip" x1="155" y1="165" x2="285" y2="80" stroke="#1a4a8a" stroke-width="2.5" stroke-linecap="round"/>
+        <rect id="s-rett" x="276" y="156" width="9" height="9" fill="none" stroke="#444441" stroke-width="1.2"/>
+        <line id="s-prol" x1="155" y1="165" x2="285" y2="50" stroke="#a32d2d" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.5"/>
+        <line id="s-tan" x1="285" y1="165" x2="285" y2="50" stroke="#a32d2d" stroke-width="3.5" stroke-linecap="round"/>
+        <circle id="pt-T" cx="285" cy="50" r="4.5" fill="#a32d2d"/>
+        <circle id="pt-P" cx="285" cy="80" r="5.5" fill="#1a4a8a"/>
+        <circle cx="155" cy="165" r="3" fill="#444441"/>
+        <text x="140" y="183" font-size="12" fill="#444441" font-family="Georgia,serif">O</text>
+        <text id="l-a" x="190" y="163" font-size="15" font-style="italic" fill="#1a4a8a" font-family="Georgia,serif">α</text>
+        <text id="l-1" x="210" y="145" font-size="14" font-style="italic" fill="#1a4a8a" font-family="Georgia,serif">1</text>
+        <text id="l-P" x="292" y="80" font-size="13" font-weight="bold" fill="#1a4a8a" font-family="Georgia,serif">P</text>
+        <text id="l-cos" x="200" y="183" font-size="13" font-style="italic" fill="#ba7517" font-family="Georgia,serif">cos α</text>
+        <text id="l-sin" x="290" y="128" font-size="13" font-style="italic" fill="#0f6e56" font-family="Georgia,serif">sin α</text>
+        <text id="l-tan" x="290" y="112" font-size="13" font-style="italic" fill="#a32d2d" font-family="Georgia,serif">tan α</text>
+        <text id="l-T" x="290" y="50" font-size="12" fill="#a32d2d" font-family="Georgia,serif">T</text>
+      </svg>
     </div>
-    <div class="passo">
-      <div class="passo-numero" style="background:var(--arancio);">2</div>
-      <div>Nel triangolo di sinistra (rettangolo): \(h = p\cdot\sin\theta\)</div>
-    </div>
-    <div class="passo">
-      <div class="passo-numero" style="background:var(--arancio);">3</div>
-      <div>Sostituisco: \(\mathcal{A} = \dfrac{1}{2}\cdot q\cdot p\cdot\sin\theta\)</div>
+    <div class="col" style="min-width:190px;">
+      <div class="box-blu" style="margin-bottom:0.8rem;">
+        <strong>Da ricordare</strong>
+        <p style="color:var(--arancio);">cos α = ascissa di P</p>
+        <p style="color:var(--verde);">sin α = ordinata di P</p>
+        <p style="color:var(--rosso);">tan α = segmento su x=1</p>
+      </div>
+      <p>Quando α → 90°:</p>
+      <ul>
+        <li style="color:var(--verde);">sin α → 1</li>
+        <li style="color:var(--arancio);">cos α → 0</li>
+        <li style="color:var(--rosso);">tan α → ∞</li>
+      </ul>
+      <p style="margin-top:0.7rem;">Per α = 45°:<br>sin = cos = \(\dfrac{\sqrt{2}}{2}\)</p>
     </div>
   </div>
 </div>
-
-<div class="attenzione">
-  ⚠️ Vale per <em>qualsiasi</em> coppia di lati: posso scegliere \(p\) e \(q\) comunque, purché \(\theta\) sia l'angolo <strong>compreso tra quei due lati</strong>. Se il triangolo è rettangolo e scelgo i due cateti, l'angolo compreso è 90° e \(\sin 90° = 1\), quindi si riduce alla formula classica \(\mathcal{A} = \frac{1}{2}\cdot b\cdot c\).
 </div>
 
-<h3>Il caso con angolo ottuso</h3>
-<p>La formula vale anche se l'angolo \(\theta\) è <strong>ottuso</strong> (maggiore di 90°). Ricorda che \(\sin(180°-\theta) = \sin\theta\), quindi il valore del seno rimane positivo.</p>
-
-<div class="figura-contenitore">
-  <div class="figura-box">
-    <svg width="100%" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
-      <!-- triangolo ottusangolo -->
-      <polygon points="30,170 240,170 70,50" fill="#faeeda" stroke="#ba7517" stroke-width="2"/>
-      <!-- angolo ottuso evidenziato -->
-      <path d="M30,170 Q50,155 55,135" fill="none" stroke="#534ab7" stroke-width="2"/>
-      <text x="58" y="160" font-size="14" font-style="italic" fill="#534ab7" font-family="Georgia">θ</text>
-      <text x="52" y="175" font-size="11" fill="#534ab7" font-family="Helvetica Neue">(ottuso)</text>
-      <!-- altezza esterna tratteggiata -->
-      <line x1="70" y1="50" x2="70" y2="170" stroke="#ba7517" stroke-width="1.2" stroke-dasharray="5 3"/>
-      <rect x="70" y="150" width="16" height="16" fill="none" stroke="#ba7517" stroke-width="1"/>
-      <!-- lati -->
-      <text x="40" y="108" font-size="14" font-style="italic" fill="#0f6e56" font-family="Georgia">p</text>
-      <text x="142" y="188" font-size="14" font-style="italic" fill="#ba7517" font-family="Georgia">q</text>
-      <text x="75" y="108" font-size="12" font-style="italic" fill="#a32d2d" font-family="Georgia">h</text>
-    </svg>
-    <div class="etichetta">Angolo ottuso: la formula vale lo stesso</div>
-  </div>
-  <div class="figura-box">
-    <svg width="100%" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
-      <!-- triangolo rettangolo: caso speciale -->
-      <polygon points="40,170 220,170 40,50" fill="#faeeda" stroke="#ba7517" stroke-width="2"/>
-      <rect x="40" y="150" width="20" height="20" fill="none" stroke="#ba7517" stroke-width="1.5"/>
-      <!-- angolo 90 -->
-      <text x="26" y="48" font-size="13" fill="#534ab7" font-family="Helvetica Neue">90°</text>
-      <!-- due cateti evidenziati -->
-      <line x1="40" y1="50" x2="40" y2="170" stroke="#0f6e56" stroke-width="3.5"/>
-      <line x1="40" y1="170" x2="220" y2="170" stroke="#ba7517" stroke-width="3.5"/>
-      <text x="22" y="112" font-size="14" font-style="italic" fill="#0f6e56" font-family="Georgia">b</text>
-      <text x="132" y="188" font-size="14" font-style="italic" fill="#ba7517" font-family="Georgia">c</text>
-      <text x="95" y="155" font-size="11" fill="#534ab7" font-family="Helvetica Neue">sin90°=1</text>
-      <text x="95" y="170" font-size="11" fill="#534ab7" font-family="Helvetica Neue">A = ½·b·c ✓</text>
-    </svg>
-    <div class="etichetta">Caso speciale: triangolo rettangolo</div>
-  </div>
+<!-- SLIDE 2: TRIANGOLO DI RIFERIMENTO -->
+<div class="slide" data-tipo="teoria">
+<div class="slide-header">
+  <div class="numero">2 / 9</div>
+  <h1>Il triangolo di riferimento</h1>
+  <span class="tipo-badge badge-teoria">Teoria</span>
 </div>
-
-<!-- ESEMPIO 3 -->
-<div class="esempio">
-  <div class="esempio-titolo">Esempio svolto — Teorema 3</div>
-  <p><strong>Problema:</strong> Un triangolo ha i lati \(p = 8\) cm, \(q = 11\) cm e l'angolo compreso \(\theta = 50°\). Calcola l'area.</p>
-  <p style="margin-top:0.8rem;"><strong>Soluzione:</strong></p>
-  <div class="riga-calcolo"><span class="freccia-calcolo">→</span> \(\mathcal{A} = \dfrac{1}{2}\cdot p\cdot q\cdot\sin\theta\)</div>
-  <div class="riga-calcolo"><span class="freccia-calcolo">→</span> \(\mathcal{A} = \dfrac{1}{2}\cdot 8\cdot 11\cdot\sin 50°\)</div>
-  <div class="riga-calcolo"><span class="freccia-calcolo">→</span> \(\mathcal{A} = \dfrac{1}{2}\cdot 88\cdot 0{,}7660\)</div>
-  <div class="riga-calcolo"><span class="freccia-calcolo">→</span> \(\mathcal{A} = 44\cdot 0{,}7660 \approx 33{,}7\) cm²</div>
-</div>
-
-<div class="esempio">
-  <div class="esempio-titolo">Esempio svolto — Area con angolo ottuso (pag. 74, es. 21)</div>
-  <p><strong>Problema:</strong> Trapezio ABCD, lato obliquo \(BC = 10\) cm, diagonale \(AC\perp BC\), angolo \(B\hat{A}C = 50°\). L'altezza è 10 cm, la base minore è lunga quanto va calcolata. [Vedi esercizio 21 pag. 74]</p>
-  <p style="margin-top:0.8rem; font-style:italic; color:var(--testo-secondario);">In questo tipo di esercizi si usa sia il Teorema 1 per trovare i lati del triangolo rettangolo interno, sia il Teorema 3 per l'area del triangolo risultante.</p>
-</div>
-
-<div class="nota-libro">
-  <strong>📖 Dal libro (pag. 74):</strong> esercizi 18–23 usano tutti e tre i teoremi insieme. Inizia con l'esercizio 18 (triangolo rettangolo con ipotenusa e angolo) e poi prova il 21 (trapezio). Le risposte in parentesi ti permettono di verificare.
-</div>
-
-<hr class="sep">
-
-<!-- ===================== STRATEGIA DI RISOLUZIONE ===================== -->
-<h2>Strategia per risolvere gli esercizi</h2>
-
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
-  <div style="background: var(--blu-chiaro); border-radius: 8px; padding: 1rem;">
-    <div style="font-family: 'Helvetica Neue', Arial; font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--blu); margin-bottom:0.5rem;">Passo 1</div>
-    <p><strong>Disegna il triangolo</strong> e scrivi su ogni lato/angolo i dati. Usa il foglietto se hai dubbi sull'orientamento.</p>
-  </div>
-  <div style="background: var(--verde-chiaro); border-radius: 8px; padding: 1rem;">
-    <div style="font-family: 'Helvetica Neue', Arial; font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--verde); margin-bottom:0.5rem;">Passo 2</div>
-    <p><strong>Identifica cosa cerchi</strong>: un cateto? l'ipotenusa? un angolo? l'area?</p>
-  </div>
-  <div style="background: var(--arancio-chiaro); border-radius: 8px; padding: 1rem;">
-    <div style="font-family: 'Helvetica Neue', Arial; font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--arancio); margin-bottom:0.5rem;">Passo 3</div>
-    <p><strong>Scegli il teorema</strong>: se hai l'ipotenusa → T1. Se hai un cateto → T2. Per l'area → T3.</p>
-  </div>
-  <div style="background: var(--viola-chiaro); border-radius: 8px; padding: 1rem;">
-    <div style="font-family: 'Helvetica Neue', Arial; font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--viola); margin-bottom:0.5rem;">Passo 4</div>
-    <p><strong>Verifica</strong>: con Pitagora se possibile. Controlla la risposta in parentesi nel libro.</p>
+<div class="slide-body">
+  <p>Stessa orientazione del cerchio: <strong>angolo retto in basso a destra</strong> (vertice B), angolo acuto \(\alpha\) in <strong>basso a sinistra</strong> (vertice A, come l'origine O). Il cateto orizzontale corrisponde al coseno, quello verticale al seno.</p>
+  <div class="due-col">
+    <div class="fig-box" style="flex:2;min-width:270px;">
+      <svg width="100%" viewBox="0 0 420 275" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="38,242 372,242 372,48" fill="#e8f0fb" stroke="#1a4a8a" stroke-width="2.5"/>
+        <rect x="350" y="220" width="22" height="22" fill="none" stroke="#444441" stroke-width="1.8"/>
+        <path d="M38,242 Q78,229 82,198" fill="none" stroke="#a32d2d" stroke-width="2"/>
+        <path d="M372,48 Q352,67 338,83" fill="none" stroke="#534ab7" stroke-width="2"/>
+        <text x="185" y="127" text-anchor="middle" font-size="22" font-style="italic" fill="#1a4a8a" font-family="Georgia,serif" transform="rotate(-29,185,142)">a</text>
+        <text x="185" y="106" text-anchor="middle" font-size="12" fill="#4a7fc1" font-family="Helvetica Neue,Arial" transform="rotate(-29,185,118)">(ipotenusa)</text>
+        <text x="205" y="266" text-anchor="middle" font-size="22" font-style="italic" fill="#ba7517" font-family="Georgia,serif">c</text>
+        <text x="205" y="275" text-anchor="middle" font-size="11" fill="#ba7517" font-family="Helvetica Neue,Arial">come cos nel cerchio</text>
+        <text x="390" y="150" font-size="22" font-style="italic" fill="#0f6e56" font-family="Georgia,serif">b</text>
+        <text x="385" y="168" font-size="11" fill="#0f6e56" font-family="Helvetica Neue,Arial">come sin</text>
+        <text x="14" y="260" font-size="18" font-weight="bold" fill="#a32d2d" font-family="Georgia,serif">A</text>
+        <text x="376" y="260" font-size="18" font-weight="bold" fill="#444441" font-family="Georgia,serif">B</text>
+        <text x="376" y="42" font-size="18" font-weight="bold" fill="#534ab7" font-family="Georgia,serif">C</text>
+        <text x="86" y="236" font-size="16" font-style="italic" fill="#a32d2d" font-family="Georgia,serif">α</text>
+        <text x="334" y="92" font-size="16" font-style="italic" fill="#534ab7" font-family="Georgia,serif">β</text>
+        <text x="316" y="258" font-size="11" fill="#444441" font-family="Helvetica Neue,Arial">90°</text>
+      </svg>
+      <div class="cap">Triangolo di riferimento</div>
+    </div>
+    <div class="col">
+      <div class="box-blu" style="margin-bottom:0.8rem;">
+        <strong>Lati</strong>
+        <p><span style="color:var(--blu);">a</span> = ipotenusa</p>
+        <p><span style="color:var(--arancio);">c</span> = cateto orizzontale</p>
+        <p><span style="color:var(--verde);">b</span> = cateto verticale</p>
+      </div>
+      <div class="box-blu" style="margin-bottom:0.8rem;">
+        <strong>Angoli</strong>
+        <p><span style="color:var(--rosso);">α</span> in A — basso sinistra</p>
+        <p><span style="color:var(--viola);">β</span> in C — alto destra</p>
+        <p>90° in B — basso destra</p>
+        <p style="margin-top:0.4rem;font-style:italic;font-size:0.9rem;">α + β = 90°</p>
+      </div>
+      <div class="formula-grande" style="font-size:1rem;">
+        \(\sin\alpha = \dfrac{b}{a}\) &ensp; \(\cos\alpha = \dfrac{c}{a}\) &ensp; \(\tan\alpha = \dfrac{b}{c}\)
+      </div>
+    </div>
   </div>
 </div>
-
-<hr class="sep">
-
-<!-- ===================== ESERCIZI CONSIGLIATI ===================== -->
-<h2>Esercizi dal libro</h2>
-<p>Puoi seguire questo percorso:</p>
-
-<table class="tabella-riepilogo">
-  <thead>
-    <tr><th>Esercizi</th><th>Pagina</th><th>Argomento</th><th>Note</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>Es. 1–3</td><td>72</td><td>Test e Vero/Falso preliminari</td><td>Ripasso definizioni sin, cos, tan</td></tr>
-    <tr><td>Es. 4</td><td>72</td><td>Completare uguaglianze con la figura</td><td>Tre triangoli diversi: attenzione agli angoli!</td></tr>
-    <tr><td>Guidato (a–c)</td><td>73</td><td>Risoluzione triangolo rettangolo</td><td>Segui tutti i passi del libro</td></tr>
-    <tr><td>Es. 7–11</td><td>73</td><td>Con calcolatrice</td><td>T1 e T2, risultati in parentesi</td></tr>
-    <tr><td>Es. 12–17</td><td>73</td><td>Senza calcolatrice (risultati esatti)</td><td>Usa angoli notevoli: 30°, 45°, 60°</td></tr>
-    <tr><td>Es. 18–23</td><td>74</td><td>T3: area con seno</td><td>Misto T1+T2+T3</td></tr>
-    <tr><td>Es. 24–33</td><td>74</td><td>Senza calcolatrice</td><td>Problemi più complessi</td></tr>
-  </tbody>
-</table>
-
-<div class="foglietto" style="margin-top:2rem;">
-  <strong>Ricorda per la prossima lezione:</strong> gli stessi tre teoremi, applicati ai triangoli <em>qualsiasi</em> (non rettangoli), generano la <strong>Legge dei seni</strong> e la <strong>Legge dei coseni</strong> — che vedremo nei prossimi capitoli.
 </div>
 
-<div style="text-align:center; margin-top:3rem; font-size:11px; color:var(--testo-secondario); font-family:'Helvetica Neue', Arial; letter-spacing:1px; text-transform:uppercase;">
-  Liceo Scientifico G. Galilei — Dolo · Classe 4L · Trigonometria
+<!-- SLIDE 3: SIMILITUDINE -->
+<div class="slide" data-tipo="raccordo">
+<div class="slide-header">
+  <div class="numero">3 / 9</div>
+  <h1>Dal cerchio al triangolo — similitudine</h1>
+  <span class="tipo-badge badge-raccordo">Raccordo</span>
+</div>
+<div class="slide-body">
+  <p>Il triangolino con ipotenusa = 1 (quello del cerchio) e il triangolo con ipotenusa = \(a\) hanno lo stesso angolo \(\alpha\): sono <strong>simili</strong>. I lati del grande si ottengono moltiplicando per \(a\).</p>
+  <div class="due-col" style="align-items:center;">
+    <div class="fig-box" style="flex:2;min-width:260px;">
+      <svg width="100%" viewBox="0 0 370 235" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="30,208 196,208 196,92" fill="#faeeda" stroke="#ba7517" stroke-width="2" stroke-dasharray="7 4"/>
+        <polygon points="30,208 121,208 121,144" fill="#e8f0fb" stroke="#1a4a8a" stroke-width="2.5"/>
+        <rect x="109" y="196" width="12" height="12" fill="none" stroke="#444441" stroke-width="1"/>
+        <rect x="184" y="196" width="12" height="12" fill="none" stroke="#ba7517" stroke-width="1"/>
+        <path d="M30,208 Q56,199 59,176" fill="none" stroke="#a32d2d" stroke-width="1.8"/>
+        <text x="62" y="200" font-size="15" font-style="italic" fill="#a32d2d" font-family="Georgia,serif">α</text>
+        <text x="77" y="222" text-anchor="middle" font-size="13" font-style="italic" fill="#ba7517" font-family="Georgia,serif">cos α</text>
+        <text x="133" y="178" font-size="13" font-style="italic" fill="#0f6e56" font-family="Georgia,serif">sin α</text>
+        <text x="68" y="163" text-anchor="middle" font-size="15" font-style="italic" fill="#1a4a8a" font-family="Georgia,serif" transform="rotate(-35,68,171)">1</text>
+        <text x="114" y="230" text-anchor="middle" font-size="12" font-style="italic" fill="#ba7517" font-family="Georgia,serif">c = a·cos α</text>
+        <text x="210" y="155" font-size="12" font-style="italic" fill="#0f6e56" font-family="Georgia,serif">b = a·sin α</text>
+        <text x="104" y="126" text-anchor="middle" font-size="15" font-style="italic" fill="#1a4a8a" font-family="Georgia,serif" transform="rotate(-35,104,138)">a</text>
+        <text x="30" y="232" font-size="10" fill="#888780" font-family="Helvetica Neue,Arial">stesso α ⇒ triangoli simili</text>
+      </svg>
+      <div class="cap">Piccolo (ip=1) e grande (ip=a)</div>
+    </div>
+    <div class="col" style="min-width:200px;">
+      <div class="box-blu" style="margin-bottom:0.6rem;">
+        <strong>Triangolino (ip = 1)</strong>
+        <p style="color:var(--arancio);">cateto oriz. = cos α</p>
+        <p style="color:var(--verde);">cateto vert. = sin α</p>
+      </div>
+      <div style="text-align:center;font-size:2rem;color:var(--tes2);margin:0.2rem 0;">↓ &times; a</div>
+      <div class="box-arancio" style="margin-bottom:0.6rem;">
+        <strong>Triangolo grande (ip = a)</strong>
+        <p style="color:var(--arancio);">c = a · cos α</p>
+        <p style="color:var(--verde);">b = a · sin α</p>
+      </div>
+      <div class="box-verde">
+        <strong>Questo è già il Teorema 1</strong>
+        <p style="font-size:0.9rem;">Ogni triangolo rettangolo con angolo α è simile al triangolino del cerchio.</p>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 
-</div><!-- fine pagina -->
+<!-- SLIDE 4: TEOREMA 1 -->
+<div class="slide" data-tipo="teoria">
+<div class="slide-header">
+  <div class="numero">4 / 9</div>
+  <h1>Teorema 1 — Il cateto dall'ipotenusa</h1>
+  <span class="tipo-badge badge-teoria">Teoria</span>
+</div>
+<div class="slide-body">
+  <div class="box-blu" style="font-size:1.03rem;">
+    <strong>Enunciato:</strong> un cateto = ipotenusa × <strong>seno dell'angolo opposto</strong> = ipotenusa × <strong>coseno dell'angolo adiacente</strong>.
+  </div>
+  <div class="due-col" style="margin-top:0.5rem;">
+    <div class="col">
+      <h3>Dimostrazione</h3>
+      <div class="passo"><div class="passo-n">1</div><div>Definizione: \(\sin\alpha = \dfrac{b}{a}\)</div></div>
+      <div class="passo"><div class="passo-n">2</div><div>Moltiplico per \(a\):&ensp; \(b = a\cdot\sin\alpha\)</div></div>
+      <div class="passo"><div class="passo-n">3</div><div>\(\cos\beta = \dfrac{b}{a}\) perché β è adiacente a b</div></div>
+      <div class="passo"><div class="passo-n">4</div><div>Quindi anche:&ensp; \(b = a\cdot\cos\beta\)</div></div>
+      <div class="formula-grande" style="margin-top:0.8rem;">
+        \[b = a\cdot\sin\alpha = a\cdot\cos\beta\]
+        \[c = a\cdot\cos\alpha = a\cdot\sin\beta\]
+      </div>
+    </div>
+    <div class="col">
+      <div class="due-col" style="gap:0.8rem;">
+        <div class="fig-box">
+          <svg width="100%" viewBox="0 0 185 170" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="15,148 158,148 158,20" fill="#e8f0fb" stroke="#1a4a8a" stroke-width="1.5"/>
+            <rect x="140" y="130" width="18" height="18" fill="none" stroke="#444441" stroke-width="1"/>
+            <line x1="15" y1="148" x2="158" y2="20" stroke="#1a4a8a" stroke-width="2.5"/>
+            <line x1="158" y1="20" x2="158" y2="148" stroke="#0f6e56" stroke-width="5"/>
+            <line x1="15" y1="148" x2="158" y2="148" stroke="#ba7517" stroke-width="1.5"/>
+            <text x="79" y="72" text-anchor="middle" font-size="16" font-style="italic" fill="#1a4a8a" font-family="Georgia,serif" transform="rotate(-42,79,84)">a</text>
+            <text x="170" y="90" font-size="17" font-style="italic" fill="#0f6e56" font-family="Georgia,serif" font-weight="bold">b</text>
+            <text x="88" y="165" text-anchor="middle" font-size="14" font-style="italic" fill="#ba7517" font-family="Georgia,serif">c</text>
+            <path d="M15,148 Q42,139 45,113" fill="none" stroke="#a32d2d" stroke-width="1.5"/>
+            <text x="47" y="142" font-size="14" font-style="italic" fill="#a32d2d" font-family="Georgia,serif">α</text>
+          </svg>
+          <div class="cap">cerco b</div>
+          <div class="fsotto">\(b = a\cdot\sin\alpha\)</div>
+        </div>
+        <div class="fig-box">
+          <svg width="100%" viewBox="0 0 185 170" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="15,148 158,148 158,20" fill="#e8f0fb" stroke="#1a4a8a" stroke-width="1.5"/>
+            <rect x="140" y="130" width="18" height="18" fill="none" stroke="#444441" stroke-width="1"/>
+            <line x1="15" y1="148" x2="158" y2="20" stroke="#1a4a8a" stroke-width="2.5"/>
+            <line x1="158" y1="20" x2="158" y2="148" stroke="#0f6e56" stroke-width="1.5"/>
+            <line x1="15" y1="148" x2="158" y2="148" stroke="#ba7517" stroke-width="5"/>
+            <text x="79" y="72" text-anchor="middle" font-size="16" font-style="italic" fill="#1a4a8a" font-family="Georgia,serif" transform="rotate(-42,79,84)">a</text>
+            <text x="170" y="90" font-size="14" font-style="italic" fill="#0f6e56" font-family="Georgia,serif">b</text>
+            <text x="88" y="165" text-anchor="middle" font-size="17" font-style="italic" fill="#ba7517" font-family="Georgia,serif" font-weight="bold">c</text>
+            <path d="M15,148 Q42,139 45,113" fill="none" stroke="#a32d2d" stroke-width="1.5"/>
+            <text x="47" y="142" font-size="14" font-style="italic" fill="#a32d2d" font-family="Georgia,serif">α</text>
+          </svg>
+          <div class="cap">cerco c</div>
+          <div class="fsotto">\(c = a\cdot\cos\alpha\)</div>
+        </div>
+      </div>
+      <div class="box-rosso" style="margin-top:0.8rem;">⚠ Seno → angolo <em>opposto</em>; coseno → angolo <em>adiacente</em>.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SLIDE 5: ESERCIZI T1 -->
+<div class="slide" data-tipo="esercizio">
+<div class="slide-header">
+  <div class="numero">5 / 9</div>
+  <h1>Esercizi — Teorema 1</h1>
+  <span class="tipo-badge badge-esercizio">Esercizio</span>
+</div>
+<div class="slide-body">
+  <div class="griglia-es">
+    <div class="card-es">
+      <div class="num-es">Es. A</div>
+      <p>\(a = 10\) cm, \(\alpha = 40°\). Calcola \(b\) e \(c\).</p>
+      <details><summary>Soluzione</summary><div class="sol">
+        <div class="riga"><span class="arr">→</span>\(b = 10\cdot\sin 40° = 10\cdot 0{,}643 \approx 6{,}43\) cm</div>
+        <div class="riga"><span class="arr">→</span>\(c = 10\cdot\cos 40° = 10\cdot 0{,}766 \approx 7{,}66\) cm</div>
+        <div class="riga" style="color:var(--verde);font-style:italic;"><span class="arr">✓</span>Pitagora: \(\sqrt{6{,}43^2+7{,}66^2}=10\) ✓</div>
+      </div></details>
+    </div>
+    <div class="card-es">
+      <div class="num-es">Es. B — libro es. 7 pag. 73</div>
+      <p>\(a = 10\), \(\beta = 35°\). Calcola \(b\) e \(c\).<br><em style="font-size:0.88rem;">(l'angolo dato è β, non α)</em></p>
+      <details><summary>Soluzione</summary><div class="sol">
+        <div class="riga"><span class="arr">→</span>β adiacente a b: \(b = a\cdot\cos\beta = 10\cdot\cos 35° \approx 8{,}19\) cm</div>
+        <div class="riga"><span class="arr">→</span>β opposto a c: \(c = a\cdot\sin\beta = 10\cdot\sin 35° \approx 5{,}74\) cm</div>
+      </div></details>
+    </div>
+    <div class="card-es">
+      <div class="num-es">Es. C — senza calcolatrice (es. 12 pag. 73)</div>
+      <p>\(a = 6\), \(\alpha = 30°\). Calcola \(b\) e \(c\) in forma esatta.</p>
+      <details><summary>Soluzione</summary><div class="sol">
+        <div class="riga"><span class="arr">→</span>\(b = 6\cdot\sin 30° = 6\cdot\tfrac{1}{2} = 3\) cm</div>
+        <div class="riga"><span class="arr">→</span>\(c = 6\cdot\cos 30° = 6\cdot\tfrac{\sqrt{3}}{2} = 3\sqrt{3}\) cm</div>
+      </div></details>
+    </div>
+    <div class="card-es">
+      <div class="num-es">Es. D — inverso</div>
+      <p>Conosco \(b = 5\) cm, \(\alpha = 50°\). Calcola l'ipotenusa \(a\).</p>
+      <details><summary>Soluzione</summary><div class="sol">
+        <div class="riga"><span class="arr">→</span>Da \(b = a\cdot\sin\alpha\) ricavo \(a = \dfrac{b}{\sin\alpha}\)</div>
+        <div class="riga"><span class="arr">→</span>\(a = \dfrac{5}{\sin 50°} = \dfrac{5}{0{,}766} \approx 6{,}53\) cm</div>
+      </div></details>
+    </div>
+  </div>
+  <div class="box-blu" style="margin-top:0.8rem;font-size:0.9rem;">
+    <strong>📖 Dal libro:</strong> esercizi 7–11 (con calcolatrice) e 12–17 (senza) — pag. 73.
+  </div>
+</div>
+</div>
+
+<!-- SLIDE 6: TEOREMA 2 -->
+<div class="slide" data-tipo="teoria">
+<div class="slide-header">
+  <div class="numero">6 / 9</div>
+  <h1>Teorema 2 — Il cateto dall'altro cateto</h1>
+  <span class="tipo-badge badge-teoria">Teoria</span>
+</div>
+<div class="slide-body">
+  <div class="box-verde" style="font-size:1.03rem;">
+    <strong>Enunciato:</strong> un cateto = altro cateto × <strong>tangente dell'angolo opposto</strong> = altro cateto × <strong>cotangente dell'angolo adiacente</strong>.
+  </div>
+  <div class="due-col" style="margin-top:0.5rem;">
+    <div class="col">
+      <h3>Dimostrazione</h3>
+      <div class="passo"><div class="passo-n" style="background:var(--verde);">1</div><div>Definizione: \(\tan\alpha = \dfrac{b}{c}\)</div></div>
+      <div class="passo"><div class="passo-n" style="background:var(--verde);">2</div><div>Moltiplico per \(c\):&ensp; \(b = c\cdot\tan\alpha\)</div></div>
+      <div class="passo"><div class="passo-n" style="background:var(--verde);">3</div><div>\(\cot\beta = \dfrac{c}{b}\;\Rightarrow\; b = c\cdot\cot\beta\)</div></div>
+      <div class="formula-grande verde" style="margin-top:0.8rem;">
+        \[b = c\cdot\tan\alpha = c\cdot\cot\beta\]
+        \[c = b\cdot\tan\beta = b\cdot\cot\alpha\]
+      </div>
+      <p style="margin-top:0.6rem;font-size:0.93rem;"><em>Nota:</em> \(\cot\alpha = \dfrac{1}{\tan\alpha}\)</p>
+      <div class="box-rosso" style="margin-top:0.7rem;">⚠ Si usa quando <strong>non si conosce l'ipotenusa</strong>.</div>
+    </div>
+    <div class="col">
+      <div class="due-col" style="gap:0.8rem;">
+        <div class="fig-box">
+          <svg width="100%" viewBox="0 0 185 170" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="15,148 158,148 158,20" fill="#e1f5ee" stroke="#0f6e56" stroke-width="1.5"/>
+            <rect x="140" y="130" width="18" height="18" fill="none" stroke="#444441" stroke-width="1"/>
+            <line x1="15" y1="148" x2="158" y2="20" stroke="#0f6e56" stroke-width="1.5"/>
+            <line x1="158" y1="20" x2="158" y2="148" stroke="#0f6e56" stroke-width="5"/>
+            <line x1="15" y1="148" x2="158" y2="148" stroke="#ba7517" stroke-width="3"/>
+            <text x="170" y="90" font-size="17" font-style="italic" fill="#0f6e56" font-family="Georgia,serif" font-weight="bold">b</text>
+            <text x="88" y="165" text-anchor="middle" font-size="14" font-style="italic" fill="#ba7517" font-family="Georgia,serif">c (noto)</text>
+            <path d="M15,148 Q42,139 45,113" fill="none" stroke="#a32d2d" stroke-width="1.5"/>
+            <text x="47" y="142" font-size="14" font-style="italic" fill="#a32d2d" font-family="Georgia,serif">α</text>
+          </svg>
+          <div class="cap">conosco c e α</div>
+          <div class="fsotto">\(b = c\cdot\tan\alpha\)</div>
+        </div>
+        <div class="fig-box">
+          <svg width="100%" viewBox="0 0 185 170" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="15,148 158,148 158,20" fill="#e1f5ee" stroke="#0f6e56" stroke-width="1.5"/>
+            <rect x="140" y="130" width="18" height="18" fill="none" stroke="#444441" stroke-width="1"/>
+            <line x1="15" y1="148" x2="158" y2="20" stroke="#0f6e56" stroke-width="1.5"/>
+            <line x1="158" y1="20" x2="158" y2="148" stroke="#0f6e56" stroke-width="3"/>
+            <line x1="15" y1="148" x2="158" y2="148" stroke="#ba7517" stroke-width="5"/>
+            <text x="170" y="90" font-size="14" font-style="italic" fill="#0f6e56" font-family="Georgia,serif">b (noto)</text>
+            <text x="88" y="165" text-anchor="middle" font-size="17" font-style="italic" fill="#ba7517" font-family="Georgia,serif" font-weight="bold">c</text>
+            <path d="M158,20 Q144,40 132,54" fill="none" stroke="#534ab7" stroke-width="1.5"/>
+            <text x="128" y="68" font-size="14" font-style="italic" fill="#534ab7" font-family="Georgia,serif">β</text>
+          </svg>
+          <div class="cap">conosco b e β</div>
+          <div class="fsotto">\(c = b\cdot\tan\beta\)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SLIDE 7: ESERCIZI T2 -->
+<div class="slide" data-tipo="esercizio">
+<div class="slide-header">
+  <div class="numero">7 / 9</div>
+  <h1>Esercizi — Teorema 2</h1>
+  <span class="tipo-badge badge-esercizio">Esercizio</span>
+</div>
+<div class="slide-body">
+  <div class="griglia-es">
+    <div class="card-es">
+      <div class="num-es">Es. A</div>
+      <p>\(c = 8\) cm, \(\alpha = 30°\). Calcola \(b\) e poi \(a\).</p>
+      <details><summary>Soluzione</summary><div class="sol">
+        <div class="riga"><span class="arr">→</span>\(b = c\cdot\tan\alpha = 8\cdot\tan 30° = 8\cdot 0{,}577 \approx 4{,}62\) cm</div>
+        <div class="riga"><span class="arr">→</span>\(a = \dfrac{c}{\cos\alpha} = \dfrac{8}{\cos 30°} \approx 9{,}24\) cm</div>
+      </div></details>
+    </div>
+    <div class="card-es">
+      <div class="num-es">Es. B — libro es. 8 pag. 73</div>
+      <p>\(b = 5\), \(\alpha = 35°\). Calcola \(c\) e \(a\).</p>
+      <details><summary>Soluzione</summary><div class="sol">
+        <div class="riga"><span class="arr">→</span>\(c = \dfrac{b}{\tan\alpha} = \dfrac{5}{\tan 35°} \approx 7{,}14\) cm</div>
+        <div class="riga"><span class="arr">→</span>\(a = \dfrac{b}{\sin\alpha} = \dfrac{5}{\sin 35°} \approx 8{,}72\) cm</div>
+      </div></details>
+    </div>
+    <div class="card-es">
+      <div class="num-es">Es. C — senza calcolatrice (es. 13 pag. 73)</div>
+      <p>\(b = 6\), \(\alpha = 30°\). Calcola \(c\) in forma esatta.</p>
+      <details><summary>Soluzione</summary><div class="sol">
+        <div class="riga"><span class="arr">→</span>\(c = b\cdot\cot\alpha = 6\cdot\cot 30° = 6\cdot\sqrt{3}\) cm</div>
+        <div class="riga"><span class="arr">→</span>Oppure: \(c = \dfrac{b}{\tan 30°} = \dfrac{6}{1/\sqrt{3}} = 6\sqrt{3}\) ✓</div>
+      </div></details>
+    </div>
+    <div class="card-es">
+      <div class="num-es">Es. D — misto T1+T2</div>
+      <p>\(b = 4\) cm, \(\beta = 60°\). Calcola \(c\) e \(a\).</p>
+      <details><summary>Soluzione</summary><div class="sol">
+        <div class="riga"><span class="arr">→</span>\(c = b\cdot\tan\beta = 4\cdot\tan 60° = 4\sqrt{3}\approx 6{,}93\) cm</div>
+        <div class="riga"><span class="arr">→</span>\(a = \dfrac{b}{\cos\beta} = \dfrac{4}{\cos 60°} = \dfrac{4}{0{,}5} = 8\) cm</div>
+      </div></details>
+    </div>
+  </div>
+  <div class="box-verde" style="margin-top:0.8rem;font-size:0.9rem;">
+    <strong>📖 Dal libro:</strong> esercizio guidato pag. 73, poi 7–17.
+  </div>
+</div>
+</div>
+
+<!-- SLIDE 8: TEOREMA 3 -->
+<div class="slide" data-tipo="teoria">
+<div class="slide-header">
+  <div class="numero">8 / 9</div>
+  <h1>Teorema 3 — L'area con il seno</h1>
+  <span class="tipo-badge badge-teoria">Teoria</span>
+</div>
+<div class="slide-body">
+  <div class="box-arancio" style="font-size:1.03rem;">
+    <strong>Enunciato (triangoli qualsiasi):</strong> l'area è uguale al semiprodotto di due lati qualsiasi per il seno dell'angolo <strong>compreso</strong> tra loro.
+  </div>
+  <div class="formula-grande arancio" style="font-size:1.5rem;margin-top:0.5rem;">
+    \[\mathcal{A} = \tfrac{1}{2}\,p\cdot q\cdot\sin\theta\]
+  </div>
+  <div class="due-col" style="margin-top:0.5rem;">
+    <div class="fig-box" style="flex:2;min-width:250px;">
+      <svg width="100%" viewBox="0 0 370 205" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="28,182 306,182 196,28" fill="#faeeda" stroke="#ba7517" stroke-width="2"/>
+        <line x1="196" y1="28" x2="196" y2="182" stroke="#a32d2d" stroke-width="1.8" stroke-dasharray="6 3"/>
+        <rect x="196" y="162" width="18" height="18" fill="none" stroke="#444441" stroke-width="1"/>
+        <text x="110" y="113" font-size="17" font-style="italic" fill="#ba7517" font-family="Georgia,serif" transform="rotate(-53,110,121)">p</text>
+        <text x="162" y="198" text-anchor="middle" font-size="17" font-style="italic" fill="#ba7517" font-family="Georgia,serif">q</text>
+        <text x="210" y="108" font-size="15" font-style="italic" fill="#a32d2d" font-family="Georgia,serif">h</text>
+        <path d="M28,182 Q54,170 58,147" fill="none" stroke="#534ab7" stroke-width="1.8"/>
+        <text x="62" y="173" font-size="15" font-style="italic" fill="#534ab7" font-family="Georgia,serif">θ</text>
+        <text x="228" y="72"  font-size="12" fill="#0f6e56" font-family="Helvetica Neue,Arial">h = p·sin θ</text>
+        <text x="228" y="90"  font-size="12" fill="#ba7517" font-family="Helvetica Neue,Arial">A = ½·q·h</text>
+        <text x="228" y="108" font-size="12" fill="#ba7517" font-family="Helvetica Neue,Arial">= ½·p·q·sin θ</text>
+      </svg>
+      <div class="cap">Dimostrazione geometrica</div>
+    </div>
+    <div class="col" style="min-width:190px;">
+      <h3>Passaggi</h3>
+      <div class="passo"><div class="passo-n" style="background:var(--arancio);">1</div><div>\(\mathcal{A}=\tfrac{1}{2}\cdot q\cdot h\)</div></div>
+      <div class="passo"><div class="passo-n" style="background:var(--arancio);">2</div><div>\(h = p\cdot\sin\theta\) &ensp;(T1)</div></div>
+      <div class="passo"><div class="passo-n" style="background:var(--arancio);">3</div><div>Sostituisco: \(\mathcal{A}=\tfrac{1}{2}pq\sin\theta\)</div></div>
+      <div class="box-rosso" style="margin-top:0.8rem;">⚠ θ deve essere l'angolo <em>compreso tra p e q</em>.</div>
+      <div class="box-grigio" style="margin-top:0.7rem;font-size:0.9rem;">
+        <strong>Caso speciale:</strong> cateti b e c, angolo retto 90°:<br>\(\mathcal{A}=\tfrac{1}{2}bc\cdot\sin 90°=\tfrac{1}{2}bc\) ✓
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SLIDE 9: ESERCIZI T3 -->
+<div class="slide" data-tipo="esercizio">
+<div class="slide-header">
+  <div class="numero">9 / 9</div>
+  <h1>Esercizi — Teorema 3 (area)</h1>
+  <span class="tipo-badge badge-esercizio">Esercizio</span>
+</div>
+<div class="slide-body">
+  <div class="griglia-es">
+    <div class="card-es">
+      <div class="num-es">Es. A</div>
+      <p>\(p = 8\) cm, \(q = 11\) cm, angolo compreso \(\theta = 50°\).</p>
+      <details><summary>Soluzione</summary><div class="sol">
+        <div class="riga"><span class="arr">→</span>\(\mathcal{A} = \tfrac{1}{2}\cdot 8\cdot 11\cdot\sin 50° = 44\cdot 0{,}766 \approx 33{,}7\) cm²</div>
+      </div></details>
+    </div>
+    <div class="card-es">
+      <div class="num-es">Es. B — libro es. 18 pag. 74</div>
+      <p>\(p = 10\) cm, \(q = 6\) cm, \(\theta = 60°\). Area?</p>
+      <details><summary>Soluzione</summary><div class="sol">
+        <div class="riga"><span class="arr">→</span>\(\mathcal{A} = \tfrac{1}{2}\cdot 10\cdot 6\cdot\sin 60° = 30\cdot\tfrac{\sqrt{3}}{2} = 15\sqrt{3} \approx 26\) cm²</div>
+      </div></details>
+    </div>
+    <div class="card-es">
+      <div class="num-es">Es. C — es. 21 pag. 74</div>
+      <p>Trapezio ABCD: lato obliquo \(BC = 10\) cm, \(\hat{A} = 50°\). Trova l'altezza, poi l'area del triangolo ABP.</p>
+      <details><summary>Soluzione</summary><div class="sol">
+        <div class="riga"><span class="arr">→</span>T1: \(h = 10\cdot\sin 50° \approx 7{,}66\) cm</div>
+        <div class="riga"><span class="arr">→</span>Base = \(10\cdot\cos 50° \approx 6{,}43\) cm</div>
+        <div class="riga"><span class="arr">→</span>\(\mathcal{A} = \tfrac{1}{2}\cdot 6{,}43\cdot 7{,}66 \approx 24{,}6\) cm²</div>
+      </div></details>
+    </div>
+    <div class="card-es">
+      <div class="num-es">Es. D — misto T1+T3</div>
+      <p>Triangolo rettangolo: \(a = 12\) cm, \(\alpha = 35°\). Calcola l'area.</p>
+      <details><summary>Soluzione</summary><div class="sol">
+        <div class="riga"><span class="arr">→</span>T1: \(b = 12\sin 35°\approx 6{,}88\) cm;&ensp; \(c = 12\cos 35°\approx 9{,}83\) cm</div>
+        <div class="riga"><span class="arr">→</span>T3: \(\mathcal{A} = \tfrac{1}{2}\cdot 6{,}88\cdot 9{,}83 \approx 33{,}8\) cm²</div>
+      </div></details>
+    </div>
+  </div>
+  <div class="box-arancio" style="margin-top:0.8rem;font-size:0.9rem;">
+    <strong>📖 Dal libro:</strong> esercizi 18–23 pag. 74.
+  </div>
+</div>
+</div>
+
+</div><!-- fine deck -->
+
+<!-- NAVBAR -->
+<div id="nav">
+  <button class="nav-btn" id="btn-prec" onclick="cambia(-1)" disabled>← Indietro</button>
+  <div id="nav-dots"></div>
+  <span id="nav-label"></span>
+  <button class="nav-btn primario" id="btn-succ" onclick="cambia(+1)">Avanti →</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const dotsEl = document.getElementById('nav-dots');
+const label  = document.getElementById('nav-label');
+const btnP   = document.getElementById('btn-prec');
+const btnS   = document.getElementById('btn-succ');
+let corrente = 0;
+const nomiTipo = {ripasso:'Ripasso',teoria:'Teoria',raccordo:'Raccordo',esercizio:'Esercizio'};
+
+slides.forEach((s,i)=>{
+  const d = document.createElement('div');
+  d.className = 'dot'+(s.dataset.tipo==='esercizio'?' es-dot':'');
+  d.title = 'Slide '+(i+1);
+  d.onclick = ()=>vai(i);
+  dotsEl.appendChild(d);
+});
+
+function vai(n){
+  slides[corrente].classList.remove('attiva');
+  corrente = Math.max(0,Math.min(n,slides.length-1));
+  slides[corrente].classList.add('attiva');
+  aggiornaNav();
+  if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([slides[corrente]]).catch(()=>{});
+}
+function cambia(d){ vai(corrente+d); }
+function aggiornaNav(){
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('attivo',i===corrente));
+  btnP.disabled = corrente===0;
+  btnS.disabled = corrente===slides.length-1;
+  const t = slides[corrente].dataset.tipo;
+  label.textContent = (corrente+1)+' / '+slides.length+' — '+(nomiTipo[t]||t);
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ') cambia(1);
+  if(e.key==='ArrowLeft') cambia(-1);
+});
+aggiornaNav();
+
+// CERCHIO INTERATTIVO
+(function(){
+  const CX=155,CY=165,R=130,TX=285;
+  const sl=document.getElementById('sl');
+  const lA=document.getElementById('ang-lbl');
+  const lC=document.getElementById('v-cos');
+  const lS=document.getElementById('v-sin');
+  const lT=document.getElementById('v-tan');
+  function g(id){return document.getElementById(id);}
+  function line(id,x1,y1,x2,y2){const e=g(id);e.setAttribute('x1',x1);e.setAttribute('y1',y1);e.setAttribute('x2',x2);e.setAttribute('y2',y2);}
+  function xy(id,x,y){g(id).setAttribute('x',x);g(id).setAttribute('y',y);}
+  function cxy(id,x,y){g(id).setAttribute('cx',x);g(id).setAttribute('cy',y);}
+  function aggiorna(deg){
+    const rad=deg*Math.PI/180;
+    const cosA=Math.cos(rad),sinA=Math.sin(rad),tanA=Math.tan(rad);
+    const Px=CX+R*cosA,Py=CY-R*sinA,Fx=Px,Fy=CY;
+    const t=(TX-CX)/(Px-CX),Ty=CY+t*(Py-CY);
+    lA.textContent=deg+'°';
+    lC.textContent=cosA.toFixed(3);
+    lS.textContent=sinA.toFixed(3);
+    lT.textContent=tanA.toFixed(3);
+    const ar=32,axP=CX+ar*cosA,ayP=CY-ar*sinA;
+    g('settore').setAttribute('d',`M${CX},${CY} L${CX+ar},${CY} A${ar},${ar} 0 0,0 ${axP},${ayP} Z`);
+    g('arco').setAttribute('d',`M${CX+ar},${CY} A${ar},${ar} 0 0,0 ${axP},${ayP}`);
+    line('s-cos',CX,CY,Fx,Fy);
+    line('s-sin',Fx,Fy,Px,Py);
+    line('s-ip',CX,CY,Px,Py);
+    line('s-prol',CX,CY,TX,Ty);
+    line('s-tan',TX,CY,TX,Ty);
+    const s=9,rr=g('s-rett');
+    rr.setAttribute('x',Fx-s);rr.setAttribute('y',Fy-s);
+    rr.setAttribute('width',s);rr.setAttribute('height',s);
+    cxy('pt-P',Px,Py);cxy('pt-T',TX,Ty);
+    const alr=44;
+    xy('l-a',CX+alr*Math.cos(rad/2)-6,CY-alr*Math.sin(rad/2)+6);
+    xy('l-1',(CX+Px)/2-14,(CY+Py)/2-6);
+    xy('l-P',Px+7,Py-5);
+    xy('l-cos',(CX+Fx)/2-22,CY+18);
+    xy('l-sin',Fx+7,(Fy+Py)/2+5);
+    xy('l-tan',TX+5,(CY+Ty)/2+5);
+    xy('l-T',TX+6,Ty-4);
+  }
+  sl.addEventListener('input',()=>aggiorna(+sl.value));
+  aggiorna(40);
+})();
+</script>
 </body>
 </html>
